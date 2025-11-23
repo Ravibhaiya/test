@@ -9,6 +9,7 @@ import {
   generatePowersQuestion,
   generateFractionsQuestion,
 } from '@/lib/question-helpers';
+import VirtualKeyboard from '@/components/VirtualKeyboard';
 import { STAR_PATH } from '@/lib/constants';
 
 interface Question {
@@ -32,6 +33,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
   const [unroundedAnswer, setUnroundedAnswer] = useState<number | null>(null);
   const [feedback, setFeedback] = useState('');
   const [isAnswerRevealed, setIsAnswerRevealed] = useState(false);
+  const [inputValue, setInputValue] = useState('');
 
   const [countdown, setCountdown] = useState<number | null>(null);
   const timerIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -88,6 +90,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
     setAnswerTypeHint('');
     setActiveAnswerType(null);
     setUnroundedAnswer(null);
+    setInputValue('');
     if (answerInputRef.current) {
       answerInputRef.current.value = '';
       answerInputRef.current.disabled = false;
@@ -171,6 +174,23 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
       setPathLength(timerPathRef.current.getTotalLength());
     }
   }, []);
+
+  const handleVirtualChar = (char: string) => {
+    if (answerInputRef.current && !answerInputRef.current.disabled) {
+      const newValue = answerInputRef.current.value + char;
+      answerInputRef.current.value = newValue;
+      setInputValue(newValue);
+    }
+  };
+
+  const handleVirtualDelete = () => {
+    if (answerInputRef.current && !answerInputRef.current.disabled) {
+      const currentValue = answerInputRef.current.value;
+      const newValue = currentValue.slice(0, -1);
+      answerInputRef.current.value = newValue;
+      setInputValue(newValue);
+    }
+  };
 
   const checkAnswer = (event: React.FormEvent) => {
     event.preventDefault();
@@ -259,11 +279,11 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
   return (
     <div
       id="execution-screen"
-      className="screen active justify-start text-center pt-8 sm:px-6 md:px-8 lg:px-12"
+      className="screen active h-[100dvh] overflow-hidden flex flex-col justify-start text-center pt-4 sm:px-6 md:px-8 lg:px-12"
     >
-      <div className="w-full max-w-sm">
+      <div className="w-full max-w-sm flex-1 flex flex-col items-center justify-center overflow-y-auto w-full mx-auto">
         {countdown !== null && activeTimerDuration && (
-          <div className="relative w-32 h-32 mx-auto mb-4 sm:w-36 sm:h-36 lg:w-40 lg:h-40">
+          <div className="relative w-32 h-32 mx-auto mb-4 sm:w-36 sm:h-36 lg:w-40 lg:h-40 flex-none">
             <svg className="w-full h-full animate-slow-spin" viewBox="-12 -12 294 297">
               <path
                 d={STAR_PATH}
@@ -304,7 +324,8 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
           <div className="text-field">
             <input
               type="text"
-              inputMode={isNumericInput ? 'decimal' : 'text'}
+              inputMode="none"
+              readOnly
               id="answer-input"
               placeholder=" "
               autoComplete="off"
@@ -341,10 +362,15 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
         </form>
         <div
           id="feedback-container"
-          className="mt-6 min-h-[40px] sm:min-h-[48px]"
+          className="mt-6 min-h-[40px] sm:min-h-[48px] w-full flex justify-center items-center"
           dangerouslySetInnerHTML={{ __html: feedback }}
         ></div>
       </div>
+      <VirtualKeyboard
+        onChar={handleVirtualChar}
+        onDelete={handleVirtualDelete}
+        visible={!feedback && !isAnswerRevealed}
+      />
     </div>
   );
 }
