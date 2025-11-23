@@ -9,6 +9,7 @@ import {
   generatePowersQuestion,
   generateFractionsQuestion,
 } from '@/lib/question-helpers';
+import VirtualKeyboard from '@/components/VirtualKeyboard';
 import { STAR_PATH } from '@/lib/constants';
 
 interface Question {
@@ -32,6 +33,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
   const [unroundedAnswer, setUnroundedAnswer] = useState<number | null>(null);
   const [feedback, setFeedback] = useState('');
   const [isAnswerRevealed, setIsAnswerRevealed] = useState(false);
+  const [inputValue, setInputValue] = useState('');
 
   const [countdown, setCountdown] = useState<number | null>(null);
   const timerIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -88,6 +90,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
     setAnswerTypeHint('');
     setActiveAnswerType(null);
     setUnroundedAnswer(null);
+    setInputValue('');
     if (answerInputRef.current) {
       answerInputRef.current.value = '';
       answerInputRef.current.disabled = false;
@@ -171,6 +174,23 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
       setPathLength(timerPathRef.current.getTotalLength());
     }
   }, []);
+
+  const handleVirtualChar = (char: string) => {
+    if (answerInputRef.current && !answerInputRef.current.disabled) {
+      const newValue = answerInputRef.current.value + char;
+      answerInputRef.current.value = newValue;
+      setInputValue(newValue);
+    }
+  };
+
+  const handleVirtualDelete = () => {
+    if (answerInputRef.current && !answerInputRef.current.disabled) {
+      const currentValue = answerInputRef.current.value;
+      const newValue = currentValue.slice(0, -1);
+      answerInputRef.current.value = newValue;
+      setInputValue(newValue);
+    }
+  };
 
   const checkAnswer = (event: React.FormEvent) => {
     event.preventDefault();
@@ -304,7 +324,8 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
           <div className="text-field">
             <input
               type="text"
-              inputMode={isNumericInput ? 'decimal' : 'text'}
+              inputMode="none"
+              readOnly
               id="answer-input"
               placeholder=" "
               autoComplete="off"
@@ -345,6 +366,12 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
           dangerouslySetInnerHTML={{ __html: feedback }}
         ></div>
       </div>
+      <div className="h-[300px] w-full" aria-hidden="true" /> {/* Spacer for keyboard */}
+      <VirtualKeyboard
+        onChar={handleVirtualChar}
+        onDelete={handleVirtualDelete}
+        visible={!feedback && !isAnswerRevealed}
+      />
     </div>
   );
 }
