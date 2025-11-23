@@ -29,13 +29,13 @@ export default function VirtualKeyboard({ onChar, onDelete, visible }: VirtualKe
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-[var(--background-hsl)] border-t-[3px] border-black p-2 pb-6 z-50 animate-slide-up shadow-[0_-4px_0_0_rgba(0,0,0,0.1)]">
+    <div className="w-full bg-[var(--background-hsl)] border-t-[3px] border-black p-2 pb-6 animate-slide-up shadow-[0_-4px_0_0_rgba(0,0,0,0.1)] flex-none">
       <div className="grid grid-cols-4 gap-2 max-w-md mx-auto">
         {keys.map((key) => (
           <button
             key={key.label}
             className={`
-              ${key.span ? `col-span-${key.span}` : ''}
+              ${key.span === 4 ? 'col-span-4' : ''}
               ${key.isAction ? 'bg-red-100' : 'bg-white'}
               h-14 rounded-xl border-[3px] border-black
               shadow-[2px_2px_0_0_black] active:shadow-none active:translate-x-[2px] active:translate-y-[2px]
