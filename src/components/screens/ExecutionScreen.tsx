@@ -279,11 +279,11 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
   return (
     <div
       id="execution-screen"
-      className="screen active h-[100dvh] overflow-hidden flex flex-col justify-start text-center pt-4 sm:px-6 md:px-8 lg:px-12"
+      className="screen active h-[100dvh] overflow-hidden flex flex-col justify-start text-center pt-2 sm:px-6 md:px-8 lg:px-12"
     >
-      <div className="w-full max-w-sm flex-1 flex flex-col items-center justify-center overflow-y-auto w-full mx-auto">
+      <div className="w-full max-w-sm flex-1 flex flex-col items-center justify-center w-full mx-auto">
         {countdown !== null && activeTimerDuration && (
-          <div className="relative w-32 h-32 mx-auto mb-4 sm:w-36 sm:h-36 lg:w-40 lg:h-40 flex-none">
+          <div className="relative w-28 h-28 mx-auto mb-2 sm:w-32 sm:h-32 lg:w-36 lg:h-36 flex-none">
             <svg className="w-full h-full animate-slow-spin" viewBox="-12 -12 294 297">
               <path
                 d={STAR_PATH}
@@ -312,7 +312,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
         )}
         <p
           id="question-text"
-          className={`my-4 text-[var(--md-sys-color-on-surface)] flex justify-center items-center h-24 ${getQuestionSizeClass()}`}
+          className={`my-2 text-[var(--md-sys-color-on-surface)] flex justify-center items-center h-20 ${getQuestionSizeClass()}`}
           dangerouslySetInnerHTML={{ __html: question }}
         ></p>
         {answerTypeHint && (
