@@ -2,7 +2,6 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import type { Mode, FractionAnswerType, ExecutionConfig, PowerType } from '@/lib/types';
-import { useRipple } from '@/hooks/useRipple';
 import {
   generateTablesQuestion,
   generatePracticeQuestion,
@@ -10,7 +9,6 @@ import {
   generateFractionsQuestion,
 } from '@/lib/question-helpers';
 import VirtualKeyboard from '@/components/VirtualKeyboard';
-import { STAR_PATH } from '@/lib/constants';
 
 interface Question {
   question: string;
@@ -31,30 +29,18 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
   const [answerTypeHint, setAnswerTypeHint] = useState('');
   const [currentAnswer, setCurrentAnswer] = useState<string | number>(0);
   const [unroundedAnswer, setUnroundedAnswer] = useState<number | null>(null);
-  const [feedback, setFeedback] = useState('');
-  const [isAnswerRevealed, setIsAnswerRevealed] = useState(false);
+
+  // States for feedback handling
+  const [feedbackStatus, setFeedbackStatus] = useState<'idle' | 'correct' | 'wrong'>('idle');
+  const [feedbackMessage, setFeedbackMessage] = useState('');
+
   const [inputValue, setInputValue] = useState('');
 
   const [countdown, setCountdown] = useState<number | null>(null);
   const timerIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  const [pathLength, setPathLength] = useState(0);
-  const timerPathRef = useRef<SVGPathElement>(null);
-  const [activeAnswerType, setActiveAnswerType] =
-    useState<FractionAnswerType | null>(null);
+  const [activeAnswerType, setActiveAnswerType] = useState<FractionAnswerType | null>(null);
 
   const answerInputRef = useRef<HTMLInputElement>(null);
-  const createRipple = useRipple();
-
-  const getQuestionSizeClass = () => {
-    if (mode === 'fractions') {
-      return 'display-small sm:display-medium';
-    }
-    const len = question.replace(/<\/?[^>]+(>|$)/g, '').length;
-    if (len >= 11) return 'display-small sm:display-medium';
-    if (len >= 8) return 'display-medium sm:display-large';
-    return 'display-large';
-  };
 
   const stopTimer = useCallback(() => {
     if (timerIntervalRef.current) {
@@ -66,34 +52,25 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
   const timeUp = useCallback(
     (answer: number | string) => {
       stopTimer();
-      setIsAnswerRevealed(true);
-      if (answerInputRef.current) answerInputRef.current.disabled = true;
-      setFeedback(
-        `<div class="flex items-center justify-center gap-2 text-red-600"><span class="material-symbols-outlined">timer</span><span class="body-large">Time's up! The answer is ${
-          typeof answer === 'number' ? answer.toLocaleString() : answer
-        }</span></div>`
-      );
-      setCurrentQuestionObject(q => {
-        if (q) {
-          setWrongAnswerPool((prev) => [...prev, q]);
-        }
-        return q;
-      });
+      setFeedbackStatus('wrong');
+      setFeedbackMessage(`Time's up! Answer: ${answer}`);
+      if (currentQuestionObject) {
+         setWrongAnswerPool((prev) => [...prev, currentQuestionObject]);
+      }
     },
-    [stopTimer]
+    [stopTimer, currentQuestionObject]
   );
 
   const displayQuestion = useCallback(() => {
     stopTimer();
-    setIsAnswerRevealed(false);
-    setFeedback('');
+    setFeedbackStatus('idle');
+    setFeedbackMessage('');
     setAnswerTypeHint('');
     setActiveAnswerType(null);
     setUnroundedAnswer(null);
     setInputValue('');
     if (answerInputRef.current) {
       answerInputRef.current.value = '';
-      answerInputRef.current.disabled = false;
     }
 
     let questionData: Question | null;
@@ -123,11 +100,8 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
         }
     }
 
-
     if (!questionData) {
-        setQuestion("<span class='title-medium'>Invalid Config</span>");
-        setCurrentAnswer(0);
-        setCurrentQuestionObject(null);
+        setQuestion("Invalid Config");
         return;
     }
 
@@ -144,7 +118,6 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
     setCurrentAnswer(questionData.answer);
     setCurrentQuestionObject(questionData);
 
-
     const activeTimer = config.timer;
     if (activeTimer && activeTimer > 0) {
       setCountdown(activeTimer);
@@ -160,8 +133,6 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
     } else {
       setCountdown(null);
     }
-
-    setTimeout(() => answerInputRef.current?.focus(), 100);
   }, [mode, config, stopTimer, timeUp, wrongAnswerPool]);
 
   useEffect(() => {
@@ -169,45 +140,25 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
     return stopTimer;
   }, []);
 
-  useEffect(() => {
-    if (timerPathRef.current) {
-      setPathLength(timerPathRef.current.getTotalLength());
-    }
-  }, []);
-
   const handleVirtualChar = (char: string) => {
-    if (answerInputRef.current && !answerInputRef.current.disabled) {
-      const newValue = answerInputRef.current.value + char;
-      answerInputRef.current.value = newValue;
-      setInputValue(newValue);
-    }
+    if (feedbackStatus !== 'idle') return; // Block input during feedback
+    const newValue = inputValue + char;
+    setInputValue(newValue);
   };
 
   const handleVirtualDelete = () => {
-    if (answerInputRef.current && !answerInputRef.current.disabled) {
-      const currentValue = answerInputRef.current.value;
-      const newValue = currentValue.slice(0, -1);
-      answerInputRef.current.value = newValue;
-      setInputValue(newValue);
-    }
+    if (feedbackStatus !== 'idle') return;
+    setInputValue(prev => prev.slice(0, -1));
   };
 
-  const checkAnswer = (event: React.FormEvent) => {
-    event.preventDefault();
-    const userAnswerStr = answerInputRef.current?.value.trim() || '';
-
-    if (isAnswerRevealed) {
-      displayQuestion();
-      return;
+  const handleCheck = () => {
+    if (feedbackStatus !== 'idle') {
+        // If checking while showing result, go to next
+        displayQuestion();
+        return;
     }
 
-    if (userAnswerStr === '') {
-      setFeedback(
-        `<div class="flex items-center justify-center gap-2 text-yellow-600"><span class="material-symbols-outlined">warning</span><span class="body-large">Please enter an answer.</span></div>`
-      );
-      setTimeout(() => setFeedback(''), 2000);
-      return;
-    }
+    if (!inputValue) return;
 
     stopTimer();
 
@@ -217,11 +168,10 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
 
     if (isFractionPractice) {
       isCorrect =
-        userAnswerStr.toLowerCase() ===
+        inputValue.toLowerCase() ===
         currentAnswer.toString().toLowerCase();
     } else {
-      // Stricter validation for numeric input
-      const sanitizedUserAnswer = userAnswerStr.replace(/,/g, '');
+      const sanitizedUserAnswer = inputValue.replace(/,/g, '');
       const isValidNumber = /^-?\d*\.?\d+$/.test(sanitizedUserAnswer);
 
       if (isValidNumber) {
@@ -242,21 +192,16 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
     }
 
     if (isCorrect) {
-      setFeedback(
-        `<div class="flex items-center justify-center gap-2 text-green-600"><span class="material-symbols-outlined">check_circle</span><span class="body-large">Correct!</span></div>`
-      );
-      // If the correct answer was in the wrong pool, remove it
+      setFeedbackStatus('correct');
+      setFeedbackMessage('Correct!');
       if (currentQuestionObject) {
          setWrongAnswerPool(prev => prev.filter(q => q.question !== currentQuestionObject.question));
       }
-      setTimeout(displayQuestion, 2000);
+      // Auto advance after short delay if desired, or let user click Next
+      // Duolingo makes you click continue.
     } else {
-      setIsAnswerRevealed(true);
-      if (answerInputRef.current) answerInputRef.current.disabled = true;
-      setFeedback(
-        `<div class="flex items-center justify-center gap-2 text-red-600"><span class="material-symbols-outlined">cancel</span><span class="body-large">The correct answer is ${currentAnswer}</span></div>`
-      );
-      // Add the incorrect question to the pool
+      setFeedbackStatus('wrong');
+      setFeedbackMessage(`Correct answer: ${currentAnswer}`);
        if (currentQuestionObject) {
          setWrongAnswerPool(prev => [...prev, currentQuestionObject]);
        }
@@ -264,113 +209,128 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
   };
 
   const activeTimerDuration = config.timer;
-  const timerProgress =
-    countdown !== null && activeTimerDuration
-      ? countdown / activeTimerDuration
-      : 1;
-
-  const isNumericInput = !(
-    mode === 'fractions' && activeAnswerType === 'fraction'
-  );
-  const showPercentAdornment =
-    mode === 'fractions' && activeAnswerType === 'decimal';
+  const showPercentAdornment = mode === 'fractions' && activeAnswerType === 'decimal';
   
+  // Progress Bar Calculation (simplified for now, just shows active timer or empty)
+  const timerProgress = (countdown !== null && activeTimerDuration)
+    ? (countdown / activeTimerDuration) * 100
+    : 100;
 
   return (
-    <div
-      id="execution-screen"
-      className="screen active h-[100dvh] overflow-hidden flex flex-col justify-start text-center pt-2 sm:px-6 md:px-8 lg:px-12"
-    >
-      <div className="w-full max-w-sm flex-1 flex flex-col items-center justify-center w-full mx-auto">
-        {countdown !== null && activeTimerDuration && (
-          <div className="relative w-28 h-28 mx-auto mb-2 sm:w-32 sm:h-32 lg:w-36 lg:h-36 flex-none">
-            <svg className="w-full h-full animate-slow-spin" viewBox="-12 -12 294 297">
-              <path
-                d={STAR_PATH}
-                fill="hsl(212, 93%, 96%)"
-                strokeWidth="12"
-                stroke={'hsl(212, 93%, 96%)'}
-              />
-              <path
-                ref={timerPathRef}
-                d={STAR_PATH}
-                fill="none"
-                strokeWidth="12"
-                stroke="var(--md-sys-color-primary)"
-                strokeLinecap="round"
-                strokeDasharray={pathLength}
-                strokeDashoffset={pathLength * (1 - timerProgress)}
-                style={{ transition: 'stroke-dashoffset 1s linear' }}
-              />
-            </svg>
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <span className="headline-large sm:headline-large lg:display-small text-[var(--md-sys-color-on-surface-variant)]">
-                {countdown}
-              </span>
+    <div id="execution-screen" className="screen-container">
+        {/* Header: Progress Bar */}
+        <div className="w-full h-16 px-4 flex items-center justify-center relative">
+             {activeTimerDuration && (
+                <div className="w-full h-4 bg-slate-200 rounded-full overflow-hidden">
+                    <div
+                        className="h-full bg-primary transition-all duration-1000 ease-linear rounded-full"
+                        style={{ width: `${timerProgress}%` }}
+                    />
+                </div>
+             )}
+        </div>
+
+        {/* Content: Question Area */}
+        <div className="screen-content flex flex-col items-center justify-center text-center">
+
+            <div className="flex-1 flex flex-col justify-center w-full">
+                {/* Question Bubble */}
+                <div className="mb-8 animate-bounce-soft">
+                     <h2
+                        className="text-4xl sm:text-5xl font-bold text-slate-700 mb-2"
+                        dangerouslySetInnerHTML={{ __html: question }}
+                     />
+                     {answerTypeHint && (
+                        <p className="text-slate-400 font-bold text-lg">{answerTypeHint}</p>
+                     )}
+                </div>
+
+                {/* Answer Display */}
+                <div className="w-full max-w-xs mx-auto mb-8">
+                    <div className={`
+                        flex items-center justify-center
+                        min-h-[80px] w-full px-6 rounded-3xl
+                        border-2 text-3xl font-bold transition-all
+                        ${feedbackStatus === 'idle' ? 'bg-white border-slate-200 text-slate-700' : ''}
+                        ${feedbackStatus === 'correct' ? 'bg-green-100 border-green-500 text-green-700' : ''}
+                        ${feedbackStatus === 'wrong' ? 'bg-red-100 border-red-500 text-red-700' : ''}
+                    `}>
+                        {inputValue}
+                        {inputValue.length === 0 && <span className="text-slate-300 animate-pulse">_</span>}
+                        {showPercentAdornment && <span className="ml-1 text-slate-400">%</span>}
+                    </div>
+                </div>
             </div>
-          </div>
-        )}
-        <p
-          id="question-text"
-          className={`my-2 text-[var(--md-sys-color-on-surface)] flex justify-center items-center h-20 ${getQuestionSizeClass()}`}
-          dangerouslySetInnerHTML={{ __html: question }}
-        ></p>
-        {answerTypeHint && (
-          <p className="body-medium text-[var(--md-sys-color-on-surface-variant)] -mt-2 mb-4">
-            {answerTypeHint}
-          </p>
-        )}
-        <form id="answer-form" className="mt-4" onSubmit={checkAnswer}>
-          <div className="text-field">
-            <input
-              type="text"
-              inputMode="none"
-              readOnly
-              id="answer-input"
-              placeholder=" "
-              autoComplete="off"
-              autoCorrect="off"
-              spellCheck="false"
-              className={`text-center title-large ${
-                showPercentAdornment ? '!pr-12' : ''
-              }`}
-              ref={answerInputRef}
-            />
-            <label htmlFor="answer-input" className="body-large">
-              Your Answer
-            </label>
-            {showPercentAdornment && (
-              <div
-                id="percent-adornment"
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 title-medium"
-              >
-                %
-              </div>
+
+        </div>
+
+        {/* Footer: Feedback / Button */}
+        <div className={`
+            screen-fixed-bottom flex flex-col gap-4 border-t-2 transition-colors duration-300
+            ${feedbackStatus === 'idle' ? 'bg-white border-slate-100' : ''}
+            ${feedbackStatus === 'correct' ? 'bg-green-100 border-transparent' : ''}
+            ${feedbackStatus === 'wrong' ? 'bg-red-100 border-transparent' : ''}
+        `}>
+             {feedbackStatus !== 'idle' && (
+                 <div className="flex items-start gap-4 mb-2">
+                     <div className={`
+                        w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0
+                        ${feedbackStatus === 'correct' ? 'bg-white text-green-500' : 'bg-white text-red-500'}
+                     `}>
+                        <span className="material-symbols-outlined font-bold">
+                            {feedbackStatus === 'correct' ? 'check' : 'close'}
+                        </span>
+                     </div>
+                     <div className="text-left">
+                        <h3 className={`
+                            font-bold text-xl
+                            ${feedbackStatus === 'correct' ? 'text-green-700' : 'text-red-700'}
+                        `}>
+                            {feedbackStatus === 'correct' ? 'Nicely done!' : 'Incorrect'}
+                        </h3>
+                         {feedbackStatus === 'wrong' && (
+                             <p className="text-red-600 font-semibold">{feedbackMessage}</p>
+                         )}
+                     </div>
+                 </div>
+             )}
+
+            {feedbackStatus === 'idle' ? (
+                <button
+                    onClick={handleCheck}
+                    disabled={!inputValue}
+                    className={`
+                        w-full filled-button transition-all
+                        ${!inputValue ? 'opacity-50 grayscale' : ''}
+                    `}
+                >
+                    CHECK
+                </button>
+            ) : (
+                <button
+                    onClick={displayQuestion}
+                    className={`
+                        w-full h-14 rounded-2xl font-bold text-lg uppercase tracking-wide btn-push
+                        ${feedbackStatus === 'correct'
+                            ? 'bg-green-500 border-green-700 text-white hover:bg-green-400'
+                            : 'bg-red-500 border-red-700 text-white hover:bg-red-400'}
+                    `}
+                >
+                    CONTINUE
+                </button>
             )}
-          </div>
-          <button
-            type="submit"
-            className={`${
-              isAnswerRevealed ? 'filled-button' : 'tonal-button'
-            } ripple-surface w-full mt-6`}
-            onMouseDown={createRipple}
-          >
-            <span className="label-large">
-              {isAnswerRevealed ? 'Next' : 'Check'}
-            </span>
-          </button>
-        </form>
-        <div
-          id="feedback-container"
-          className="mt-6 min-h-[40px] sm:min-h-[48px] w-full flex justify-center items-center"
-          dangerouslySetInnerHTML={{ __html: feedback }}
-        ></div>
-      </div>
-      <VirtualKeyboard
-        onChar={handleVirtualChar}
-        onDelete={handleVirtualDelete}
-        visible={!feedback && !isAnswerRevealed}
-      />
+        </div>
+
+        {/* Keyboard (Only visible when idle) */}
+        {feedbackStatus === 'idle' && (
+            <div className="bg-slate-100 p-2 pb-6 border-t border-slate-200">
+                <VirtualKeyboard
+                    onChar={handleVirtualChar}
+                    onDelete={handleVirtualDelete}
+                    visible={true}
+                />
+            </div>
+        )}
     </div>
   );
 }

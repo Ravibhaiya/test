@@ -1,94 +1,100 @@
 // src/components/screens/HomeScreen.tsx
 'use client';
 import type { Page } from '@/lib/types';
-import { useRipple } from '@/hooks/useRipple';
+// Ripple is less used in "Duolingo" style (prefer push animation), but we can keep or remove.
+// I'll rely on the css active states for the "push" effect.
 
 interface HomeScreenProps {
   navigateTo: (page: Page) => void;
 }
 
 export default function HomeScreen({ navigateTo }: HomeScreenProps) {
-  const createRipple = useRipple();
   return (
-    <div id="home-screen" className="screen active">
-      <div className="grid grid-cols-1 gap-6">
-        <button
-          onClick={() => navigateTo('table-selection')}
-          className="app-card ripple-surface group"
-          onMouseDown={createRipple}
-        >
-          <div className="flex items-center gap-6">
-            <div className="flex-shrink-0 flex items-center justify-center w-16 h-16 rounded-2xl bg-purple-100 border-2 border-black shadow-[2px_2px_0_0_black]">
-              <span className="material-symbols-outlined text-purple-600 text-3xl">
-                close
-              </span>
+    <div id="home-screen" className="screen-container">
+        {/* Header */}
+        <div className="flex-shrink-0 px-6 py-6 pb-2">
+            <h1 className="display-medium text-slate-700">Practice</h1>
+            <p className="body-medium mt-1">Choose a skill to improve</p>
+        </div>
+
+        {/* Content */}
+        <div className="screen-content no-scrollbar pb-8">
+            <div className="flex flex-col gap-4">
+                {/* Card 1: Tables (Purple) */}
+                <button
+                    onClick={() => navigateTo('table-selection')}
+                    className="w-full relative group transition-all active:scale-[0.98]"
+                >
+                     {/* Card Body */}
+                    <div className="w-full bg-white border-2 border-slate-100 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
+                        {/* Icon Box */}
+                        <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center">
+                            <span className="material-symbols-outlined text-3xl">close</span>
+                        </div>
+
+                        {/* Text */}
+                        <div className="text-left flex-1">
+                            <h3 className="title-medium text-slate-700">Tables</h3>
+                            <p className="text-sm font-semibold text-slate-400">Multiplication tables</p>
+                        </div>
+
+                        {/* Chevron */}
+                        <span className="material-symbols-outlined text-slate-300">chevron_right</span>
+                    </div>
+                </button>
+
+                {/* Card 2: Practice (Cyan) */}
+                <button
+                    onClick={() => navigateTo('practice-config')}
+                    className="w-full relative group transition-all active:scale-[0.98]"
+                >
+                    <div className="w-full bg-white border-2 border-slate-100 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
+                        <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center">
+                             <span className="material-symbols-outlined text-3xl">calculate</span>
+                        </div>
+                        <div className="text-left flex-1">
+                            <h3 className="title-medium text-slate-700">Multiply</h3>
+                            <p className="text-sm font-semibold text-slate-400">Multi-digit problems</p>
+                        </div>
+                        <span className="material-symbols-outlined text-slate-300">chevron_right</span>
+                    </div>
+                </button>
+
+                {/* Card 3: Powers (Green) */}
+                <button
+                    onClick={() => navigateTo('powers-config')}
+                    className="w-full relative group transition-all active:scale-[0.98]"
+                >
+                    <div className="w-full bg-white border-2 border-slate-100 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
+                         <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                             <span className="material-symbols-outlined text-3xl">superscript</span>
+                        </div>
+                        <div className="text-left flex-1">
+                            <h3 className="title-medium text-slate-700">Powers</h3>
+                            <p className="text-sm font-semibold text-slate-400">Squares, cubes & roots</p>
+                        </div>
+                        <span className="material-symbols-outlined text-slate-300">chevron_right</span>
+                    </div>
+                </button>
+
+                 {/* Card 4: Fractions (Red) */}
+                 <button
+                    onClick={() => navigateTo('fractions-config')}
+                    className="w-full relative group transition-all active:scale-[0.98]"
+                >
+                    <div className="w-full bg-white border-2 border-slate-100 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
+                         <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center">
+                             <span className="material-symbols-outlined text-3xl">percent</span>
+                        </div>
+                        <div className="text-left flex-1">
+                            <h3 className="title-medium text-slate-700">Fractions</h3>
+                            <p className="text-sm font-semibold text-slate-400">Decimals & percents</p>
+                        </div>
+                        <span className="material-symbols-outlined text-slate-300">chevron_right</span>
+                    </div>
+                </button>
             </div>
-            <div className="text-left">
-              <p className="title-medium text-xl mb-1">Multiplication Tables</p>
-              <p className="body-medium text-gray-600">
-                Practice your times tables
-              </p>
-            </div>
-          </div>
-        </button>
-        <button
-          onClick={() => navigateTo('practice-config')}
-          className="app-card ripple-surface group"
-          onMouseDown={createRipple}
-        >
-          <div className="flex items-center gap-6">
-            <div className="flex-shrink-0 flex items-center justify-center w-16 h-16 rounded-2xl bg-cyan-100 border-2 border-black shadow-[2px_2px_0_0_black]">
-              <span className="material-symbols-outlined text-cyan-700 text-3xl">
-                calculate
-              </span>
-            </div>
-            <div className="text-left">
-              <p className="title-medium text-xl mb-1">Multiplication Practice</p>
-              <p className="body-medium text-gray-600">
-                Solve multi-digit problems
-              </p>
-            </div>
-          </div>
-        </button>
-        <button
-          onClick={() => navigateTo('powers-config')}
-          className="app-card ripple-surface group"
-          onMouseDown={createRipple}
-        >
-          <div className="flex items-center gap-6">
-            <div className="flex-shrink-0 flex items-center justify-center w-16 h-16 rounded-2xl bg-green-100 border-2 border-black shadow-[2px_2px_0_0_black]">
-              <span className="material-symbols-outlined text-green-700 text-3xl">
-                superscript
-              </span>
-            </div>
-            <div className="text-left">
-              <p className="title-medium text-xl mb-1">Powers &amp; Roots</p>
-              <p className="body-medium text-gray-600">
-                Practice squares, cubes, and roots
-              </p>
-            </div>
-          </div>
-        </button>
-        <button
-          onClick={() => navigateTo('fractions-config')}
-          className="app-card ripple-surface group"
-          onMouseDown={createRipple}
-        >
-          <div className="flex items-center gap-6">
-            <div className="flex-shrink-0 flex items-center justify-center w-16 h-16 rounded-2xl bg-red-100 border-2 border-black shadow-[2px_2px_0_0_black]">
-              <span className="material-symbols-outlined text-red-600 text-3xl">
-                percent
-              </span>
-            </div>
-            <div className="text-left">
-              <p className="title-medium text-xl mb-1">Fractions &amp; Decimals</p>
-              <p className="body-medium text-gray-600">
-                Convert between fractions and percentages
-              </p>
-            </div>
-          </div>
-        </button>
-      </div>
+        </div>
     </div>
   );
 }

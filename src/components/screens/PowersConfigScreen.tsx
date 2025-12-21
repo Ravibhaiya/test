@@ -2,7 +2,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import type { Mode, PowerType } from '@/lib/types';
-import { useRipple } from '@/hooks/useRipple';
 
 interface PowersConfig {
   selected: PowerType[];
@@ -23,8 +22,6 @@ export default function PowersConfigScreen({ onStart }: PowersConfigScreenProps)
   const [configError, setConfigError] = useState('');
 
   const sliderRef = useRef<HTMLInputElement>(null);
-  const sliderLabelRef = useRef<HTMLSpanElement>(null);
-  const createRipple = useRipple();
 
   useEffect(() => {
     try {
@@ -36,21 +33,6 @@ export default function PowersConfigScreen({ onStart }: PowersConfigScreenProps)
       console.error('Failed to read timer from localStorage', error);
     }
   }, []);
-
-  useEffect(() => {
-    if (sliderRef.current && sliderLabelRef.current) {
-      const slider = sliderRef.current;
-      const valueLabel = sliderLabelRef.current;
-      const min = parseInt(slider.min);
-      const max = parseInt(slider.max);
-      const value = parseInt(slider.value);
-      const percent = ((value - min) / (max - min)) * 100;
-      const thumbWidth = 20;
-      valueLabel.style.left = `calc(${percent}% + (${
-        (thumbWidth / 2) - (percent / 100) * thumbWidth
-      }px))`;
-    }
-  }, [rangeMax]);
 
   const handleSelectionChange = () => {
     if (configError) setConfigError('');
@@ -88,7 +70,7 @@ export default function PowersConfigScreen({ onStart }: PowersConfigScreenProps)
       onStart('powers', { selected, rangeMax, timer });
     } else {
       setConfigError(
-        'Please select at least one practice type (e.g., Squares, Cubes).'
+        'Please select at least one practice type.'
       );
     }
   };
@@ -98,104 +80,108 @@ export default function PowersConfigScreen({ onStart }: PowersConfigScreenProps)
   const isPowerRangeAbove20 = rangeMax > 20;
 
   return (
-    <div
-      id="powers-config-screen"
-      className="screen active flex-col sm:px-6 md:px-8 lg:px-12"
-    >
-      <div className="flex-grow">
-        <p className="body-large text-[var(--md-sys-color-on-surface-variant)] mb-2">
-          Practice Types:
-        </p>
-        <div id="powers-chips" className="flex flex-wrap gap-2 mb-6">
-          {(
-            ['squares', 'cubes', 'square_roots', 'cube_roots'] as PowerType[]
-          ).map((type) => (
-            <button
-              key={type}
-              onClick={() => handlePowerSelection(type)}
-              onMouseDown={createRipple}
-              className={`choice-chip ripple-surface label-large ${
-                selected.includes(type) ? 'selected' : ''
-              }`}
-            >
-              <span className="material-symbols-outlined">done</span>
-              <span>
-                {
-                  {
-                    squares: 'Squares (x²)',
-                    cubes: 'Cubes (x³)',
-                    square_roots: 'Square Roots (√x)',
-                    cube_roots: 'Cube Roots (³√x)',
-                  }[type]
-                }
-              </span>
-            </button>
-          ))}
+    <div id="powers-config-screen" className="screen-container">
+        {/* Header */}
+        <div className="flex-shrink-0 px-6 py-6 pb-2">
+            <h1 className="title-large text-slate-700">Powers & Roots</h1>
+            <p className="body-medium mt-1">Squares, cubes, and more</p>
         </div>
-        <p className="body-large text-[var(--md-sys-color-on-surface-variant)] mb-2">
-          Number Range:
-        </p>
-        <div className="range-slider-wrapper">
-          <span id="slider-value-label" ref={sliderLabelRef}>
-            {rangeMax}
-          </span>
-          <input
-            type="range"
-            id="powers-range-slider"
-            min="2"
-            max="30"
-            value={rangeMax}
-            onChange={handleSliderChange}
-            ref={sliderRef}
-          />
-          <div className="flex justify-between mt-2 body-medium text-[var(--md-sys-color-on-surface-variant)]">
-            <span>2</span>
-            <span>30</span>
-          </div>
+
+        {/* Content */}
+        <div className="screen-content no-scrollbar flex flex-col gap-6">
+
+             {/* Section 1: Types */}
+             <div className="app-card !p-4">
+                 <h3 className="text-slate-700 font-bold mb-3">Practice Types</h3>
+                 <div className="flex flex-wrap gap-2">
+                    {(['squares', 'cubes', 'square_roots', 'cube_roots'] as PowerType[]).map((type) => (
+                        <button
+                            key={type}
+                            onClick={() => handlePowerSelection(type)}
+                            className={`choice-chip btn-push ${selected.includes(type) ? 'selected' : ''}`}
+                        >
+                            {selected.includes(type) && <span className="material-symbols-outlined text-lg">check</span>}
+                            <span>
+                              {
+                                {
+                                  squares: 'Squares (x²)',
+                                  cubes: 'Cubes (x³)',
+                                  square_roots: 'Square Roots (√x)',
+                                  cube_roots: 'Cube Roots (³√x)',
+                                }[type]
+                              }
+                            </span>
+                        </button>
+                    ))}
+                 </div>
+             </div>
+
+             {/* Section 2: Range */}
+             <div className="app-card !p-4">
+                 <div className="flex justify-between items-center mb-4">
+                     <h3 className="text-slate-700 font-bold">Max Number</h3>
+                     <span className="bg-primary text-white font-bold px-3 py-1 rounded-lg">
+                        {rangeMax}
+                     </span>
+                 </div>
+
+                 <input
+                    type="range"
+                    min="2"
+                    max="30"
+                    value={rangeMax}
+                    onChange={handleSliderChange}
+                    className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-primary"
+                 />
+                 <div className="flex justify-between mt-2 text-xs font-bold text-slate-400">
+                    <span>2</span>
+                    <span>30</span>
+                 </div>
+
+                 {(hasCubeSelection && isPowerRangeAbove20) && (
+                     <div className="mt-4 p-3 bg-yellow-50 rounded-xl border border-yellow-100 flex gap-2">
+                         <span className="material-symbols-outlined text-yellow-600">info</span>
+                         <p className="text-xs text-yellow-800 font-semibold">
+                            Cube/Root questions limited to 20 max to avoid huge numbers.
+                         </p>
+                     </div>
+                 )}
+             </div>
         </div>
-        <p
-          id="powers-helper-note"
-          className={`label-medium text-center text-[var(--md-sys-color-on-surface-variant)] mt-2 ${
-            !(hasCubeSelection && isPowerRangeAbove20) ? 'hidden' : ''
-          }`}
-        >
-          Note: Cube and cube root questions will only be generated for numbers
-          up to 20.
-        </p>
-      </div>
-      <div className="flex-shrink-0 mt-6">
-        <div className="text-field !mt-0">
-          <input
-            type="number"
-            id="powers-timer-input"
-            placeholder=" "
-            autoComplete="off"
-            className="text-center title-medium"
-            value={timer === undefined ? '' : timer}
-            onChange={(e) => handleTimerChange(e.target.value)}
-          />
-          <label htmlFor="powers-timer-input" className="body-large">
-            Seconds per question
-          </label>
+
+        {/* Footer */}
+        <div className="screen-fixed-bottom border-t border-slate-100 flex flex-col gap-4">
+             {/* Timer Input */}
+             <div className="flex items-center gap-4 bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-600">
+                     <span className="material-symbols-outlined">timer</span>
+                </div>
+                <div className="flex-1">
+                    <p className="font-bold text-slate-700 text-sm">Timer (seconds)</p>
+                    <p className="text-xs text-slate-400">0 for no timer</p>
+                </div>
+                <input
+                    type="number"
+                    value={timer === undefined ? '' : timer}
+                    onChange={(e) => handleTimerChange(e.target.value)}
+                    className="w-16 h-10 bg-white border-2 border-slate-200 rounded-xl text-center font-bold text-slate-700 outline-none focus:border-primary"
+                    placeholder="∞"
+                />
+             </div>
+
+             {configError && (
+                 <div className="text-center text-red-500 font-bold text-sm bg-red-50 py-2 rounded-xl border border-red-100">
+                     {configError}
+                 </div>
+             )}
+
+             <button
+                onClick={handleStartClick}
+                className="w-full filled-button"
+             >
+                START PRACTICE
+             </button>
         </div>
-        <p className="label-medium text-center text-[var(--md-sys-color-on-surface-variant)] mt-2">
-          Enter 0 or leave blank for no timer.
-        </p>
-      </div>
-      <div className="min-h-[24px] text-center my-2">
-        {configError && (
-          <span className="body-medium text-red-600">{configError}</span>
-        )}
-      </div>
-      <div className="flex justify-end pt-2 flex-shrink-0">
-        <button
-          onClick={handleStartClick}
-          className="filled-button ripple-surface"
-          onMouseDown={createRipple}
-        >
-          <span className="label-large">Start Practice</span>
-        </button>
-      </div>
     </div>
   );
 }
