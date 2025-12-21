@@ -2,7 +2,6 @@
 'use client';
 import { useState, useEffect } from 'react';
 import type { Mode } from '@/lib/types';
-import { useRipple } from '@/hooks/useRipple';
 
 interface PracticeConfig {
   digits1: number[];
@@ -23,7 +22,6 @@ export default function PracticeConfigScreen({
   const [digits2, setDigits2] = useState<number[]>([]);
   const [timer, setTimer] = useState<number | undefined>(10);
   const [configError, setConfigError] = useState('');
-  const createRipple = useRipple();
 
   useEffect(() => {
     try {
@@ -72,86 +70,89 @@ export default function PracticeConfigScreen({
       setConfigError('');
       onStart('practice', { digits1, digits2, timer });
     } else {
-      setConfigError('Please select the number of digits for both numbers.');
+      setConfigError('Please select digit count for both numbers.');
     }
   };
 
   return (
-    <div
-      id="practice-config-screen"
-      className="screen active flex-col sm:px-6 md:px-8 lg:px-12"
-    >
-      <div className="flex-grow">
-        <p className="body-large text-[var(--md-sys-color-on-surface-variant)] mb-2">
-          Digits in first number:
-        </p>
-        <div id="digits1-chips" className="flex flex-wrap gap-2 mb-6">
-          {[2, 3, 4, 5].map((digit) => (
-            <button
-              key={`d1-${digit}`}
-              onClick={() => handleDigitSelection('digits1', digit)}
-              onMouseDown={createRipple}
-              className={`choice-chip ripple-surface label-large ${
-                digits1.includes(digit) ? 'selected' : ''
-              }`}
-            >
-              <span className="material-symbols-outlined">done</span>
-              <span>{digit}</span>
-            </button>
-          ))}
+    <div id="practice-config-screen" className="screen-container">
+        {/* Header */}
+        <div className="flex-shrink-0 px-6 py-6 pb-2">
+            <h1 className="title-large text-slate-700">Multiplication Practice</h1>
+            <p className="body-medium mt-1">Configure your challenge</p>
         </div>
-        <p className="body-large text-[var(--md-sys-color-on-surface-variant)] mb-2">
-          Digits in second number:
-        </p>
-        <div id="digits2-chips" className="flex flex-wrap gap-2">
-          {[2, 3, 4, 5].map((digit) => (
-            <button
-              key={`d2-${digit}`}
-              onClick={() => handleDigitSelection('digits2', digit)}
-              onMouseDown={createRipple}
-              className={`choice-chip ripple-surface label-large ${
-                digits2.includes(digit) ? 'selected' : ''
-              }`}
-            >
-              <span className="material-symbols-outlined">done</span>
-              <span>{digit}</span>
-            </button>
-          ))}
+
+        {/* Content */}
+        <div className="screen-content no-scrollbar flex flex-col gap-6">
+
+             {/* Section 1 */}
+             <div className="app-card !p-4">
+                 <h3 className="text-slate-700 font-bold mb-3">Digits in 1st Number</h3>
+                 <div className="flex flex-wrap gap-2">
+                    {[2, 3, 4, 5].map((digit) => (
+                        <button
+                            key={`d1-${digit}`}
+                            onClick={() => handleDigitSelection('digits1', digit)}
+                            className={`choice-chip btn-push ${digits1.includes(digit) ? 'selected' : ''}`}
+                        >
+                            {digits1.includes(digit) && <span className="material-symbols-outlined text-lg">check</span>}
+                            <span>{digit} Digits</span>
+                        </button>
+                    ))}
+                 </div>
+             </div>
+
+             {/* Section 2 */}
+             <div className="app-card !p-4">
+                 <h3 className="text-slate-700 font-bold mb-3">Digits in 2nd Number</h3>
+                 <div className="flex flex-wrap gap-2">
+                    {[2, 3, 4, 5].map((digit) => (
+                        <button
+                            key={`d2-${digit}`}
+                            onClick={() => handleDigitSelection('digits2', digit)}
+                            className={`choice-chip btn-push ${digits2.includes(digit) ? 'selected' : ''}`}
+                        >
+                            {digits2.includes(digit) && <span className="material-symbols-outlined text-lg">check</span>}
+                            <span>{digit} Digits</span>
+                        </button>
+                    ))}
+                 </div>
+             </div>
         </div>
-      </div>
-      <div className="flex-shrink-0 mt-6">
-        <div className="text-field !mt-0">
-          <input
-            type="number"
-            id="practice-timer-input"
-            placeholder=" "
-            autoComplete="off"
-            className="text-center title-medium"
-            value={timer === undefined ? '' : timer}
-            onChange={(e) => handleTimerChange(e.target.value)}
-          />
-          <label htmlFor="practice-timer-input" className="body-large">
-            Seconds per question
-          </label>
+
+        {/* Footer */}
+        <div className="screen-fixed-bottom border-t border-slate-100 flex flex-col gap-4">
+             {/* Timer Input */}
+             <div className="flex items-center gap-4 bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-600">
+                     <span className="material-symbols-outlined">timer</span>
+                </div>
+                <div className="flex-1">
+                    <p className="font-bold text-slate-700 text-sm">Timer (seconds)</p>
+                    <p className="text-xs text-slate-400">0 for no timer</p>
+                </div>
+                <input
+                    type="number"
+                    value={timer === undefined ? '' : timer}
+                    onChange={(e) => handleTimerChange(e.target.value)}
+                    className="w-16 h-10 bg-white border-2 border-slate-200 rounded-xl text-center font-bold text-slate-700 outline-none focus:border-primary"
+                    placeholder="∞"
+                />
+             </div>
+
+             {configError && (
+                 <div className="text-center text-red-500 font-bold text-sm bg-red-50 py-2 rounded-xl border border-red-100">
+                     {configError}
+                 </div>
+             )}
+
+             <button
+                onClick={handleStartClick}
+                className="w-full filled-button"
+             >
+                START
+             </button>
         </div>
-        <p className="label-medium text-center text-[var(--md-sys-color-on-surface-variant)] mt-2">
-          Enter 0 or leave blank for no timer.
-        </p>
-      </div>
-      <div className="min-h-[24px] text-center my-2">
-        {configError && (
-          <span className="body-medium text-red-600">{configError}</span>
-        )}
-      </div>
-      <div className="flex justify-end pt-2 flex-shrink-0">
-        <button
-          onClick={handleStartClick}
-          className="filled-button ripple-surface"
-          onMouseDown={createRipple}
-        >
-          <span className="label-large">Start Practice</span>
-        </button>
-      </div>
     </div>
   );
 }

@@ -23,6 +23,12 @@ const sourceCodePro = Source_Code_Pro({
 export const metadata: Metadata = {
   title: 'Math Tools',
   description: 'Practice multiplication, powers, and roots.',
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false, // Prevents zooming to maintain app-like feel
+  },
 };
 
 export default function RootLayout({
@@ -35,13 +41,15 @@ export default function RootLayout({
       <head>
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap"
         />
       </head>
       <body
-        className={`${fredoka.variable} ${nunito.variable} ${sourceCodePro.variable}`}
+        className={`${fredoka.variable} ${nunito.variable} ${sourceCodePro.variable} antialiased selection:bg-primary/20`}
       >
-        {children}
+        <div id="app-root" className="h-full w-full overflow-hidden bg-background text-foreground">
+            {children}
+        </div>
       </body>
     </html>
   );
