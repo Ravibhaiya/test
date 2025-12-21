@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Nunito, Fredoka, Source_Code_Pro } from 'next/font/google';
 import './globals.css';
 
@@ -23,12 +23,13 @@ const sourceCodePro = Source_Code_Pro({
 export const metadata: Metadata = {
   title: 'Math Tools',
   description: 'Practice multiplication, powers, and roots.',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false, // Prevents zooming to maintain app-like feel
-  },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false, // Prevents zooming to maintain app-like feel
 };
 
 export default function RootLayout({
