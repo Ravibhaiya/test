@@ -67,7 +67,7 @@ export default function Home() {
     <main id="app-container" className="h-full flex flex-col overflow-hidden bg-background">
       <header
         id="top-app-bar"
-        className="flex flex-row items-center p-4 bg-white sticky top-0 z-50 min-h-[72px] flex-shrink-0"
+        className="flex flex-row items-center px-4 bg-white sticky top-0 z-50 h-14 flex-shrink-0"
       >
         <button
           id="back-btn"

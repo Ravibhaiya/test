@@ -220,7 +220,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
   return (
     <div id="execution-screen" className="screen-container">
         {/* Header: Progress Bar */}
-        <div className="w-full h-16 px-4 flex items-center justify-center relative">
+        <div className="w-full h-10 px-4 flex items-center justify-center relative">
              {activeTimerDuration && (
                 <div className="w-full h-4 bg-slate-200 rounded-full overflow-hidden">
                     <div
@@ -236,7 +236,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
 
             <div className="flex-1 flex flex-col justify-center w-full">
                 {/* Question Bubble */}
-                <div className="mb-8 animate-bounce-soft">
+                <div className="mb-4 animate-bounce-soft">
                      <h2
                         className="text-4xl sm:text-5xl font-bold text-slate-700 mb-2"
                         dangerouslySetInnerHTML={{ __html: question }}
@@ -247,7 +247,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
                 </div>
 
                 {/* Answer Display */}
-                <div className="w-full max-w-xs mx-auto mb-8">
+                <div className="w-full max-w-xs mx-auto mb-4">
                     <div className={`
                         flex items-center justify-center
                         min-h-[80px] w-full px-6 rounded-3xl
@@ -324,7 +324,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
 
         {/* Keyboard (Only visible when idle) */}
         {feedbackStatus === 'idle' && (
-            <div className="bg-slate-100 p-2 pb-6 border-t border-slate-200">
+            <div className="bg-slate-100 p-2 pb-2 border-t border-slate-200">
                 <VirtualKeyboard
                     onChar={handleVirtualChar}
                     onDelete={handleVirtualDelete}
