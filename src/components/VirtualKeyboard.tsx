@@ -11,7 +11,7 @@ export default function VirtualKeyboard({ onChar, onDelete, visible }: VirtualKe
 
   return (
     <div className="w-full max-w-md mx-auto">
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-4 gap-2">
         {/* Row 1 */}
         <KeyButton label="1" value="1" onChar={onChar} />
         <KeyButton label="2" value="2" onChar={onChar} />
@@ -57,7 +57,7 @@ const KeyButton = memo(function KeyButton({
     return (
         <button
             className={`
-              h-14 rounded-xl text-2xl font-bold flex items-center justify-center transition-all btn-push
+              h-12 rounded-xl text-2xl font-bold flex items-center justify-center transition-all btn-push
               ${isAction
                 ? 'bg-slate-200 text-slate-600 border-slate-300'
                 : 'bg-white text-slate-700 border-slate-200'
