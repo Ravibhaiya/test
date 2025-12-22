@@ -1,6 +1,7 @@
 // src/components/screens/ExecutionScreen.tsx
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import React from 'react';
 import type { Mode, FractionAnswerType, ExecutionConfig, PowerType } from '@/lib/types';
 import {
   generateTablesQuestion,
@@ -231,7 +232,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
         </div>
 
         {/* Content: Question Area */}
-        <div className="screen-content flex flex-col items-center justify-center text-center">
+        <div className="screen-content !overflow-hidden flex flex-col items-center justify-center text-center">
 
             <div className="flex-1 flex flex-col justify-center w-full">
                 {/* Question Bubble */}
