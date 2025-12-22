@@ -83,7 +83,7 @@ export default function PracticeConfigScreen({
         </div>
 
         {/* Content */}
-        <div className="screen-content no-scrollbar flex flex-col gap-6">
+        <div className="screen-content overflow-y-auto no-scrollbar flex flex-col gap-6">
 
              {/* Section 1 */}
              <div className="app-card !p-4">

@@ -65,10 +65,13 @@ export default function Home() {
 
   return (
     <main id="app-container">
-      <header id="top-app-bar">
+      <header
+        id="top-app-bar"
+        className="flex flex-row items-center p-4 bg-white sticky top-0 z-50 min-h-[72px]"
+      >
         <button
           id="back-btn"
-          className="icon-button ripple-surface"
+          className="icon-button ripple-surface relative z-10"
           onClick={handleBack}
           style={{ display: page === 'home' ? 'none' : 'inline-flex' }}
         >
@@ -76,9 +79,16 @@ export default function Home() {
             arrow_back
           </span>
         </button>
-        <h1 id="app-title" className="title-large text-gray-800">
-          {pageTitles[page]}
-        </h1>
+        {page !== 'practice-config' && (
+          <h1
+            id="app-title"
+            className={`title-large text-gray-800 flex-1 text-center absolute left-0 right-0 pointer-events-none ${
+              page === 'execution' ? 'mx-0' : 'mx-12 relative flex-auto text-left pointer-events-auto'
+            }`}
+          >
+            {pageTitles[page]}
+          </h1>
+        )}
       </header>
 
       {page === 'home' && <HomeScreen navigateTo={navigateTo} />}
