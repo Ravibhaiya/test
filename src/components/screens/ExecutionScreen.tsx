@@ -1,6 +1,7 @@
 // src/components/screens/ExecutionScreen.tsx
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import React from 'react';
 import type { Mode, FractionAnswerType, ExecutionConfig, PowerType } from '@/lib/types';
 import {
   generateTablesQuestion,
