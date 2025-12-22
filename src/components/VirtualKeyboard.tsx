@@ -6,6 +6,8 @@ interface VirtualKeyboardProps {
   visible: boolean;
 }
 
+import { memo } from 'react';
+
 export default function VirtualKeyboard({ onChar, onDelete, visible }: VirtualKeyboardProps) {
   if (!visible) return null;
 
@@ -67,7 +69,7 @@ export default function VirtualKeyboard({ onChar, onDelete, visible }: VirtualKe
   );
 }
 
-function KeyButton({
+const KeyButton = memo(function KeyButton({
     label,
     value,
     onChar,
@@ -108,4 +110,4 @@ function KeyButton({
             )}
           </button>
     )
-}
+});

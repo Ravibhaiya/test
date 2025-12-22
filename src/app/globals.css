@@ -98,7 +98,7 @@
    Simulates 3D depth by using a solid bottom border that disappears on active
 */
 .btn-push {
-  @apply relative transition-all duration-100 ease-in-out border-b-4 active:border-b-0 active:translate-y-1 active:mt-1;
+  @apply relative transition-all duration-100 ease-in-out border-b-4 active:border-b-transparent active:translate-y-1;
 }
 
 /* Primary Button (Purple) */

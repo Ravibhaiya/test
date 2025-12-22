@@ -140,16 +140,16 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
     return stopTimer;
   }, []);
 
-  const handleVirtualChar = (char: string) => {
+  // Use callback to prevent VirtualKeyboard re-renders (animation bleed)
+  const handleVirtualChar = useCallback((char: string) => {
     if (feedbackStatus !== 'idle') return; // Block input during feedback
-    const newValue = inputValue + char;
-    setInputValue(newValue);
-  };
+    setInputValue(prev => prev + char);
+  }, [feedbackStatus]);
 
-  const handleVirtualDelete = () => {
+  const handleVirtualDelete = useCallback(() => {
     if (feedbackStatus !== 'idle') return;
     setInputValue(prev => prev.slice(0, -1));
-  };
+  }, [feedbackStatus]);
 
   const handleCheck = () => {
     if (feedbackStatus !== 'idle') {
