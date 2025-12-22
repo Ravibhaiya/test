@@ -78,7 +78,6 @@ export default function PracticeConfigScreen({
     <div id="practice-config-screen" className="screen-container">
         {/* Header */}
         <div className="flex-shrink-0 px-6 py-6 pb-2">
-            <h1 className="title-large text-slate-700">Multiplication Practice</h1>
             <p className="body-medium mt-1">Configure your challenge</p>
         </div>
 

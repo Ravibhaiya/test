@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 interface VirtualKeyboardProps {
   onChar: (char: string) => void;
@@ -6,38 +6,8 @@ interface VirtualKeyboardProps {
   visible: boolean;
 }
 
-import { memo } from 'react';
-
 export default function VirtualKeyboard({ onChar, onDelete, visible }: VirtualKeyboardProps) {
   if (!visible) return null;
-
-  const keys = [
-    { label: '1', value: '1' },
-    { label: '2', value: '2' },
-    { label: '3', value: '3' },
-    { label: '⌫', value: 'backspace', isAction: true },
-    { label: '4', value: '4' },
-    { label: '5', value: '5' },
-    { label: '6', value: '6' },
-    { label: '/', value: '/' },
-    { label: '7', value: '7' },
-    { label: '8', value: '8' },
-    { label: '9', value: '9' },
-    { label: '.', value: '.' },
-    { label: '0', value: '0', span: 4 }, // 0 spans the full width or just center?
-  ];
-
-  // Better Layout for thumb typing:
-  // 1 2 3
-  // 4 5 6
-  // 7 8 9
-  // . 0 / ⌫ (Row 4 has 4 items?)
-
-  // Let's stick to the previous 4-col grid but cleaner.
-  // 1 2 3 ⌫
-  // 4 5 6 /
-  // 7 8 9 .
-  // 0 (span)
 
   return (
     <div className="w-full max-w-md mx-auto">
