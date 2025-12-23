@@ -69,13 +69,13 @@ export default function Home() {
         id="top-app-bar"
         className="flex flex-row items-center px-4 bg-white sticky top-0 z-50 h-14 flex-shrink-0"
       >
-        <button
+         <button
           id="back-btn"
-          className="icon-button ripple-surface relative z-10"
+          className="btn-push rounded-full bg-slate-200 border-slate-300 flex items-center justify-center w-11 h-11 text-slate-600 relative z-10"
           onClick={handleBack}
           style={{ display: page === 'home' ? 'none' : 'inline-flex' }}
         >
-          <span className="material-symbols-outlined text-gray-700">
+          <span className="material-symbols-outlined">
             arrow_back
           </span>
         </button>
