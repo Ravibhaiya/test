@@ -71,7 +71,7 @@ export default function Home() {
       >
          <button
           id="back-btn"
-          className="btn-push rounded-full bg-slate-200 border-slate-300 flex items-center justify-center w-11 h-11 text-slate-600 relative z-10"
+          className="rounded-full bg-slate-200 flex items-center justify-center w-11 h-11 text-slate-600 relative z-10"
           onClick={handleBack}
           style={{ display: page === 'home' ? 'none' : 'inline-flex' }}
         >
@@ -83,7 +83,7 @@ export default function Home() {
           id="app-title"
           className={`title-large text-gray-800 flex-1 pointer-events-none ${
             page !== 'home'
-              ? 'text-center absolute left-0 right-0 mx-0'
+              ? 'text-center absolute left-0 right-0 mx-0 px-16'
               : 'mx-12 relative flex-auto text-left pointer-events-auto'
           }`}
         >
