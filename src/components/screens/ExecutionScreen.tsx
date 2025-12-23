@@ -217,16 +217,27 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
     ? (countdown / activeTimerDuration) * 100
     : 100;
 
+  // Determine progress bar color based on remaining time
+  let timerColorClass = 'bg-green-500'; // Default Green (Sufficient time)
+  if (timerProgress <= 20) {
+    timerColorClass = 'bg-red-500'; // Very low time
+  } else if (timerProgress <= 50) {
+    timerColorClass = 'bg-orange-500'; // Low time
+  }
+
   return (
     <div id="execution-screen" className="screen-container">
         {/* Header: Progress Bar */}
         <div className="w-full h-10 px-4 flex items-center justify-center relative">
              {activeTimerDuration && (
-                <div className="w-full h-4 bg-slate-200 rounded-full overflow-hidden">
+                <div className="w-full h-5 bg-slate-200 rounded-full overflow-hidden border-2 border-slate-100 shadow-inner">
                     <div
-                        className="h-full bg-primary transition-all duration-1000 ease-linear rounded-full"
+                        className={`h-full ${timerColorClass} transition-all duration-1000 ease-linear rounded-full relative`}
                         style={{ width: `${timerProgress}%` }}
-                    />
+                    >
+                        {/* Light reflection effect */}
+                        <div className="absolute top-1 left-2 right-2 h-[30%] bg-white opacity-40 rounded-full blur-[1px]" />
+                    </div>
                 </div>
              )}
         </div>
