@@ -225,6 +225,9 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
     timerColorClass = 'bg-orange-500'; // Low time
   }
 
+  // Instant refill when resetting to 100%, smooth otherwise
+  const timerDurationClass = timerProgress === 100 ? 'duration-0' : 'duration-1000';
+
   return (
     <div id="execution-screen" className="screen-container">
         {/* Header: Progress Bar */}
@@ -232,7 +235,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
              {activeTimerDuration && (
                 <div className="w-full h-5 bg-slate-200 rounded-full overflow-hidden border-2 border-slate-100 shadow-inner">
                     <div
-                        className={`h-full ${timerColorClass} transition-all duration-1000 ease-linear rounded-full relative`}
+                        className={`h-full ${timerColorClass} transition-[width] ${timerDurationClass} ease-linear rounded-full relative`}
                         style={{ width: `${timerProgress}%` }}
                     >
                         {/* Light reflection effect */}
@@ -325,7 +328,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
                         w-full h-14 rounded-2xl font-bold text-lg uppercase tracking-wide btn-push
                         ${feedbackStatus === 'correct'
                             ? 'bg-green-500 border-green-700 text-white hover:bg-green-400'
-                            : 'bg-red-500 border-red-700 text-white hover:bg-red-400'}
+                            : 'bg-red-600 border-red-800 text-white hover:bg-red-600'}
                     `}
                 >
                     CONTINUE
