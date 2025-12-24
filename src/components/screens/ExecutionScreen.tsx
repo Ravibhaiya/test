@@ -327,7 +327,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
                     className={`
                         w-full h-14 rounded-2xl font-bold text-lg uppercase tracking-wide btn-push
                         ${feedbackStatus === 'correct'
-                            ? 'bg-green-500 border-green-700 text-white hover:bg-green-400'
+                            ? 'bg-green-600 border-green-800 text-white hover:bg-green-600'
                             : 'bg-red-600 border-red-800 text-white hover:bg-red-600'}
                     `}
                 >
