@@ -219,9 +219,9 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
 
   // Determine progress bar color based on remaining time
   let timerColorClass = 'bg-green-500'; // Default Green (Sufficient time)
-  if (timerProgress <= 20) {
+  if (timerProgress < 33.33) {
     timerColorClass = 'bg-red-500'; // Very low time
-  } else if (timerProgress <= 50) {
+  } else if (timerProgress <= 66.66) {
     timerColorClass = 'bg-orange-500'; // Low time
   }
 
