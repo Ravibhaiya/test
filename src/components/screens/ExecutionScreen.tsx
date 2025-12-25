@@ -32,7 +32,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
   const [unroundedAnswer, setUnroundedAnswer] = useState<number | null>(null);
 
   // States for feedback handling
-  const [feedbackStatus, setFeedbackStatus] = useState<'idle' | 'correct' | 'wrong'>('idle');
+  const [feedbackStatus, setFeedbackStatus] = useState<'idle' | 'correct' | 'wrong' | 'timeup'>('idle');
   const [feedbackMessage, setFeedbackMessage] = useState('');
 
   const [inputValue, setInputValue] = useState('');
@@ -53,8 +53,8 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
   const timeUp = useCallback(
     (answer: number | string) => {
       stopTimer();
-      setFeedbackStatus('wrong');
-      setFeedbackMessage(`Time's up! Answer: ${answer}`);
+      setFeedbackStatus('timeup');
+      setFeedbackMessage(`Correct answer: ${answer}`);
       if (currentQuestionObject) {
          setWrongAnswerPool((prev) => [...prev, currentQuestionObject]);
       }
@@ -269,6 +269,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
                         ${feedbackStatus === 'idle' ? 'bg-white border-slate-200 text-slate-700' : ''}
                         ${feedbackStatus === 'correct' ? 'bg-green-100 border-green-500 text-green-700' : ''}
                         ${feedbackStatus === 'wrong' ? 'bg-red-100 border-red-500 text-red-700' : ''}
+                        ${feedbackStatus === 'timeup' ? 'bg-blue-100 border-blue-500 text-blue-700' : ''}
                     `}>
                         {inputValue}
                         {inputValue.length === 0 && <span className="text-slate-300 animate-pulse">_</span>}
@@ -285,26 +286,34 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
             ${feedbackStatus === 'idle' ? 'bg-white border-slate-100' : ''}
             ${feedbackStatus === 'correct' ? 'bg-green-100 border-transparent' : ''}
             ${feedbackStatus === 'wrong' ? 'bg-red-100 border-transparent' : ''}
+            ${feedbackStatus === 'timeup' ? 'bg-blue-100 border-transparent' : ''}
         `}>
              {feedbackStatus !== 'idle' && (
                  <div className="flex items-start gap-4 mb-2">
                      <div className={`
                         w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0
-                        ${feedbackStatus === 'correct' ? 'bg-white text-green-500' : 'bg-white text-red-500'}
+                        ${feedbackStatus === 'correct' ? 'bg-white text-green-500' : ''}
+                        ${feedbackStatus === 'wrong' ? 'bg-white text-red-500' : ''}
+                        ${feedbackStatus === 'timeup' ? 'bg-white text-blue-500' : ''}
                      `}>
                         <span className="material-symbols-outlined font-bold">
-                            {feedbackStatus === 'correct' ? 'check' : 'close'}
+                            {feedbackStatus === 'correct' ? 'check' : feedbackStatus === 'timeup' ? 'timer' : 'close'}
                         </span>
                      </div>
                      <div className="text-left">
                         <h3 className={`
                             font-bold text-xl
-                            ${feedbackStatus === 'correct' ? 'text-green-700' : 'text-red-700'}
+                            ${feedbackStatus === 'correct' ? 'text-green-700' : ''}
+                            ${feedbackStatus === 'wrong' ? 'text-red-700' : ''}
+                            ${feedbackStatus === 'timeup' ? 'text-blue-700' : ''}
                         `}>
-                            {feedbackStatus === 'correct' ? 'Nicely done!' : 'Incorrect'}
+                            {feedbackStatus === 'correct' ? 'Nicely done!' : feedbackStatus === 'timeup' ? "Time's Up!" : 'Incorrect'}
                         </h3>
                          {feedbackStatus === 'wrong' && (
                              <p className="text-red-600 font-semibold">{feedbackMessage}</p>
+                         )}
+                         {feedbackStatus === 'timeup' && (
+                             <p className="text-blue-600 font-semibold">{feedbackMessage}</p>
                          )}
                      </div>
                  </div>
@@ -326,9 +335,9 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
                     onClick={displayQuestion}
                     className={`
                         w-full h-14 rounded-2xl font-bold text-lg uppercase tracking-wide btn-push
-                        ${feedbackStatus === 'correct'
-                            ? 'bg-green-600 border-green-800 text-white hover:bg-green-600'
-                            : 'bg-red-600 border-red-800 text-white hover:bg-red-600'}
+                        ${feedbackStatus === 'correct' ? 'bg-green-600 border-green-800 text-white hover:bg-green-600' : ''}
+                        ${feedbackStatus === 'wrong' ? 'bg-red-600 border-red-800 text-white hover:bg-red-600' : ''}
+                        ${feedbackStatus === 'timeup' ? 'bg-blue-600 border-blue-800 text-white hover:bg-blue-600' : ''}
                     `}
                 >
                     CONTINUE
