@@ -293,7 +293,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
                         ${feedbackStatus === 'idle' ? 'bg-white border-slate-200 text-slate-700' : ''}
                         ${feedbackStatus === 'correct' ? 'bg-green-100 border-green-500 text-green-700' : ''}
                         ${feedbackStatus === 'wrong' ? 'bg-red-100 border-red-500 text-red-700' : ''}
-                        ${feedbackStatus === 'timeup' ? 'bg-blue-100 border-blue-500 text-blue-700' : ''}
+                        ${feedbackStatus === 'timeup' ? 'bg-sky-100 border-sky-500 text-sky-700' : ''}
                     `}>
                         {inputValue}
                         {inputValue.length === 0 && <span className="text-slate-300 animate-pulse">_</span>}
@@ -310,15 +310,15 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
             ${feedbackStatus === 'idle' ? 'bg-white border-slate-100' : ''}
             ${feedbackStatus === 'correct' ? 'bg-green-100 border-transparent' : ''}
             ${feedbackStatus === 'wrong' ? 'bg-red-100 border-transparent' : ''}
-            ${feedbackStatus === 'timeup' ? 'bg-blue-100 border-transparent' : ''}
+            ${feedbackStatus === 'timeup' ? 'bg-sky-100 border-transparent' : ''}
         `}>
              {feedbackStatus !== 'idle' && (
                  <div className="flex items-start gap-4 mb-2">
                      <div className={`
                         w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0
-                        ${feedbackStatus === 'correct' ? 'bg-white text-green-500' : ''}
-                        ${feedbackStatus === 'wrong' ? 'bg-white text-red-500' : ''}
-                        ${feedbackStatus === 'timeup' ? 'bg-white text-blue-500' : ''}
+                        ${feedbackStatus === 'correct' ? 'bg-green-500 text-white' : ''}
+                        ${feedbackStatus === 'wrong' ? 'bg-red-500 text-white' : ''}
+                        ${feedbackStatus === 'timeup' ? 'bg-sky-500 text-white' : ''}
                      `}>
                         <span className="material-symbols-outlined font-bold">
                             {feedbackStatus === 'correct' ? 'check' : feedbackStatus === 'timeup' ? 'timer' : 'close'}
@@ -329,7 +329,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
                             font-bold text-xl
                             ${feedbackStatus === 'correct' ? 'text-green-700' : ''}
                             ${feedbackStatus === 'wrong' ? 'text-red-700' : ''}
-                            ${feedbackStatus === 'timeup' ? 'text-blue-700' : ''}
+                            ${feedbackStatus === 'timeup' ? 'text-sky-700' : ''}
                         `}>
                             {feedbackStatus === 'correct' ? 'Nicely done!' : feedbackStatus === 'timeup' ? "Time's Up!" : 'Incorrect'}
                         </h3>
@@ -337,7 +337,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
                              <p className="text-red-600 font-semibold">{feedbackMessage}</p>
                          )}
                          {feedbackStatus === 'timeup' && (
-                             <p className="text-blue-600 font-semibold">{feedbackMessage}</p>
+                             <p className="text-sky-600 font-semibold">{feedbackMessage}</p>
                          )}
                      </div>
                  </div>
@@ -361,7 +361,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
                         w-full h-14 rounded-2xl font-bold text-lg uppercase tracking-wide btn-push
                         ${feedbackStatus === 'correct' ? 'bg-green-600 border-green-800 text-white hover:bg-green-600' : ''}
                         ${feedbackStatus === 'wrong' ? 'bg-red-600 border-red-800 text-white hover:bg-red-600' : ''}
-                        ${feedbackStatus === 'timeup' ? 'bg-blue-600 border-blue-800 text-white hover:bg-blue-600' : ''}
+                        ${feedbackStatus === 'timeup' ? 'bg-sky-500 border-sky-700 text-white hover:bg-sky-500' : ''}
                     `}
                 >
                     CONTINUE
