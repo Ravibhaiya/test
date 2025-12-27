@@ -37,16 +37,26 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
 
   const [inputValue, setInputValue] = useState('');
 
-  const [countdown, setCountdown] = useState<number | null>(null);
-  const timerIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [timerProgress, setTimerProgress] = useState<number>(100);
+  const requestRef = useRef<number>(0);
+  const startTimeRef = useRef<number>(0);
+  const totalDurationRef = useRef<number>(0);
+
   const [activeAnswerType, setActiveAnswerType] = useState<FractionAnswerType | null>(null);
 
   const answerInputRef = useRef<HTMLInputElement>(null);
 
+  // Helper ref to access current answer in the animation loop without stale closures
+  const currentQuestionRef = useRef<Question | null>(null);
+
+  useEffect(() => {
+    currentQuestionRef.current = currentQuestionObject;
+  }, [currentQuestionObject]);
+
   const stopTimer = useCallback(() => {
-    if (timerIntervalRef.current) {
-      clearInterval(timerIntervalRef.current);
-      timerIntervalRef.current = null;
+    if (requestRef.current) {
+      cancelAnimationFrame(requestRef.current);
+      requestRef.current = 0;
     }
   }, []);
 
@@ -55,12 +65,37 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
       stopTimer();
       setFeedbackStatus('timeup');
       setFeedbackMessage(`Correct answer: ${answer}`);
-      if (currentQuestionObject) {
-         setWrongAnswerPool((prev) => [...prev, currentQuestionObject]);
+      const qObj = currentQuestionRef.current;
+      if (qObj) {
+         setWrongAnswerPool((prev) => [...prev, qObj]);
       }
     },
-    [stopTimer, currentQuestionObject]
+    [stopTimer]
   );
+
+  const animate = useCallback((time: number) => {
+    const elapsed = time - startTimeRef.current;
+    const duration = totalDurationRef.current;
+
+    if (duration > 0) {
+        const remaining = Math.max(0, duration - elapsed);
+        const progress = (remaining / duration) * 100;
+        setTimerProgress(progress);
+
+        if (remaining <= 0) {
+           stopTimer();
+           const q = currentQuestionRef.current;
+           if (q) {
+              // Trigger timeUp logic directly
+              setFeedbackStatus('timeup');
+              setFeedbackMessage(`Correct answer: ${q.answer}`);
+              setWrongAnswerPool((prev) => [...prev, q]);
+           }
+           return;
+        }
+    }
+    requestRef.current = requestAnimationFrame(animate);
+  }, [stopTimer]);
 
   const displayQuestion = useCallback(() => {
     stopTimer();
@@ -118,23 +153,20 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
     setQuestion(questionData.question);
     setCurrentAnswer(questionData.answer);
     setCurrentQuestionObject(questionData);
+    // Sync ref immediately for the timer start
+    currentQuestionRef.current = questionData;
 
     const activeTimer = config.timer;
     if (activeTimer && activeTimer > 0) {
-      setCountdown(activeTimer);
-      timerIntervalRef.current = setInterval(() => {
-        setCountdown((prev) => {
-          if (prev === null || prev <= 1) {
-            timeUp(questionData!.answer);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
+      setTimerProgress(100);
+      startTimeRef.current = performance.now();
+      totalDurationRef.current = activeTimer * 1000;
+      requestRef.current = requestAnimationFrame(animate);
     } else {
-      setCountdown(null);
+      setTimerProgress(100);
+      stopTimer();
     }
-  }, [mode, config, stopTimer, timeUp, wrongAnswerPool]);
+  }, [mode, config, stopTimer, timeUp, wrongAnswerPool, animate]);
 
   useEffect(() => {
     displayQuestion();
@@ -212,11 +244,6 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
   const activeTimerDuration = config.timer;
   const showPercentAdornment = mode === 'fractions' && activeAnswerType === 'decimal';
   
-  // Progress Bar Calculation (simplified for now, just shows active timer or empty)
-  const timerProgress = (countdown !== null && activeTimerDuration)
-    ? (countdown / activeTimerDuration) * 100
-    : 100;
-
   // Determine progress bar color based on remaining time
   let timerColorClass = 'bg-green-500'; // Default Green (Sufficient time)
   if (timerProgress < 33.33) {
@@ -225,9 +252,6 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
     timerColorClass = 'bg-orange-500'; // Low time
   }
 
-  // Instant refill when resetting to 100%, smooth otherwise
-  const timerDurationClass = timerProgress === 100 ? 'duration-0' : 'duration-1000';
-
   return (
     <div id="execution-screen" className="screen-container">
         {/* Header: Progress Bar */}
@@ -235,7 +259,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
              {activeTimerDuration && (
                 <div className="w-full h-5 bg-slate-200 rounded-full overflow-hidden border-2 border-slate-100 shadow-inner">
                     <div
-                        className={`h-full ${timerColorClass} transition-[width] ${timerDurationClass} ease-linear rounded-full relative`}
+                        className={`h-full ${timerColorClass} rounded-full relative`}
                         style={{ width: `${timerProgress}%` }}
                     >
                         {/* Light reflection effect */}
