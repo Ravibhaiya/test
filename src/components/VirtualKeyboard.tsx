@@ -6,7 +6,8 @@ interface VirtualKeyboardProps {
   visible: boolean;
 }
 
-export default function VirtualKeyboard({ onChar, onDelete, visible }: VirtualKeyboardProps) {
+// Memoized to prevent re-renders when parent timer updates or other unrelated state changes
+const VirtualKeyboard = memo(function VirtualKeyboard({ onChar, onDelete, visible }: VirtualKeyboardProps) {
   if (!visible) return null;
 
   return (
@@ -37,7 +38,9 @@ export default function VirtualKeyboard({ onChar, onDelete, visible }: VirtualKe
       </div>
     </div>
   );
-}
+});
+
+export default VirtualKeyboard;
 
 const KeyButton = memo(function KeyButton({
     label,
