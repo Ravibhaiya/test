@@ -70,12 +70,14 @@ export default function Home() {
         className="flex flex-row items-center px-4 bg-white sticky top-0 z-50 h-14 flex-shrink-0"
       >
          <button
+          type="button"
           id="back-btn"
-          className="rounded-full bg-slate-200 flex items-center justify-center w-11 h-11 text-slate-600 relative z-10"
+          aria-label="Go back"
+          className="rounded-full bg-slate-200 hover:bg-slate-300 active:bg-slate-400 transition-colors flex items-center justify-center w-11 h-11 text-slate-600 relative z-10 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2"
           onClick={handleBack}
           style={{ display: page === 'home' ? 'none' : 'inline-flex' }}
         >
-          <span className="material-symbols-outlined">
+          <span className="material-symbols-outlined" aria-hidden="true">
             arrow_back
           </span>
         </button>
