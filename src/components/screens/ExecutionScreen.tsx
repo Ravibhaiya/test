@@ -261,9 +261,9 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
         <div className={`
             screen-fixed-bottom flex flex-col gap-4 border-t-2 transition-colors duration-300
             ${feedbackStatus === 'idle' ? 'bg-white border-slate-100' : ''}
-            ${feedbackStatus === 'correct' ? 'bg-green-100 border-transparent' : ''}
-            ${feedbackStatus === 'wrong' ? 'bg-red-100 border-transparent' : ''}
-            ${feedbackStatus === 'timeup' ? 'bg-sky-100 border-transparent' : ''}
+            ${feedbackStatus === 'correct' ? '!bg-green-100 !border-transparent' : ''}
+            ${feedbackStatus === 'wrong' ? '!bg-red-100 !border-transparent' : ''}
+            ${feedbackStatus === 'timeup' ? '!bg-sky-100 !border-transparent' : ''}
         `}>
              {feedbackStatus !== 'idle' && (
                  <div className="flex items-start gap-4 mb-2">
