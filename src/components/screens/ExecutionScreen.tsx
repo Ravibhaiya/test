@@ -11,6 +11,7 @@ import {
 } from '@/lib/question-helpers';
 import VirtualKeyboard from '@/components/VirtualKeyboard';
 import TimerBar from '@/components/TimerBar';
+import WavyFeedbackDecoration from '@/components/WavyFeedbackDecoration';
 
 interface Question {
   question: string;
@@ -217,9 +218,9 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
         </div>
 
         {/* Content: Question Area */}
-        <div className="screen-content !overflow-hidden flex flex-col items-center justify-center text-center">
+        <div className="screen-content !overflow-hidden flex flex-col items-center justify-center text-center relative">
 
-            <div className="flex-1 flex flex-col justify-center w-full">
+            <div className="flex-1 flex flex-col justify-center w-full relative z-10">
                 {/* Question Bubble */}
                 <div className="mb-4 animate-bounce-soft">
                      <h2
@@ -248,6 +249,11 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
                     </div>
                 </div>
             </div>
+
+            {/* Wavy Decoration (visible only during feedback) */}
+            {feedbackStatus !== 'idle' && (
+                <WavyFeedbackDecoration status={feedbackStatus} />
+            )}
 
         </div>
 
