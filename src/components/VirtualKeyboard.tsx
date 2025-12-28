@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import PunchedButton from '@/components/PunchedButton';
 
 interface VirtualKeyboardProps {
   onChar: (char: string) => void;
@@ -58,15 +59,11 @@ const KeyButton = memo(function KeyButton({
     className?: string
 }) {
     return (
-        <button
-            className={`
-              h-12 rounded-xl text-2xl font-bold flex items-center justify-center transition-all btn-push
-              ${isAction
-                ? 'bg-slate-200 text-slate-600 border-slate-300'
-                : 'bg-white text-slate-700 border-slate-200'
-              }
-              ${className}
-            `}
+        <PunchedButton
+            wrapperClassName={`h-14 ${className || ''}`}
+            shape="rounded-xl"
+            variant={isAction ? 'neutral-dark' : 'neutral'}
+            className={`text-2xl ${isAction ? 'text-slate-600' : 'text-slate-700'}`}
             onClick={(e) => {
               e.preventDefault();
               if (value === 'backspace' && onDelete) {
@@ -81,6 +78,6 @@ const KeyButton = memo(function KeyButton({
             ) : (
               label
             )}
-          </button>
+        </PunchedButton>
     )
 });

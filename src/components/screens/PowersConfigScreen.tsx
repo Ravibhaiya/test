@@ -2,6 +2,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import type { Mode, PowerType } from '@/lib/types';
+import PunchedButton from '@/components/PunchedButton';
 
 interface PowersConfig {
   selected: PowerType[];
@@ -174,12 +175,14 @@ export default function PowersConfigScreen({ onStart }: PowersConfigScreenProps)
                  </div>
              )}
 
-             <button
+             <PunchedButton
                 onClick={handleStartClick}
-                className="w-full filled-button"
+                wrapperClassName="w-full h-16"
+                className="text-xl"
+                variant="primary"
              >
                 START PRACTICE
-             </button>
+             </PunchedButton>
         </div>
     </div>
   );

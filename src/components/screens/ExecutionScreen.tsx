@@ -10,6 +10,7 @@ import {
   generateFractionsQuestion,
 } from '@/lib/question-helpers';
 import VirtualKeyboard from '@/components/VirtualKeyboard';
+import PunchedButton from '@/components/PunchedButton';
 
 interface Question {
   question: string;
@@ -344,28 +345,28 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
              )}
 
             {feedbackStatus === 'idle' ? (
-                <button
+                <PunchedButton
                     onClick={handleCheck}
                     disabled={!inputValue}
-                    className={`
-                        w-full filled-button transition-all
-                        ${!inputValue ? 'opacity-50 grayscale' : ''}
-                    `}
+                    wrapperClassName="w-full h-16"
+                    className="text-xl"
+                    variant="primary"
                 >
                     CHECK
-                </button>
+                </PunchedButton>
             ) : (
-                <button
+                <PunchedButton
                     onClick={displayQuestion}
-                    className={`
-                        w-full h-14 btn-juicy
-                        ${feedbackStatus === 'correct' ? 'btn-juicy-success' : ''}
-                        ${feedbackStatus === 'wrong' ? 'btn-juicy-danger' : ''}
-                        ${feedbackStatus === 'timeup' ? 'btn-juicy-sky' : ''}
-                    `}
+                    wrapperClassName="w-full h-16"
+                    className="text-xl"
+                    variant={
+                        feedbackStatus === 'correct' ? 'success' :
+                        feedbackStatus === 'wrong' ? 'danger' :
+                        feedbackStatus === 'timeup' ? 'sky' : 'primary'
+                    }
                 >
                     CONTINUE
-                </button>
+                </PunchedButton>
             )}
         </div>
 

@@ -2,6 +2,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import type { Mode } from '@/lib/types';
+import PunchedButton from '@/components/PunchedButton';
 
 interface PracticeConfig {
   digits1: number[];
@@ -145,12 +146,14 @@ export default function PracticeConfigScreen({
                  </div>
              )}
 
-             <button
+             <PunchedButton
                 onClick={handleStartClick}
-                className="w-full filled-button"
+                wrapperClassName="w-full h-16"
+                className="text-xl"
+                variant="primary"
              >
                 START
-             </button>
+             </PunchedButton>
         </div>
     </div>
   );

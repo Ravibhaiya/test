@@ -2,6 +2,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import type { Mode, FractionAnswerType } from '@/lib/types';
+import PunchedButton from '@/components/PunchedButton';
 
 interface FractionsConfig {
   selected: FractionAnswerType[];
@@ -122,12 +123,14 @@ export default function FractionsConfigScreen({
                  </div>
              )}
 
-             <button
+             <PunchedButton
                 onClick={handleStartClick}
-                className="w-full filled-button"
+                wrapperClassName="w-full h-16"
+                className="text-xl"
+                variant="primary"
              >
                 START PRACTICE
-             </button>
+             </PunchedButton>
         </div>
     </div>
   );

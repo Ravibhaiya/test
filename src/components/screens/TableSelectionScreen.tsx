@@ -2,6 +2,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import type { Mode } from '@/lib/types';
+import PunchedButton from '@/components/PunchedButton';
 
 interface TableConfig {
   selected: number[];
@@ -78,13 +79,15 @@ export default function TableSelectionScreen({
         <div className="screen-content no-scrollbar pb-8">
              <div className="grid grid-cols-4 sm:grid-cols-5 gap-3">
                 {Array.from({ length: 29 }, (_, i) => i + 2).map((num) => (
-                    <button
+                    <PunchedButton
                         key={num}
                         onClick={() => handleTableSelection(num)}
-                        className={`number-chip btn-push ${selected.includes(num) ? 'selected' : ''}`}
+                        variant={selected.includes(num) ? 'sky' : 'white'}
+                        className={`text-2xl ${selected.includes(num) ? '' : 'text-slate-600'}`}
+                        wrapperClassName="aspect-square"
                     >
                         {num}
-                    </button>
+                    </PunchedButton>
                 ))}
              </div>
         </div>
@@ -115,13 +118,15 @@ export default function TableSelectionScreen({
                  </div>
              )}
 
-             <button
+             <PunchedButton
                 onClick={handleStartClick}
                 disabled={selected.length === 0}
-                className={`w-full filled-button ${selected.length === 0 ? 'opacity-50 grayscale' : ''}`}
+                wrapperClassName="w-full h-16"
+                className="text-xl"
+                variant="primary"
              >
                 START PRACTICE
-             </button>
+             </PunchedButton>
         </div>
     </div>
   );
