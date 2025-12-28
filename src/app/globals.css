@@ -94,51 +94,73 @@
 /* COMPONENT STYLES */
 
 /*
-   Button "Push" Effect
+   Legacy Button "Push" Effect (kept for tonal/chip buttons)
    Simulates 3D depth by using a solid bottom border that disappears on active
 */
 .btn-push {
   @apply relative transition-all duration-100 ease-in-out border-b-4 active:border-b-transparent active:translate-y-1;
 }
 
-/* Shine Animation */
-@keyframes shine-sweep {
-  0% { left: -100%; }
-  15% { left: 200%; }
-  100% { left: 200%; }
-}
-
-.btn-shine {
-  @apply relative overflow-hidden;
-}
-.btn-shine::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.3) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  transform: skewX(-20deg);
-  pointer-events: none;
-  animation: shine-sweep 4s infinite ease-in-out;
-}
-
-/* Primary Button (Purple) */
-.filled-button {
-  @apply btn-shine btn-push bg-primary border-primary-depth text-white rounded-2xl;
-  @apply h-14 px-8 inline-flex items-center justify-center;
-  @apply font-bold text-lg uppercase tracking-wide;
+/*
+   New "Juicy" 3D Button Style
+   Replaces btn-shine and flat colors with gradients and inner shadows
+*/
+.btn-juicy {
+  @apply relative overflow-hidden rounded-2xl transition-all duration-100 ease-out;
+  @apply flex items-center justify-center font-bold text-lg uppercase tracking-wide;
+  @apply shadow-[inset_0px_4px_2px_rgba(255,255,255,0.3),inset_0px_-4px_0px_rgba(0,0,0,0.2),0px_2px_4px_rgba(0,0,0,0.2)];
   font-family: var(--font-fredoka);
 }
-.filled-button:hover { @apply brightness-110; }
 
-/* Tonal Button (Gray/White) */
+.btn-juicy:active {
+  @apply translate-y-[2px];
+  @apply shadow-[inset_0px_4px_2px_rgba(255,255,255,0.3),inset_0px_-2px_0px_rgba(0,0,0,0.2),0px_1px_2px_rgba(0,0,0,0.2)];
+}
+
+/* Primary Variant (Purple) */
+.btn-juicy-primary {
+  background: linear-gradient(to bottom, hsl(var(--primary-hsl)), hsl(var(--primary-depth-hsl)));
+  @apply text-white;
+}
+.btn-juicy-primary:hover {
+  filter: brightness(1.1);
+}
+
+/* Success Variant (Green) */
+.btn-juicy-success {
+  background: linear-gradient(to bottom, hsl(var(--success-hsl)), hsl(var(--success-depth-hsl)));
+  @apply text-white;
+}
+.btn-juicy-success:hover {
+  filter: brightness(1.1);
+}
+
+/* Danger Variant (Red) */
+.btn-juicy-danger {
+  background: linear-gradient(to bottom, hsl(var(--destructive-hsl)), hsl(var(--destructive-depth-hsl)));
+  @apply text-white;
+}
+.btn-juicy-danger:hover {
+  filter: brightness(1.1);
+}
+
+/* Sky Variant (Info/Time Up) */
+.btn-juicy-sky {
+  background: linear-gradient(to bottom, hsl(var(--secondary-hsl)), hsl(var(--secondary-depth-hsl)));
+  @apply text-white;
+}
+.btn-juicy-sky:hover {
+  filter: brightness(1.1);
+}
+
+
+/* Primary Button (Purple) - Updated to use Juicy style */
+.filled-button {
+  @apply btn-juicy btn-juicy-primary;
+  @apply h-14 px-8 inline-flex;
+}
+
+/* Tonal Button (Gray/White) - Kept as is for now, using btn-push */
 .tonal-button {
   @apply btn-push bg-white border-slate-200 text-slate-700 rounded-2xl;
   @apply h-12 px-6 inline-flex items-center justify-center;
