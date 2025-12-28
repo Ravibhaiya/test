@@ -10,6 +10,7 @@ import {
   generateFractionsQuestion,
 } from '@/lib/question-helpers';
 import VirtualKeyboard from '@/components/VirtualKeyboard';
+import TimerBar from '@/components/TimerBar';
 
 interface Question {
   question: string;
@@ -37,11 +38,6 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
 
   const [inputValue, setInputValue] = useState('');
 
-  const [timerProgress, setTimerProgress] = useState<number>(100);
-  const requestRef = useRef<number>(0);
-  const startTimeRef = useRef<number>(0);
-  const totalDurationRef = useRef<number>(0);
-
   const [activeAnswerType, setActiveAnswerType] = useState<FractionAnswerType | null>(null);
 
   const answerInputRef = useRef<HTMLInputElement>(null);
@@ -53,16 +49,8 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
     currentQuestionRef.current = currentQuestionObject;
   }, [currentQuestionObject]);
 
-  const stopTimer = useCallback(() => {
-    if (requestRef.current) {
-      cancelAnimationFrame(requestRef.current);
-      requestRef.current = 0;
-    }
-  }, []);
-
   const timeUp = useCallback(
     (answer: number | string) => {
-      stopTimer();
       setFeedbackStatus('timeup');
       setFeedbackMessage(`Correct answer: ${answer}`);
       const qObj = currentQuestionRef.current;
@@ -70,35 +58,17 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
          setWrongAnswerPool((prev) => [...prev, qObj]);
       }
     },
-    [stopTimer]
+    []
   );
 
-  const animate = useCallback((time: number) => {
-    const elapsed = time - startTimeRef.current;
-    const duration = totalDurationRef.current;
-
-    if (duration > 0) {
-        const remaining = Math.max(0, duration - elapsed);
-        const progress = (remaining / duration) * 100;
-        setTimerProgress(progress);
-
-        if (remaining <= 0) {
-           stopTimer();
-           const q = currentQuestionRef.current;
-           if (q) {
-              // Trigger timeUp logic directly
-              setFeedbackStatus('timeup');
-              setFeedbackMessage(`Correct answer: ${q.answer}`);
-              setWrongAnswerPool((prev) => [...prev, q]);
-           }
-           return;
-        }
-    }
-    requestRef.current = requestAnimationFrame(animate);
-  }, [stopTimer]);
+  const handleTimerFinish = useCallback(() => {
+     const q = currentQuestionRef.current;
+     if (q) {
+         timeUp(q.answer);
+     }
+  }, [timeUp]);
 
   const displayQuestion = useCallback(() => {
-    stopTimer();
     setFeedbackStatus('idle');
     setFeedbackMessage('');
     setAnswerTypeHint('');
@@ -153,24 +123,12 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
     setQuestion(questionData.question);
     setCurrentAnswer(questionData.answer);
     setCurrentQuestionObject(questionData);
-    // Sync ref immediately for the timer start
+    // Sync ref immediately
     currentQuestionRef.current = questionData;
-
-    const activeTimer = config.timer;
-    if (activeTimer && activeTimer > 0) {
-      setTimerProgress(100);
-      startTimeRef.current = performance.now();
-      totalDurationRef.current = activeTimer * 1000;
-      requestRef.current = requestAnimationFrame(animate);
-    } else {
-      setTimerProgress(100);
-      stopTimer();
-    }
-  }, [mode, config, stopTimer, timeUp, wrongAnswerPool, animate]);
+  }, [mode, config, wrongAnswerPool]);
 
   useEffect(() => {
     displayQuestion();
-    return stopTimer;
   }, []);
 
   // Use callback to prevent VirtualKeyboard re-renders (animation bleed)
@@ -196,8 +154,6 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
     }
 
     if (!inputValue) return;
-
-    stopTimer();
 
     let isCorrect = false;
     const isFractionPractice =
@@ -234,8 +190,6 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
       if (currentQuestionObject) {
          setWrongAnswerPool(prev => prev.filter(q => q.question !== currentQuestionObject.question));
       }
-      // Auto advance after short delay if desired, or let user click Next
-      // Duolingo makes you click continue.
     } else {
       setFeedbackStatus('wrong');
       setFeedbackMessage(`Correct answer: ${currentAnswer}`);
@@ -247,29 +201,18 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
 
   const activeTimerDuration = config.timer;
   const showPercentAdornment = mode === 'fractions' && activeAnswerType === 'decimal';
-  
-  // Determine progress bar color based on remaining time
-  let timerColorClass = 'bg-green-500'; // Default Green (Sufficient time)
-  if (timerProgress < 33.33) {
-    timerColorClass = 'bg-red-500'; // Very low time
-  } else if (timerProgress <= 66.66) {
-    timerColorClass = 'bg-orange-500'; // Low time
-  }
 
   return (
     <div id="execution-screen" className="screen-container">
         {/* Header: Progress Bar */}
         <div className="w-full h-10 px-4 flex items-center justify-center relative">
-             {activeTimerDuration && (
-                <div className="w-full h-5 bg-slate-200 rounded-full overflow-hidden border-2 border-slate-100 shadow-inner">
-                    <div
-                        className={`h-full ${timerColorClass} rounded-full relative`}
-                        style={{ width: `${timerProgress}%` }}
-                    >
-                        {/* Light reflection effect */}
-                        <div className="absolute top-1 left-2 right-2 h-[30%] bg-white opacity-40 rounded-full blur-[1px]" />
-                    </div>
-                </div>
+             {activeTimerDuration && activeTimerDuration > 0 && (
+                <TimerBar
+                    duration={activeTimerDuration}
+                    isRunning={feedbackStatus === 'idle'}
+                    onTimeUp={handleTimerFinish}
+                    resetKey={currentQuestionObject}
+                />
              )}
         </div>
 
