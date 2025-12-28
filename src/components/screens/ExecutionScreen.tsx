@@ -176,7 +176,11 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
   // Use callback to prevent VirtualKeyboard re-renders (animation bleed)
   const handleVirtualChar = useCallback((char: string) => {
     if (feedbackStatus !== 'idle') return; // Block input during feedback
-    setInputValue(prev => prev + char);
+    setInputValue(prev => {
+      // Security: Prevent DoS/UI overflow by limiting input length
+      if (prev.length >= 15) return prev;
+      return prev + char;
+    });
   }, [feedbackStatus]);
 
   const handleVirtualDelete = useCallback(() => {
