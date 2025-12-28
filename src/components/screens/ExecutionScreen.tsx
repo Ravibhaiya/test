@@ -358,7 +358,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
                 <button
                     onClick={displayQuestion}
                     className={`
-                        w-full h-14 rounded-2xl font-bold text-lg uppercase tracking-wide btn-push
+                        w-full h-14 rounded-2xl font-bold text-lg uppercase tracking-wide btn-push btn-shine
                         ${feedbackStatus === 'correct' ? 'bg-green-600 border-green-800 text-white hover:bg-green-600' : ''}
                         ${feedbackStatus === 'wrong' ? 'bg-red-600 border-red-800 text-white hover:bg-red-600' : ''}
                         ${feedbackStatus === 'timeup' ? 'bg-sky-500 border-sky-700 text-white hover:bg-sky-500' : ''}
