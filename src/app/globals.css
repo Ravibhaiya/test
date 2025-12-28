@@ -101,9 +101,37 @@
   @apply relative transition-all duration-100 ease-in-out border-b-4 active:border-b-transparent active:translate-y-1;
 }
 
+/* Shine Animation */
+@keyframes shine-sweep {
+  0% { left: -100%; }
+  15% { left: 200%; }
+  100% { left: 200%; }
+}
+
+.btn-shine {
+  @apply relative overflow-hidden;
+}
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-20deg);
+  pointer-events: none;
+  animation: shine-sweep 4s infinite ease-in-out;
+}
+
 /* Primary Button (Purple) */
 .filled-button {
-  @apply btn-push bg-primary border-primary-depth text-white rounded-2xl;
+  @apply btn-shine btn-push bg-primary border-primary-depth text-white rounded-2xl;
   @apply h-14 px-8 inline-flex items-center justify-center;
   @apply font-bold text-lg uppercase tracking-wide;
   font-family: var(--font-fredoka);
