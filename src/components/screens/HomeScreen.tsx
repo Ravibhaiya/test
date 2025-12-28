@@ -29,7 +29,7 @@ export default function HomeScreen({ navigateTo }: HomeScreenProps) {
                     <div className="w-full bg-white border-2 border-slate-100 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
                         {/* Icon Box */}
                         <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center">
-                            <span className="material-symbols-outlined text-3xl">close</span>
+                            <span className="material-symbols-outlined text-3xl" aria-hidden="true">close</span>
                         </div>
 
                         {/* Text */}
@@ -39,7 +39,7 @@ export default function HomeScreen({ navigateTo }: HomeScreenProps) {
                         </div>
 
                         {/* Chevron */}
-                        <span className="material-symbols-outlined text-slate-300">chevron_right</span>
+                        <span className="material-symbols-outlined text-slate-300" aria-hidden="true">chevron_right</span>
                     </div>
                 </button>
 
@@ -50,13 +50,13 @@ export default function HomeScreen({ navigateTo }: HomeScreenProps) {
                 >
                     <div className="w-full bg-white border-2 border-slate-100 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
                         <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center">
-                             <span className="material-symbols-outlined text-3xl">calculate</span>
+                             <span className="material-symbols-outlined text-3xl" aria-hidden="true">calculate</span>
                         </div>
                         <div className="text-left flex-1">
                             <h3 className="title-medium text-slate-700">Multiply</h3>
                             <p className="text-sm font-semibold text-slate-400">Multi-digit problems</p>
                         </div>
-                        <span className="material-symbols-outlined text-slate-300">chevron_right</span>
+                        <span className="material-symbols-outlined text-slate-300" aria-hidden="true">chevron_right</span>
                     </div>
                 </button>
 
@@ -67,13 +67,13 @@ export default function HomeScreen({ navigateTo }: HomeScreenProps) {
                 >
                     <div className="w-full bg-white border-2 border-slate-100 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
                          <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
-                             <span className="material-symbols-outlined text-3xl">superscript</span>
+                             <span className="material-symbols-outlined text-3xl" aria-hidden="true">superscript</span>
                         </div>
                         <div className="text-left flex-1">
                             <h3 className="title-medium text-slate-700">Powers</h3>
                             <p className="text-sm font-semibold text-slate-400">Squares, cubes & roots</p>
                         </div>
-                        <span className="material-symbols-outlined text-slate-300">chevron_right</span>
+                        <span className="material-symbols-outlined text-slate-300" aria-hidden="true">chevron_right</span>
                     </div>
                 </button>
 
@@ -84,13 +84,13 @@ export default function HomeScreen({ navigateTo }: HomeScreenProps) {
                 >
                     <div className="w-full bg-white border-2 border-slate-100 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
                          <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center">
-                             <span className="material-symbols-outlined text-3xl">percent</span>
+                             <span className="material-symbols-outlined text-3xl" aria-hidden="true">percent</span>
                         </div>
                         <div className="text-left flex-1">
                             <h3 className="title-medium text-slate-700">Fractions</h3>
                             <p className="text-sm font-semibold text-slate-400">Decimals & percents</p>
                         </div>
-                        <span className="material-symbols-outlined text-slate-300">chevron_right</span>
+                        <span className="material-symbols-outlined text-slate-300" aria-hidden="true">chevron_right</span>
                     </div>
                 </button>
             </div>
