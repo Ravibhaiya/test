@@ -11,7 +11,7 @@ import {
 } from '@/lib/question-helpers';
 import VirtualKeyboard from '@/components/VirtualKeyboard';
 import TimerBar from '@/components/TimerBar';
-import WavyFeedbackDecoration from '@/components/WavyFeedbackDecoration';
+import FeedbackBackground from '@/components/FeedbackBackground';
 
 interface Question {
   question: string;
@@ -250,23 +250,19 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
                 </div>
             </div>
 
-            {/* Wavy Decoration (visible only during feedback) */}
-            {feedbackStatus !== 'idle' && (
-                <WavyFeedbackDecoration status={feedbackStatus} />
-            )}
-
         </div>
 
         {/* Footer: Feedback / Button */}
         <div className={`
-            screen-fixed-bottom flex flex-col gap-4 border-t-2 transition-colors duration-300
-            ${feedbackStatus === 'idle' ? 'bg-white border-slate-100' : ''}
-            ${feedbackStatus === 'correct' ? '!bg-green-100 !border-transparent' : ''}
-            ${feedbackStatus === 'wrong' ? '!bg-red-100 !border-transparent' : ''}
-            ${feedbackStatus === 'timeup' ? '!bg-sky-100 !border-transparent' : ''}
+            screen-fixed-bottom flex flex-col gap-4 border-t-2 transition-colors duration-300 relative overflow-visible z-20
+            ${feedbackStatus === 'idle' ? 'bg-white border-slate-100' : 'border-transparent bg-transparent'}
         `}>
+             {/* Feedback Background (Wave + Fill) */}
+             <FeedbackBackground status={feedbackStatus} />
+
+             {/* Footer Content */}
              {feedbackStatus !== 'idle' && (
-                 <div className="flex items-start gap-4 mb-2">
+                 <div className="flex items-start gap-4 mb-2 relative z-10">
                      <div className={`
                         w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0
                         ${feedbackStatus === 'correct' ? 'bg-green-500 text-white' : ''}
@@ -300,10 +296,11 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
                 <button
                     onClick={handleCheck}
                     disabled={!inputValue}
-                    className={`
-                        w-full filled-button transition-all
-                        ${!inputValue ? 'opacity-50 grayscale' : ''}
-                    `}
+                    className={
+                        !inputValue
+                        ? "btn-disabled transition-all"
+                        : "w-full filled-button transition-all"
+                    }
                 >
                     CHECK
                 </button>

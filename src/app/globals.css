@@ -169,6 +169,13 @@
 }
 .tonal-button:hover { @apply bg-slate-50; }
 
+/* Disabled Button */
+.btn-disabled {
+  @apply w-full h-14 rounded-2xl flex items-center justify-center font-bold text-lg uppercase tracking-wide;
+  @apply bg-slate-200 text-slate-400 cursor-not-allowed shadow-none border-transparent;
+  font-family: var(--font-fredoka);
+}
+
 /* Icon Button */
 .icon-button {
   @apply p-2 rounded-xl transition-transform active:scale-95 text-slate-400 hover:text-slate-600 hover:bg-slate-100;
