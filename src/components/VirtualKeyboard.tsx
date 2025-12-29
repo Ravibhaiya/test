@@ -57,8 +57,11 @@ const KeyButton = memo(function KeyButton({
     isAction?: boolean,
     className?: string
 }) {
+    const isBackspace = value === 'backspace';
+
     return (
         <button
+            aria-label={isBackspace ? 'Backspace' : undefined}
             className={`
               h-12 rounded-xl text-2xl font-bold flex items-center justify-center transition-all btn-push
               ${isAction
@@ -69,15 +72,15 @@ const KeyButton = memo(function KeyButton({
             `}
             onClick={(e) => {
               e.preventDefault();
-              if (value === 'backspace' && onDelete) {
+              if (isBackspace && onDelete) {
                 onDelete();
               } else if (onChar) {
                 onChar(value);
               }
             }}
           >
-            {value === 'backspace' ? (
-              <span className="material-symbols-outlined font-bold text-2xl">backspace</span>
+            {isBackspace ? (
+              <span className="material-symbols-outlined font-bold text-2xl" aria-hidden="true">backspace</span>
             ) : (
               label
             )}
