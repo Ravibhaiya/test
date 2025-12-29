@@ -37,12 +37,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isDev = process.env.NODE_ENV === 'development';
+  // Security: strict CSP, only allow unsafe-eval in development.
+  // We use 'unsafe-inline' for scripts as Next.js requires it for hydration in static exports (unless using nonces, which are hard with static export).
+  const csp = `default-src 'self'; script-src 'self' 'unsafe-inline' ${isDev ? "'unsafe-eval'" : ""}; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://placehold.co https://images.unsplash.com https://picsum.photos; object-src 'none'; base-uri 'self'; form-action 'self';`;
+
   return (
     <html lang="en">
       <head>
         <meta
           httpEquiv="Content-Security-Policy"
-          content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://placehold.co https://images.unsplash.com https://picsum.photos; object-src 'none'; base-uri 'self'; form-action 'self';"
+          content={csp}
         />
         <link
           rel="stylesheet"

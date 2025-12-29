@@ -223,6 +223,11 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
             <div className="flex-1 flex flex-col justify-center w-full relative z-10">
                 {/* Question Bubble */}
                 <div className="mb-4 animate-bounce-soft">
+                     {/*
+                       Security Note: dangerouslySetInnerHTML is used here to render MathML/HTML questions.
+                       Currently, 'question' is generated internally from trusted numbers/templates in question-helpers.ts.
+                       If user input or external data is ever used here, it MUST be sanitized (e.g., via DOMPurify) to prevent XSS.
+                     */}
                      <h2
                         className="text-4xl sm:text-5xl font-bold text-slate-700 mb-2"
                         dangerouslySetInnerHTML={{ __html: question }}
