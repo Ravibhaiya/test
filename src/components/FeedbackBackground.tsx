@@ -33,7 +33,7 @@ const FeedbackBackground: React.FC<FeedbackBackgroundProps> = ({ status }) => {
     }
   }, [status]);
 
-  // Generate sine wave path (Same as before)
+  // Generate sine wave path
   const wavePath = useMemo(() => {
     const width = 1440;
     const height = 320;
@@ -70,18 +70,6 @@ const FeedbackBackground: React.FC<FeedbackBackgroundProps> = ({ status }) => {
 
     const elements = [];
 
-    // We want icons in the wave area AND the footer area.
-    // Wave area is roughly 160px high (top part).
-    // Footer area is 100% height of this component's main container.
-    // We will distribute them using percentage of the TOTAL combined visual height?
-    // Or just scatter them in this component.
-    // This component will be absolute inset-0 in the footer.
-    // It has a child (Wave) that is absolute bottom-full.
-
-    // Let's generate two sets of icons:
-    // 1. For the Wave part (above the footer)
-    // 2. For the Footer part (inside the footer)
-
     // Set 1: Wave Area (above)
     const waveCols = 4;
     const waveRows = 2;
@@ -89,17 +77,17 @@ const FeedbackBackground: React.FC<FeedbackBackgroundProps> = ({ status }) => {
         const Icon = IconSet[Math.floor(Math.random() * IconSet.length)];
         const size = Math.floor(Math.random() * 16) + 14;
 
-        // Position relative to the WAVE container (which is h-40 = 160px)
+        // Position relative to the WAVE container (h-20)
         const left = (i % waveCols) * (100 / waveCols) + Math.random() * 10;
         const top = Math.floor(i / waveCols) * (100 / waveRows) + Math.random() * 20;
 
         elements.push(
             <div
                 key={`wave-${i}`}
-                className="absolute animate-float-up z-0"
+                className="absolute animate-float-up z-10"
                 style={{
                     left: `${left}%`,
-                    top: `${top}%`, // Inside the wave box
+                    top: `${top}%`,
                     animationDelay: `${Math.random() * 2}s`,
                     animationDuration: `${3 + Math.random() * 3}s`,
                     transform: `rotate(${Math.random() * 360}deg)`,
@@ -144,55 +132,43 @@ const FeedbackBackground: React.FC<FeedbackBackgroundProps> = ({ status }) => {
 
   if (status === 'idle') return null;
 
+  // Create a data URI for the mask image using the same wave path
+  const maskImage = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320' preserveAspectRatio='none'%3E%3Cpath d='${wavePath}' fill='black'/%3E%3C/svg%3E")`;
+
   return (
     <>
         {/* Wave Part: Anchored to the top of the footer (bottom: 100%) */}
-        <div className={`absolute bottom-[100%] left-0 right-0 w-full h-20 pointer-events-none overflow-hidden flex flex-col justify-end ${colors.text}`}>
-            {/* SVG Wave */}
-            <div className="w-full relative h-12 flex-shrink-0 translate-y-[1px] z-10">
-                    <svg
-                        viewBox="0 0 1440 320"
-                        className="w-full h-full preserve-3d"
-                        preserveAspectRatio="none"
-                    >
-                        <path
-                            fill={colors.fill}
-                            fillOpacity="1"
-                            d={wavePath}
-                        ></path>
-                    </svg>
-            </div>
+        <div className={`absolute bottom-[100%] left-0 right-0 w-full h-20 pointer-events-none ${colors.text}`}>
 
-            {/* Wave Body (The block below the SVG curve but above the footer line) */}
-            {/* Wait, the SVG includes the block down to height 320.
-                In the previous code, h-40 was the container.
-                We want the wave to seamlessly join the footer.
-                The SVG path ends at y=320.
-                MidY is 160.
-                So the SVG covers 160px of height?
-                Actually, let's just stick to the previous SVG logic which seemed to work.
-                It was: container h-40 (160px). SVG inside h-12 (48px). Block below it?
+             {/* Unified Background Layer (SVG + Solid) - Layer 0 */}
+             {/* We use the SVG to draw the entire shape including the wave and the fill below it. */}
+             <div className="absolute inset-0 w-full h-full z-0">
+                 <svg
+                    viewBox="0 0 1440 320"
+                    className="w-full h-full preserve-3d"
+                    preserveAspectRatio="none"
+                 >
+                    <path
+                        fill={colors.fill}
+                        fillOpacity="1"
+                        d={wavePath}
+                    ></path>
+                 </svg>
+             </div>
 
-                Previous code:
-                   <div className="w-full relative h-12 overflow-hidden translate-y-[1px]"> <svg...> </svg> </div>
-                   <div className={`w-full flex-1 relative overflow-hidden ${colorClass}`}> {animatedElements} </div>
-
-                The 'flex-1' div filled the rest of the h-40 container.
-                So the wave visual was: [SVG Curve 48px] + [Solid Block ~112px]
-
-                Here, we are attaching this to the TOP of the footer.
-                So we want: [SVG Curve] + [Solid Block connecting to Footer]
-
-                This entire 'Wave Part' div is sitting ABOVE the footer.
-                So it should look like:
-
-                  ~~~ (Curve)
-                  | | (Solid)
-                ----------- (Footer Top Edge)
-
-                So yes, we need the solid block.
-            */}
-             <div className={`w-full flex-1 relative overflow-hidden ${colors.bg}`}>
+             {/* Icons Layer - Layer 1 */}
+             {/* Positioned absolutely over the whole area, but masked by the wave shape */}
+             <div
+                className="absolute inset-0 w-full h-full z-10 overflow-hidden"
+                style={{
+                    maskImage: maskImage,
+                    WebkitMaskImage: maskImage, // For WebKit browsers
+                    maskSize: '100% 100%',
+                    WebkitMaskSize: '100% 100%',
+                    maskRepeat: 'no-repeat',
+                    WebkitMaskRepeat: 'no-repeat'
+                }}
+             >
                 {animatedElements?.waveIcons}
              </div>
         </div>
