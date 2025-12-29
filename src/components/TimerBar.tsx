@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useState, memo } from 'react';
+import React, { useEffect, useRef, memo } from 'react';
 
 interface TimerBarProps {
   duration: number; // in seconds
@@ -9,15 +9,33 @@ interface TimerBarProps {
 }
 
 const TimerBar = memo(function TimerBar({ duration, isRunning, onTimeUp, resetKey }: TimerBarProps) {
-  const [progress, setProgress] = useState(100);
+  const barRef = useRef<HTMLDivElement>(null);
   const requestRef = useRef<number>(0);
   const startTimeRef = useRef<number>(0);
   const totalDurationRef = useRef<number>(duration * 1000);
   const onTimeUpRef = useRef(onTimeUp);
+  const activeColorClassRef = useRef<string>('bg-green-500');
 
   useEffect(() => {
     onTimeUpRef.current = onTimeUp;
   }, [onTimeUp]);
+
+  const updateColor = (progress: number) => {
+    if (!barRef.current) return;
+
+    let newColor = 'bg-green-500';
+    if (progress < 33.33) {
+      newColor = 'bg-red-500';
+    } else if (progress <= 66.66) {
+      newColor = 'bg-orange-500';
+    }
+
+    if (newColor !== activeColorClassRef.current) {
+        barRef.current.classList.remove(activeColorClassRef.current);
+        barRef.current.classList.add(newColor);
+        activeColorClassRef.current = newColor;
+    }
+  };
 
   const animate = (time: number) => {
     const elapsed = time - startTimeRef.current;
@@ -26,7 +44,11 @@ const TimerBar = memo(function TimerBar({ duration, isRunning, onTimeUp, resetKe
     if (durationMs > 0) {
       const remaining = Math.max(0, durationMs - elapsed);
       const newProgress = (remaining / durationMs) * 100;
-      setProgress(newProgress);
+
+      if (barRef.current) {
+        barRef.current.style.width = `${newProgress}%`;
+        updateColor(newProgress);
+      }
 
       if (remaining <= 0) {
         if (requestRef.current) cancelAnimationFrame(requestRef.current);
@@ -41,8 +63,15 @@ const TimerBar = memo(function TimerBar({ duration, isRunning, onTimeUp, resetKe
   useEffect(() => {
     if (requestRef.current) cancelAnimationFrame(requestRef.current);
 
-    setProgress(100);
+    // Reset visual state
     totalDurationRef.current = duration * 1000;
+    if (barRef.current) {
+        barRef.current.style.width = '100%';
+        // Reset color to green
+        barRef.current.classList.remove(activeColorClassRef.current);
+        barRef.current.classList.add('bg-green-500');
+        activeColorClassRef.current = 'bg-green-500';
+    }
 
     if (isRunning) {
         startTimeRef.current = performance.now();
@@ -62,18 +91,12 @@ const TimerBar = memo(function TimerBar({ duration, isRunning, onTimeUp, resetKe
     }
   }, [isRunning]);
 
-  let timerColorClass = 'bg-green-500';
-  if (progress < 33.33) {
-    timerColorClass = 'bg-red-500';
-  } else if (progress <= 66.66) {
-    timerColorClass = 'bg-orange-500';
-  }
-
   return (
     <div className="w-full h-5 bg-slate-200 rounded-full overflow-hidden border-2 border-slate-100 shadow-inner">
         <div
-            className={`h-full ${timerColorClass} rounded-full relative`}
-            style={{ width: `${progress}%` }}
+            ref={barRef}
+            className="h-full bg-green-500 rounded-full relative"
+            style={{ width: '100%' }}
         >
             <div className="absolute top-1 left-2 right-2 h-[30%] bg-white opacity-40 rounded-full blur-[1px]" />
         </div>
