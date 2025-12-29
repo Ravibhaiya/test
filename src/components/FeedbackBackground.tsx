@@ -147,7 +147,7 @@ const FeedbackBackground: React.FC<FeedbackBackgroundProps> = ({ status }) => {
   return (
     <>
         {/* Wave Part: Anchored to the top of the footer (bottom: 100%) */}
-        <div className={`absolute bottom-[100%] left-0 right-0 w-full h-40 pointer-events-none overflow-hidden flex flex-col justify-end ${colors.text}`}>
+        <div className={`absolute bottom-[100%] left-0 right-0 w-full h-20 pointer-events-none overflow-hidden flex flex-col justify-end ${colors.text}`}>
             {/* SVG Wave */}
             <div className="w-full relative h-12 flex-shrink-0 translate-y-[1px] z-10">
                     <svg
