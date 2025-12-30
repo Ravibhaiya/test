@@ -2,6 +2,7 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import React from 'react';
+import DOMPurify from 'dompurify';
 import type { Mode, FractionAnswerType, ExecutionConfig, PowerType } from '@/lib/types';
 import {
   generateTablesQuestion,
@@ -225,12 +226,17 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
                 <div className="mb-4 animate-bounce-soft">
                      {/*
                        Security Note: dangerouslySetInnerHTML is used here to render MathML/HTML questions.
-                       Currently, 'question' is generated internally from trusted numbers/templates in question-helpers.ts.
-                       If user input or external data is ever used here, it MUST be sanitized (e.g., via DOMPurify) to prevent XSS.
+                       Input is sanitized via DOMPurify to prevent XSS.
+                       We explicitly allow MathML tags and common text formatting.
                      */}
                      <h2
                         className="text-4xl sm:text-5xl font-bold text-slate-700 mb-2"
-                        dangerouslySetInnerHTML={{ __html: question }}
+                        dangerouslySetInnerHTML={{
+                          __html: DOMPurify.sanitize(question, {
+                            USE_PROFILES: { html: true, mathMl: true },
+                            ADD_TAGS: ['math', 'mrow', 'mfrac', 'mn', 'mo', 'sup', 'sub'],
+                          }),
+                        }}
                      />
                      {answerTypeHint && (
                         <p className="text-slate-400 font-bold text-lg">{answerTypeHint}</p>
