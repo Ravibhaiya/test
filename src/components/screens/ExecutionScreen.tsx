@@ -267,7 +267,11 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
 
              {/* Footer Content */}
              {feedbackStatus !== 'idle' && (
-                 <div className="flex items-start gap-4 mb-2 relative z-10">
+                 <div
+                   className="flex items-start gap-4 mb-2 relative z-10"
+                   role="alert"
+                   aria-live="assertive"
+                 >
                      <div className={`
                         w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0
                         ${feedbackStatus === 'correct' ? 'bg-green-500 text-white' : ''}
