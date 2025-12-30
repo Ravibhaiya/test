@@ -37,6 +37,12 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
   const [feedbackStatus, setFeedbackStatus] = useState<'idle' | 'correct' | 'wrong' | 'timeup'>('idle');
   const [feedbackMessage, setFeedbackMessage] = useState('');
 
+  // Ref to access feedback status in event handlers without triggering re-renders
+  const feedbackStatusRef = useRef(feedbackStatus);
+  useEffect(() => {
+    feedbackStatusRef.current = feedbackStatus;
+  }, [feedbackStatus]);
+
   const [inputValue, setInputValue] = useState('');
 
   const [activeAnswerType, setActiveAnswerType] = useState<FractionAnswerType | null>(null);
@@ -134,18 +140,18 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
 
   // Use callback to prevent VirtualKeyboard re-renders (animation bleed)
   const handleVirtualChar = useCallback((char: string) => {
-    if (feedbackStatus !== 'idle') return; // Block input during feedback
+    if (feedbackStatusRef.current !== 'idle') return; // Block input during feedback
     setInputValue(prev => {
       // Security: Prevent DoS/UI overflow by limiting input length
       if (prev.length >= 15) return prev;
       return prev + char;
     });
-  }, [feedbackStatus]);
+  }, []); // Stable callback
 
   const handleVirtualDelete = useCallback(() => {
-    if (feedbackStatus !== 'idle') return;
+    if (feedbackStatusRef.current !== 'idle') return;
     setInputValue(prev => prev.slice(0, -1));
-  }, [feedbackStatus]);
+  }, []); // Stable callback
 
   const handleCheck = () => {
     if (feedbackStatus !== 'idle') {
@@ -324,16 +330,14 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
             )}
         </div>
 
-        {/* Keyboard (Only visible when idle) */}
-        {feedbackStatus === 'idle' && (
-            <div className="bg-slate-100 p-2 pb-2 border-t border-slate-200">
-                <VirtualKeyboard
-                    onChar={handleVirtualChar}
-                    onDelete={handleVirtualDelete}
-                    visible={true}
-                />
-            </div>
-        )}
+        {/* Keyboard (Always mounted, toggled visibility) */}
+        <div className={`bg-slate-100 p-2 pb-2 border-t border-slate-200 ${feedbackStatus === 'idle' ? '' : 'hidden'}`}>
+            <VirtualKeyboard
+                onChar={handleVirtualChar}
+                onDelete={handleVirtualDelete}
+                visible={true}
+            />
+        </div>
     </div>
   );
 }
