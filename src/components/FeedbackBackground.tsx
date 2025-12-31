@@ -9,89 +9,134 @@ interface FeedbackBackgroundProps {
 }
 
 const FeedbackBackground: React.FC<FeedbackBackgroundProps> = ({ status }) => {
-  // Determine colors based on status
-  const colors = useMemo(() => {
+  // Determine gradient colors based on status
+  // We ensure the Wave gradient ends where the Footer background begins for a seamless look.
+  const theme = useMemo(() => {
     switch (status) {
-      case 'correct': return { bg: 'bg-green-100', text: 'text-green-300', fill: '#dcfce7' };
-      case 'wrong': return { bg: 'bg-red-100', text: 'text-red-300', fill: '#fee2e2' };
-      case 'timeup': return { bg: 'bg-sky-100', text: 'text-sky-300', fill: '#e0f2fe' };
-      default: return { bg: 'bg-transparent', text: 'text-transparent', fill: 'transparent' };
+      case 'correct':
+        return {
+          footerBg: 'bg-green-200', // Matches end of wave gradient
+          fillFront: 'url(#grad-correct)',
+          fillBack: '#dcfce7', // green-100 (Lighter, matches top)
+          text: 'text-green-400', // Slightly darker for icons to be visible on 200
+          gradId: 'grad-correct',
+          stops: [
+            { offset: '0%', color: '#dcfce7' }, // green-100
+            { offset: '100%', color: '#bbf7d0' } // green-200
+          ]
+        };
+      case 'wrong':
+        return {
+          footerBg: 'bg-red-200',
+          fillFront: 'url(#grad-wrong)',
+          fillBack: '#fee2e2', // red-100
+          text: 'text-red-400',
+          gradId: 'grad-wrong',
+          stops: [
+            { offset: '0%', color: '#fee2e2' }, // red-100
+            { offset: '100%', color: '#fecaca' } // red-200
+          ]
+        };
+      case 'timeup':
+        return {
+          footerBg: 'bg-sky-200',
+          fillFront: 'url(#grad-timeup)',
+          fillBack: '#e0f2fe', // sky-100
+          text: 'text-sky-400',
+          gradId: 'grad-timeup',
+          stops: [
+            { offset: '0%', color: '#e0f2fe' }, // sky-100
+            { offset: '100%', color: '#bae6fd' } // sky-200
+          ]
+        };
+      default:
+        return {
+          footerBg: 'bg-transparent',
+          fillFront: 'transparent',
+          fillBack: 'transparent',
+          text: 'text-transparent',
+          gradId: '',
+          stops: []
+        };
     }
   }, [status]);
 
   // Determine Icon Set based on status
   const IconSet = useMemo(() => {
     switch (status) {
-      case 'correct':
-        return [Star, Heart, Sparkles, CheckCircle2, Circle];
-      case 'wrong':
-        return [X, AlertTriangle, Triangle, CloudRain, Cloud];
-      case 'timeup':
-        return [Clock, Hourglass, Zap, Cloud];
-      default:
-        return [];
+      case 'correct': return [Star, Heart, Sparkles, CheckCircle2, Circle];
+      case 'wrong': return [X, AlertTriangle, Triangle, CloudRain, Cloud];
+      case 'timeup': return [Clock, Hourglass, Zap, Cloud];
+      default: return [];
     }
   }, [status]);
 
-  // Generate sine wave path
-  const wavePath = useMemo(() => {
+  // Generate sine wave paths (Front and Back)
+  const waves = useMemo(() => {
     const width = 1440;
     const height = 320;
     const amplitude = 30;
     const frequency = 8;
     const midY = 160;
 
-    let path = `M 0 ${midY} `;
-    const segmentWidth = width / frequency;
+    // Standard smooth Quadratic Bezier Wave
+    const generateQuadPath = (invert: boolean) => {
+        let path = `M 0 ${midY} `;
+        const segmentWidth = width / frequency;
 
-    for (let i = 0; i < frequency; i++) {
-        const startX = i * segmentWidth;
-        const q1x = startX + segmentWidth / 4;
-        const q1y = midY - amplitude;
-        const end1x = startX + segmentWidth / 2;
-        const end1y = midY;
+        for (let i = 0; i < frequency; i++) {
+            const startX = i * segmentWidth;
+            const dir = invert ? -1 : 1;
 
-        const q2x = startX + (segmentWidth * 3) / 4;
-        const q2y = midY + amplitude;
-        const end2x = startX + segmentWidth;
-        const end2y = midY;
+            const q1x = startX + segmentWidth / 4;
+            const q1y = midY - amplitude * dir;
+            const end1x = startX + segmentWidth / 2;
+            const end1y = midY;
 
-        path += `Q ${q1x} ${q1y}, ${end1x} ${end1y} `;
-        path += `Q ${q2x} ${q2y}, ${end2x} ${end2y} `;
+            const q2x = startX + (segmentWidth * 3) / 4;
+            const q2y = midY + amplitude * dir;
+            const end2x = startX + segmentWidth;
+            const end2y = midY;
+
+            path += `Q ${q1x} ${q1y}, ${end1x} ${end1y} `;
+            path += `Q ${q2x} ${q2y}, ${end2x} ${end2y} `;
+        }
+        path += `L ${width} ${height} L 0 ${height} Z`;
+        return path;
     }
 
-    path += `L ${width} ${height} L 0 ${height} Z`;
-    return path;
+    return {
+        front: generateQuadPath(false),
+        back: generateQuadPath(true) // Inverted phase for depth
+    };
   }, []);
 
-  // Generate animated elements
-  const animatedElements = useMemo(() => {
+  // Generate STATIC elements
+  const staticElements = useMemo(() => {
     if (IconSet.length === 0) return null;
 
     const elements = [];
 
     // Set 1: Wave Area (above)
-    const waveCols = 4;
-    const waveRows = 2;
+    // Constraint: Must be safely below the trough (Y=190 in 320 viewbox -> ~60%)
+    // We place them from 65% to 90% to be safe.
+    const waveCols = 5;
+    const waveRows = 1;
     for (let i = 0; i < waveCols * waveRows; i++) {
         const Icon = IconSet[Math.floor(Math.random() * IconSet.length)];
-        const size = Math.floor(Math.random() * 16) + 14;
+        const size = Math.floor(Math.random() * 12) + 10;
 
-        // Position relative to the WAVE container (h-20)
         const left = (i % waveCols) * (100 / waveCols) + Math.random() * 10;
-        const top = Math.floor(i / waveCols) * (100 / waveRows) + Math.random() * 20;
+        const top = 65 + Math.random() * 20; // 65% to 85%
 
         elements.push(
             <div
                 key={`wave-${i}`}
-                className="absolute animate-float-up z-10"
+                className="absolute z-10 opacity-20"
                 style={{
                     left: `${left}%`,
                     top: `${top}%`,
-                    animationDelay: `${Math.random() * 2}s`,
-                    animationDuration: `${3 + Math.random() * 3}s`,
                     transform: `rotate(${Math.random() * 360}deg)`,
-                    opacity: 0.3 + Math.random() * 0.4,
                 }}
             >
                 <Icon size={size} fill="currentColor" className="currentColor" />
@@ -100,26 +145,23 @@ const FeedbackBackground: React.FC<FeedbackBackgroundProps> = ({ status }) => {
     }
 
     // Set 2: Footer Area (inside)
-    const footerCols = 5;
+    const footerCols = 6;
     const footerRows = 2;
     for (let i = 0; i < footerCols * footerRows; i++) {
         const Icon = IconSet[Math.floor(Math.random() * IconSet.length)];
-        const size = Math.floor(Math.random() * 16) + 14;
+        const size = Math.floor(Math.random() * 16) + 12;
 
         const left = (i % footerCols) * (100 / footerCols) + Math.random() * 10;
-        const top = Math.floor(i / footerCols) * (100 / footerRows) + Math.random() * 20;
+        const top = Math.floor(i / footerCols) * (100 / footerRows) + Math.random() * 30;
 
         elements.push(
             <div
                 key={`footer-${i}`}
-                className="absolute animate-float-up z-0"
+                className="absolute z-0 opacity-20"
                 style={{
                     left: `${left}%`,
                     top: `${top}%`,
-                    animationDelay: `${Math.random() * 2}s`,
-                    animationDuration: `${3 + Math.random() * 3}s`,
                     transform: `rotate(${Math.random() * 360}deg)`,
-                    opacity: 0.3 + Math.random() * 0.4,
                 }}
             >
                 <Icon size={size} fill="currentColor" className="currentColor" />
@@ -132,50 +174,50 @@ const FeedbackBackground: React.FC<FeedbackBackgroundProps> = ({ status }) => {
 
   if (status === 'idle') return null;
 
-  // Create a data URI for the mask image using the same wave path
-  const maskImage = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320' preserveAspectRatio='none'%3E%3Cpath d='${wavePath}' fill='black'/%3E%3C/svg%3E")`;
-
   return (
     <>
         {/* Wave Part: Anchored to the top of the footer (bottom: 100%) */}
-        <div className={`absolute bottom-[100%] left-0 right-0 w-full h-20 pointer-events-none ${colors.text}`}>
+        <div className={`absolute bottom-[100%] left-0 right-0 w-full h-20 pointer-events-none ${theme.text}`}>
 
-             {/* Unified Background Layer (SVG + Solid) - Layer 0 */}
-             {/* We use the SVG to draw the entire shape including the wave and the fill below it. */}
              <div className="absolute inset-0 w-full h-full z-0">
                  <svg
                     viewBox="0 0 1440 320"
                     className="w-full h-full preserve-3d"
                     preserveAspectRatio="none"
                  >
+                    <defs>
+                        <linearGradient id={theme.gradId} x1="0%" y1="0%" x2="0%" y2="100%">
+                            {theme.stops.map((stop, i) => (
+                                <stop key={i} offset={stop.offset} stopColor={stop.color} />
+                            ))}
+                        </linearGradient>
+                    </defs>
+
+                    {/* Back Wave (Depth) - Slightly lighter/transparent */}
                     <path
-                        fill={colors.fill}
+                        fill={theme.fillBack}
+                        fillOpacity="0.4"
+                        d={waves.back}
+                    ></path>
+
+                    {/* Front Wave (Main) - Gradient */}
+                    <path
+                        fill={theme.fillFront}
                         fillOpacity="1"
-                        d={wavePath}
+                        d={waves.front}
                     ></path>
                  </svg>
              </div>
 
-             {/* Icons Layer - Layer 1 */}
-             {/* Positioned absolutely over the whole area, but masked by the wave shape */}
-             <div
-                className="absolute inset-0 w-full h-full z-10 overflow-hidden"
-                style={{
-                    maskImage: maskImage,
-                    WebkitMaskImage: maskImage, // For WebKit browsers
-                    maskSize: '100% 100%',
-                    WebkitMaskSize: '100% 100%',
-                    maskRepeat: 'no-repeat',
-                    WebkitMaskRepeat: 'no-repeat'
-                }}
-             >
-                {animatedElements?.waveIcons}
+             {/* Icons Layer - Safely positioned deep in the liquid */}
+             <div className="absolute inset-0 w-full h-full z-10 overflow-hidden">
+                {staticElements?.waveIcons}
              </div>
         </div>
 
         {/* Footer Part: Fills the footer container */}
-        <div className={`absolute inset-0 w-full h-full pointer-events-none overflow-hidden ${colors.bg} ${colors.text}`}>
-            {animatedElements?.footerIcons}
+        <div className={`absolute inset-0 w-full h-full pointer-events-none overflow-hidden ${theme.footerBg} ${theme.text}`}>
+            {staticElements?.footerIcons}
         </div>
     </>
   );
