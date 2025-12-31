@@ -1,6 +1,6 @@
 // src/components/screens/ExecutionScreen.tsx
 'use client';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import React from 'react';
 import DOMPurify from 'dompurify';
 import type { Mode, FractionAnswerType, ExecutionConfig, PowerType } from '@/lib/types';
@@ -210,6 +210,14 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
   const activeTimerDuration = config.timer;
   const showPercentAdornment = mode === 'fractions' && activeAnswerType === 'decimal';
 
+  // Memoize sanitized HTML to prevent expensive re-sanitization on every render (e.g. keystrokes)
+  const sanitizedQuestionHtml = useMemo(() => {
+    return DOMPurify.sanitize(question, {
+      USE_PROFILES: { html: true, mathMl: true },
+      ADD_TAGS: ['math', 'mrow', 'mfrac', 'mn', 'mo', 'sup', 'sub'],
+    });
+  }, [question]);
+
   return (
     <div id="execution-screen" className="screen-container">
         {/* Header: Progress Bar */}
@@ -238,10 +246,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
                      <h2
                         className="text-4xl sm:text-5xl font-bold text-slate-700 mb-2"
                         dangerouslySetInnerHTML={{
-                          __html: DOMPurify.sanitize(question, {
-                            USE_PROFILES: { html: true, mathMl: true },
-                            ADD_TAGS: ['math', 'mrow', 'mfrac', 'mn', 'mo', 'sup', 'sub'],
-                          }),
+                          __html: sanitizedQuestionHtml,
                         }}
                      />
                      {answerTypeHint && (
