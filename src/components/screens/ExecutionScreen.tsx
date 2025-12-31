@@ -251,10 +251,17 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
 
                 {/* Answer Display */}
                 <div className="w-full max-w-xs mx-auto mb-4">
-                    <div className={`
+                    <div
+                        role="textbox"
+                        aria-label="Current answer"
+                        aria-readonly="true"
+                        aria-live="polite"
+                        tabIndex={0}
+                        className={`
                         flex items-center justify-center
                         min-h-[80px] w-full px-6 rounded-3xl
                         border-2 text-3xl font-bold transition-all
+                        focus:outline-none focus:ring-4 focus:ring-purple-200 focus:border-purple-400
                         ${feedbackStatus === 'idle' ? 'bg-white border-slate-200 text-slate-700' : ''}
                         ${feedbackStatus === 'correct' ? 'bg-green-100 border-green-500 text-green-700' : ''}
                         ${feedbackStatus === 'wrong' ? 'bg-red-100 border-red-500 text-red-700' : ''}
