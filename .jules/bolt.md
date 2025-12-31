@@ -1,3 +1,3 @@
-## 2025-02-21 - [ExecutionScreen: VirtualKeyboard Stability]
-**Learning:** Conditional rendering of heavy components (like a keyboard) coupled with state-dependent callbacks causes unnecessary unmounting/remounting and prop instability, defeating `React.memo`.
-**Action:** Use CSS visibility (`hidden` class) to toggle visibility instead of conditional rendering, and use `useRef` to access state in event handlers without adding them to dependency arrays. This keeps the component mounted and the props stable.
+## 2025-02-21 - [ExecutionScreen: Memoized HTML Sanitization]
+**Learning:** `dangerouslySetInnerHTML` with `DOMPurify.sanitize` inside the render loop runs on every re-render (e.g., keystrokes). For frequently updating components, this is an expensive synchronous operation.
+**Action:** Always wrap `DOMPurify.sanitize` calls in `useMemo` when the input string is relatively stable (e.g., a question that doesn't change during answer input).
