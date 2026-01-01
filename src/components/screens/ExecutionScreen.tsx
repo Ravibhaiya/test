@@ -213,8 +213,14 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
   // Memoize sanitized HTML to prevent expensive re-sanitization on every render (e.g. keystrokes)
   const sanitizedQuestionHtml = useMemo(() => {
     return DOMPurify.sanitize(question, {
-      USE_PROFILES: { html: true, mathMl: true },
-      ADD_TAGS: ['math', 'mrow', 'mfrac', 'mn', 'mo', 'sup', 'sub'],
+      // Security: Principle of Least Privilege. Only allow specific tags needed for MathML and formatting.
+      // We disable the broad 'html' profile to reduce attack surface.
+      ALLOWED_TAGS: [
+        'b', 'i', 'em', 'strong', 'u', 'br', 'p', 'span', 'div', // Basic formatting
+        'ul', 'ol', 'li', 'table', 'thead', 'tbody', 'tr', 'th', 'td', // Tables and Lists
+        'math', 'mrow', 'mfrac', 'mn', 'mo', 'sup', 'sub'       // MathML & Powers
+      ],
+      USE_PROFILES: { mathMl: true }, // Keep mathMl profile for standard MathML attributes
     });
   }, [question]);
 
