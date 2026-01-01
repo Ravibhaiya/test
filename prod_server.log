@@ -1,0 +1,54 @@
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Progress: resolved 50, reused 4, downloaded 34, added 0
+Packages: +86
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 86, reused 20, downloaded 66, added 86, done
+ INFO  Accepting connections at http://localhost:9002
+ HTTP  1/1/2026 5:26:05 AM ::1 GET /
+ HTTP  1/1/2026 5:26:05 AM ::1 Returned 200 in 358 ms
+ HTTP  1/1/2026 5:26:06 AM ::1 GET /_next/static/media/07454f8ad8aaac57-s.p.fc65572f.woff2
+ HTTP  1/1/2026 5:26:06 AM ::1 Returned 200 in 5 ms
+ HTTP  1/1/2026 5:26:06 AM ::1 GET /_next/static/chunks/e0aeaf4216c49f00.css
+ HTTP  1/1/2026 5:26:06 AM ::1 GET /_next/static/media/5d52bd6c4cb3f315-s.p.610fd2a3.woff2
+ HTTP  1/1/2026 5:26:06 AM ::1 GET /_next/static/media/c9e42e3eae6237c2-s.p.24d96596.woff2
+ HTTP  1/1/2026 5:26:06 AM ::1 Returned 200 in 9 ms
+ HTTP  1/1/2026 5:26:06 AM ::1 Returned 200 in 8 ms
+ HTTP  1/1/2026 5:26:06 AM ::1 Returned 200 in 8 ms
+ HTTP  1/1/2026 5:26:06 AM ::1 GET /_next/static/chunks/da533c47fd210083.js
+ HTTP  1/1/2026 5:26:06 AM ::1 Returned 200 in 4 ms
+ HTTP  1/1/2026 5:26:06 AM ::1 GET /_next/static/chunks/08daaf8a60b0a494.js
+ HTTP  1/1/2026 5:26:06 AM ::1 GET /_next/static/chunks/5bb79aa00fb265e5.js
+ HTTP  1/1/2026 5:26:06 AM ::1 GET /_next/static/chunks/turbopack-a489ca015338412d.js
+ HTTP  1/1/2026 5:26:06 AM ::1 GET /_next/static/chunks/6e4f63017c9a638b.js
+ HTTP  1/1/2026 5:26:06 AM ::1 GET /_next/static/chunks/3145a42523c2f11f.js
+ HTTP  1/1/2026 5:26:06 AM ::1 GET /_next/static/chunks/cf37f71da6e8c949.js
+ HTTP  1/1/2026 5:26:06 AM ::1 Returned 200 in 12 ms
+ HTTP  1/1/2026 5:26:06 AM ::1 Returned 200 in 11 ms
+ HTTP  1/1/2026 5:26:06 AM ::1 Returned 200 in 10 ms
+ HTTP  1/1/2026 5:26:06 AM ::1 Returned 200 in 18 ms
+ HTTP  1/1/2026 5:26:06 AM ::1 Returned 200 in 20 ms
+ HTTP  1/1/2026 5:26:06 AM ::1 Returned 200 in 35 ms
+ HTTP  1/1/2026 5:26:17 AM ::1 GET /
+ HTTP  1/1/2026 5:26:17 AM ::1 Returned 200 in 2 ms
+ HTTP  1/1/2026 5:26:17 AM ::1 GET /_next/static/media/07454f8ad8aaac57-s.p.fc65572f.woff2
+ HTTP  1/1/2026 5:26:17 AM ::1 Returned 200 in 1 ms
+ HTTP  1/1/2026 5:26:17 AM ::1 GET /_next/static/chunks/e0aeaf4216c49f00.css
+ HTTP  1/1/2026 5:26:17 AM ::1 GET /_next/static/media/5d52bd6c4cb3f315-s.p.610fd2a3.woff2
+ HTTP  1/1/2026 5:26:17 AM ::1 GET /_next/static/media/c9e42e3eae6237c2-s.p.24d96596.woff2
+ HTTP  1/1/2026 5:26:17 AM ::1 Returned 200 in 6 ms
+ HTTP  1/1/2026 5:26:17 AM ::1 Returned 200 in 8 ms
+ HTTP  1/1/2026 5:26:17 AM ::1 Returned 200 in 9 ms
+ HTTP  1/1/2026 5:26:17 AM ::1 GET /_next/static/chunks/da533c47fd210083.js
+ HTTP  1/1/2026 5:26:17 AM ::1 Returned 200 in 3 ms
+ HTTP  1/1/2026 5:26:17 AM ::1 GET /_next/static/chunks/08daaf8a60b0a494.js
+ HTTP  1/1/2026 5:26:17 AM ::1 Returned 200 in 3 ms
+ HTTP  1/1/2026 5:26:17 AM ::1 GET /_next/static/chunks/turbopack-a489ca015338412d.js
+ HTTP  1/1/2026 5:26:17 AM ::1 GET /_next/static/chunks/6e4f63017c9a638b.js
+ HTTP  1/1/2026 5:26:17 AM ::1 GET /_next/static/chunks/5bb79aa00fb265e5.js
+ HTTP  1/1/2026 5:26:17 AM ::1 Returned 200 in 2 ms
+ HTTP  1/1/2026 5:26:17 AM ::1 Returned 200 in 1 ms
+ HTTP  1/1/2026 5:26:17 AM ::1 Returned 200 in 2 ms
+ HTTP  1/1/2026 5:26:17 AM ::1 GET /_next/static/chunks/3145a42523c2f11f.js
+ HTTP  1/1/2026 5:26:17 AM ::1 Returned 200 in 3 ms
+ HTTP  1/1/2026 5:26:17 AM ::1 GET /_next/static/chunks/cf37f71da6e8c949.js
+ HTTP  1/1/2026 5:26:17 AM ::1 Returned 200 in 4 ms
