@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, memo } from 'react';
 import {
   Star, Circle, Triangle, Cloud, Sparkles, Heart,
   X, AlertTriangle, CloudRain, Clock, Hourglass, Zap, CheckCircle2
@@ -223,4 +223,4 @@ const FeedbackBackground: React.FC<FeedbackBackgroundProps> = ({ status }) => {
   );
 };
 
-export default FeedbackBackground;
+export default memo(FeedbackBackground);
