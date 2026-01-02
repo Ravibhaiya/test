@@ -14,3 +14,8 @@
 **Vulnerability:** The previous `DOMPurify` configuration used `USE_PROFILES: { html: true }`, which is permissive and enables a broad set of HTML tags, potentially increasing the attack surface if malicious content were ever introduced.
 **Learning:** Security by design means adhering to the "Principle of Least Privilege". We should only enable the specific tags required for the application's functionality (MathML and basic text formatting).
 **Prevention:** Replaced the broad `html` profile with a strict `ALLOWED_TAGS` list in `ExecutionScreen.tsx`. This explicitly whitelists only necessary tags (`math`, `mrow`, `mfrac`, `mn`, `mo`, `sup`, `sub`, basic formatting, and common structure like `ul/li/table`), rejecting all others.
+
+## 2025-02-21 - Android Manifest Hardening
+**Vulnerability:** The Android application was configured with `android:allowBackup="true"`, allowing potentially sensitive application data (like local storage) to be extracted via `adb backup` by anyone with physical access or malware on the same device. Additionally, cleartext traffic was not explicitly disabled.
+**Learning:** Default Android configurations often prioritize convenience (backups) over strict security. Explicitly disabling these features is crucial for apps that do not intend to share data or state via standard backup mechanisms, especially when local storage is used for sensitive config.
+**Prevention:** Modified `AndroidManifest.xml` to set `android:allowBackup="false"` and `android:usesCleartextTraffic="false"`. This prevents data extraction via backup tools and ensures the app fails securely if it attempts to make insecure HTTP connections.
