@@ -2,6 +2,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import type { Mode } from '@/lib/types';
+import { validateTimerInput } from '@/lib/security';
 
 interface TableConfig {
   selected: number[];
@@ -44,10 +45,7 @@ export default function TableSelectionScreen({
   };
 
   const handleTimerChange = (value: string) => {
-    const timerValue =
-      value === '' || parseInt(value, 10) === 0
-        ? undefined
-        : parseInt(value, 10);
+    const timerValue = validateTimerInput(value);
     setTimer(timerValue);
     try {
       localStorage.setItem(TIMER_STORAGE_KEY, JSON.stringify(timerValue));

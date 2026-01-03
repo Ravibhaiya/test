@@ -2,6 +2,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import type { Mode, FractionAnswerType } from '@/lib/types';
+import { validateTimerInput } from '@/lib/security';
 
 interface FractionsConfig {
   selected: FractionAnswerType[];
@@ -45,10 +46,7 @@ export default function FractionsConfigScreen({
   };
 
   const handleTimerChange = (value: string) => {
-    const timerValue =
-      value === '' || parseInt(value, 10) === 0
-        ? undefined
-        : parseInt(value, 10);
+    const timerValue = validateTimerInput(value);
     setTimer(timerValue);
     try {
       localStorage.setItem(TIMER_STORAGE_KEY, JSON.stringify(timerValue));
