@@ -73,7 +73,7 @@ export default function Home() {
           type="button"
           id="back-btn"
           aria-label="Go back"
-          className="rounded-full bg-slate-200 hover:bg-slate-300 active:bg-slate-400 transition-colors flex items-center justify-center w-11 h-11 text-slate-600 relative z-10 focus:outline-none"
+          className="rounded-full bg-slate-200 hover:bg-slate-300 active:bg-slate-400 transition-colors flex items-center justify-center w-11 h-11 text-slate-600 relative z-10 focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:outline-none focus:outline-none"
           onClick={handleBack}
           style={{ display: page === 'home' ? 'none' : 'inline-flex' }}
         >

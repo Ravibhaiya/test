@@ -64,6 +64,7 @@ const KeyButton = memo(function KeyButton({
             aria-label={isBackspace ? 'Backspace' : undefined}
             className={`
               h-12 rounded-xl text-2xl font-bold flex items-center justify-center transition-all btn-push
+              focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:outline-none z-10
               ${isAction
                 ? 'bg-slate-200 text-slate-600 border-slate-300'
                 : 'bg-white text-slate-700 border-slate-200'
