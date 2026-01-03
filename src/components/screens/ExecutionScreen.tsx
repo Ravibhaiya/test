@@ -224,6 +224,10 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
     });
   }, [question]);
 
+  // Memoize the dangerous HTML object wrapper to prevent object identity changes on re-renders
+  // which would cause React to treat the prop as new.
+  const questionHtmlProp = useMemo(() => ({ __html: sanitizedQuestionHtml }), [sanitizedQuestionHtml]);
+
   return (
     <div id="execution-screen" className="screen-container">
         {/* Header: Progress Bar */}
@@ -251,9 +255,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
                      */}
                      <h2
                         className="text-4xl sm:text-5xl font-bold text-slate-700 mb-2"
-                        dangerouslySetInnerHTML={{
-                          __html: sanitizedQuestionHtml,
-                        }}
+                        dangerouslySetInnerHTML={questionHtmlProp}
                      />
                      {answerTypeHint && (
                         <p className="text-slate-400 font-bold text-lg">{answerTypeHint}</p>
