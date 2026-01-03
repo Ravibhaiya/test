@@ -19,3 +19,8 @@
 **Vulnerability:** The Android application was configured with `android:allowBackup="true"`, allowing potentially sensitive application data (like local storage) to be extracted via `adb backup` by anyone with physical access or malware on the same device. Additionally, cleartext traffic was not explicitly disabled.
 **Learning:** Default Android configurations often prioritize convenience (backups) over strict security. Explicitly disabling these features is crucial for apps that do not intend to share data or state via standard backup mechanisms, especially when local storage is used for sensitive config.
 **Prevention:** Modified `AndroidManifest.xml` to set `android:allowBackup="false"` and `android:usesCleartextTraffic="false"`. This prevents data extraction via backup tools and ensures the app fails securely if it attempts to make insecure HTTP connections.
+
+## 2025-02-27 - Timer Input Validation
+**Vulnerability:** Configuration screens allowed users to input negative numbers or excessively large values for the practice timer. This led to potential Denial of Service (DoS) in the `TimerBar` component (immediate loop) or UI overflow/performance issues.
+**Learning:** Input fields with `type="number"` do not automatically prevent negative values from being processed by JavaScript `parseInt`. Explicit validation and clamping are necessary to protect internal logic and UI state from invalid user inputs.
+**Prevention:** Implemented a `validateTimerInput` utility in `src/lib/security.ts` that enforces a positive integer range (0-3600 seconds). Applied this validator across all configuration screens to sanitize inputs before updating state or local storage.

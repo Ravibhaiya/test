@@ -2,6 +2,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import type { Mode, PowerType } from '@/lib/types';
+import { validateTimerInput } from '@/lib/security';
 
 interface PowersConfig {
   selected: PowerType[];
@@ -52,10 +53,7 @@ export default function PowersConfigScreen({ onStart }: PowersConfigScreenProps)
   };
 
   const handleTimerChange = (value: string) => {
-    const timerValue =
-      value === '' || parseInt(value, 10) === 0
-        ? undefined
-        : parseInt(value, 10);
+    const timerValue = validateTimerInput(value);
     setTimer(timerValue);
     try {
       localStorage.setItem(TIMER_STORAGE_KEY, JSON.stringify(timerValue));
