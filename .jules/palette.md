@@ -5,3 +5,7 @@
 ## 2025-05-18 - Card Accessibility Wrapping
 **Learning:** Complex cards with internal buttons often trap focus or create redundant tab stops. Wrapping the entire card content in a single `<button>` is cleaner but requires explicit `focus-visible` styling to match the card's non-standard shape (e.g., `rounded-3xl`).
 **Action:** When wrapping entire cards as buttons, always apply `focus-visible:ring-*` and `rounded-*` to the parent button to ensure the focus indicator hugs the card's actual geometry.
+
+## 2025-05-18 - Keyboard Navigation Visibility
+**Learning:** Removing default focus rings (`focus:outline-none`) creates a major accessibility barrier for keyboard users.
+**Action:** Always pair `focus:outline-none` with explicit `focus-visible:ring-*` styles to maintain a clean UI for mouse users while ensuring accessibility for keyboard navigation.
