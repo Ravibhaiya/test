@@ -2,6 +2,7 @@
 
 import type { PowerType, FractionAnswerType } from '@/lib/types';
 import FRACTION_DATA from '@/lib/fractions.json';
+import { secureMathRandom } from '@/lib/security';
 
 export interface Question {
   question: string;
@@ -64,8 +65,8 @@ export const generateTablesQuestion = (config: {
   selected: number[];
 }): Question => {
   const { selected } = config;
-  const table = selected[Math.floor(Math.random() * selected.length)];
-  const multiplier = Math.floor(Math.random() * 10) + 1;
+  const table = selected[Math.floor(secureMathRandom() * selected.length)];
+  const multiplier = Math.floor(secureMathRandom() * 10) + 1;
   return {
     question: `${table} &times; ${multiplier}`,
     answer: table * multiplier,
@@ -77,12 +78,12 @@ export const generatePracticeQuestion = (config: {
   digits2: number[];
 }): Question => {
   const { digits1, digits2 } = config;
-  const d1 = digits1[Math.floor(Math.random() * digits1.length)];
-  const d2 = digits2[Math.floor(Math.random() * digits2.length)];
+  const d1 = digits1[Math.floor(secureMathRandom() * digits1.length)];
+  const d2 = digits2[Math.floor(secureMathRandom() * digits2.length)];
   const generateRandomNumber = (digits: number) => {
     const min = Math.pow(10, digits - 1);
     const max = Math.pow(10, digits) - 1;
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+    return Math.floor(secureMathRandom() * (max - min + 1)) + min;
   };
   const num1 = generateRandomNumber(d1);
   const num2 = generateRandomNumber(d2);
@@ -97,7 +98,7 @@ export const generatePowersQuestion = (config: {
   rangeMax: number;
 }): Question | null => {
   const { selected, rangeMax } = config;
-  const powerMode = selected[Math.floor(Math.random() * selected.length)];
+  const powerMode = selected[Math.floor(secureMathRandom() * selected.length)];
   const minRange = 2;
   let maxNum = rangeMax;
 
@@ -107,7 +108,7 @@ export const generatePowersQuestion = (config: {
 
   if (minRange > maxNum) return null;
 
-  const n = Math.floor(Math.random() * (maxNum - minRange + 1)) + minRange;
+  const n = Math.floor(secureMathRandom() * (maxNum - minRange + 1)) + minRange;
   let question = '';
   let answer = 0;
 
@@ -136,9 +137,9 @@ export const generateFractionsQuestion = (config: {
   selected: FractionAnswerType[];
 }): Question => {
   const { selected } = config;
-  const answerType = selected[Math.floor(Math.random() * selected.length)];
+  const answerType = selected[Math.floor(secureMathRandom() * selected.length)];
   const randomFractionData =
-    FRACTION_DATA[Math.floor(Math.random() * FRACTION_DATA.length)];
+    FRACTION_DATA[Math.floor(secureMathRandom() * FRACTION_DATA.length)];
   const { n, d } = randomFractionData;
 
   const percentageValue = (n / d) * 100;

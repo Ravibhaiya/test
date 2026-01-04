@@ -20,3 +20,18 @@ export function validateTimerInput(value: string): number | undefined {
 
   return clamped === 0 ? undefined : clamped;
 }
+
+/**
+ * A cryptographically secure replacement for Math.random().
+ * Returns a floating-point number between 0 (inclusive) and 1 (exclusive).
+ *
+ * Security: Uses crypto.getRandomValues() to ensure better randomness
+ * and prevent predictability in question generation, although primarily
+ * a defense-in-depth measure for this specific application.
+ */
+export function secureMathRandom(): number {
+  const array = new Uint32Array(1);
+  crypto.getRandomValues(array);
+  // Divide by 2^32 to get a value between 0 and 1
+  return array[0] / (0xffffffff + 1);
+}
