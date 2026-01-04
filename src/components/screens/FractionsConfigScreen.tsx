@@ -83,6 +83,7 @@ export default function FractionsConfigScreen({
                     {(['fraction', 'decimal'] as FractionAnswerType[]).map((type) => (
                         <button
                             key={type}
+                            aria-pressed={selected.includes(type)}
                             onClick={() => handleTypeSelection(type)}
                             className={`choice-chip btn-push ${selected.includes(type) ? 'selected' : ''}`}
                         >

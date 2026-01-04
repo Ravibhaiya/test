@@ -74,10 +74,38 @@ export default function TableSelectionScreen({
 
         {/* Content */}
         <div className="screen-content no-scrollbar pb-8">
+             {/* Batch Actions */}
+             <div className="flex justify-end mb-4">
+                 <button
+                    onClick={() => {
+                        if (selected.length === 29) {
+                            setSelected([]);
+                        } else {
+                            setSelected(Array.from({ length: 29 }, (_, i) => i + 2));
+                        }
+                        handleSelectionChange();
+                    }}
+                    className="choice-chip text-sm font-bold"
+                 >
+                    {selected.length === 29 ? (
+                        <>
+                            <span className="material-symbols-outlined text-lg">close</span>
+                            Clear
+                        </>
+                    ) : (
+                        <>
+                            <span className="material-symbols-outlined text-lg">done_all</span>
+                            Select All
+                        </>
+                    )}
+                 </button>
+             </div>
+
              <div className="grid grid-cols-4 sm:grid-cols-5 gap-3">
                 {Array.from({ length: 29 }, (_, i) => i + 2).map((num) => (
                     <button
                         key={num}
+                        aria-pressed={selected.includes(num)}
                         onClick={() => handleTableSelection(num)}
                         className={`number-chip btn-push ${selected.includes(num) ? 'selected' : ''}`}
                     >
@@ -108,14 +136,17 @@ export default function TableSelectionScreen({
              </div>
 
              {configError && (
-                 <div className="text-center text-red-500 font-bold text-sm bg-red-50 py-2 rounded-xl border border-red-100">
+                 <div
+                   role="alert"
+                   aria-live="polite"
+                   className="text-center text-red-500 font-bold text-sm bg-red-50 py-2 rounded-xl border border-red-100"
+                 >
                      {configError}
                  </div>
              )}
 
              <button
                 onClick={handleStartClick}
-                disabled={selected.length === 0}
                 className={`w-full filled-button ${selected.length === 0 ? 'opacity-50 grayscale' : ''}`}
              >
                 START PRACTICE

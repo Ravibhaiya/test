@@ -94,6 +94,7 @@ export default function PowersConfigScreen({ onStart }: PowersConfigScreenProps)
                     {(['squares', 'cubes', 'square_roots', 'cube_roots'] as PowerType[]).map((type) => (
                         <button
                             key={type}
+                            aria-pressed={selected.includes(type)}
                             onClick={() => handlePowerSelection(type)}
                             className={`choice-chip btn-push ${selected.includes(type) ? 'selected' : ''}`}
                         >

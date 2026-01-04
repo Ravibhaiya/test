@@ -89,6 +89,7 @@ export default function PracticeConfigScreen({
                     {[2, 3, 4, 5].map((digit) => (
                         <button
                             key={`d1-${digit}`}
+                            aria-pressed={digits1.includes(digit)}
                             onClick={() => handleDigitSelection('digits1', digit)}
                             className={`choice-chip btn-push ${digits1.includes(digit) ? 'selected' : ''}`}
                         >
@@ -106,6 +107,7 @@ export default function PracticeConfigScreen({
                     {[2, 3, 4, 5].map((digit) => (
                         <button
                             key={`d2-${digit}`}
+                            aria-pressed={digits2.includes(digit)}
                             onClick={() => handleDigitSelection('digits2', digit)}
                             className={`choice-chip btn-push ${digits2.includes(digit) ? 'selected' : ''}`}
                         >
