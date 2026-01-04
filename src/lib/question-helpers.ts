@@ -11,6 +11,27 @@ export interface Question {
   unroundedAnswer?: number;
 }
 
+// Bolt Optimization: Extract static constant to avoid recreation and string parsing in loop
+const PERCENTAGE_MAPPINGS = [
+  { val: 0.5, n: 1, d: 2 },
+  { val: 0.333, n: 1, d: 3 },
+  { val: 0.666, n: 2, d: 3 },
+  { val: 0.25, n: 1, d: 4 },
+  { val: 0.75, n: 3, d: 4 },
+  { val: 0.2, n: 1, d: 5 },
+  { val: 0.4, n: 2, d: 5 },
+  { val: 0.6, n: 3, d: 5 },
+  { val: 0.8, n: 4, d: 5 },
+  { val: 0.166, n: 1, d: 6 },
+  { val: 0.833, n: 5, d: 6 },
+  { val: 0.142, n: 1, d: 7 },
+  { val: 0.125, n: 1, d: 8 },
+  { val: 0.375, n: 3, d: 8 },
+  { val: 0.625, n: 5, d: 8 },
+  { val: 0.875, n: 7, d: 8 },
+  { val: 0.111, n: 1, d: 9 },
+];
+
 const buildPercentageString = (numerator: number, denominator: number): string => {
   const percentageValue = (numerator / denominator) * 100;
   let percentageString = '';
@@ -19,32 +40,13 @@ const buildPercentageString = (numerator: number, denominator: number): string =
   const remainder = percentageValue - wholePart;
 
   if (remainder > 0.001) {
-    const fractions: { [key: number]: { n: number; d: number } } = {
-      0.5: { n: 1, d: 2 },
-      0.333: { n: 1, d: 3 },
-      0.666: { n: 2, d: 3 },
-      0.25: { n: 1, d: 4 },
-      0.75: { n: 3, d: 4 },
-      0.2: { n: 1, d: 5 },
-      0.4: { n: 2, d: 5 },
-      0.6: { n: 3, d: 5 },
-      0.8: { n: 4, d: 5 },
-      0.166: { n: 1, d: 6 },
-      0.833: { n: 5, d: 6 },
-      0.142: { n: 1, d: 7 },
-      0.125: { n: 1, d: 8 },
-      0.375: { n: 3, d: 8 },
-      0.625: { n: 5, d: 8 },
-      0.875: { n: 7, d: 8 },
-      0.111: { n: 1, d: 9 },
-    };
     let found = false;
-    for (const key in fractions) {
-      if (Math.abs(remainder - parseFloat(key)) < 0.001) {
-        const frac = fractions[key];
+    // Bolt Optimization: Iterate over static array instead of object keys (avoids parseFloat)
+    for (const mapping of PERCENTAGE_MAPPINGS) {
+      if (Math.abs(remainder - mapping.val) < 0.001) {
         percentageString = `<math><mrow>${
           wholePart > 0 ? `<mn>${wholePart}</mn>` : ''
-        }<mfrac><mn>${frac.n}</mn><mn>${frac.d}</mn></mfrac><mo>%</mo></mrow></math>`;
+        }<mfrac><mn>${mapping.n}</mn><mn>${mapping.d}</mn></mfrac><mo>%</mo></mrow></math>`;
         found = true;
         break;
       }
