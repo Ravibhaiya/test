@@ -2,6 +2,8 @@ import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
+  // @ts-ignore - Next.js 16 supports this at root, but types might lag
+  reactCompiler: true,
   output: 'export',
   images: {
     remotePatterns: [

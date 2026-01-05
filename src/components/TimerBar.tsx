@@ -81,8 +81,7 @@ const TimerBar = memo(function TimerBar({ duration, isRunning, onTimeUp, resetKe
     return () => {
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resetKey]);
+  }, [resetKey, duration, isRunning]); // Bolt: Added missing dependencies to satisfy React rules
 
   useEffect(() => {
     if (!isRunning && requestRef.current) {
