@@ -9,3 +9,7 @@
 ## 2025-05-18 - Keyboard Navigation Visibility
 **Learning:** Removing default focus rings (`focus:outline-none`) creates a major accessibility barrier for keyboard users.
 **Action:** Always pair `focus:outline-none` with explicit `focus-visible:ring-*` styles to maintain a clean UI for mouse users while ensuring accessibility for keyboard navigation.
+
+## 2025-05-18 - Input Label Association
+**Learning:** Inputs (like timers) often rely on proximity to text ("Timer (seconds)") without programmatic association, confusing screen readers.
+**Action:** Use `id` on the descriptive text and `aria-labelledby` on the input to explicitly link them without changing the visual layout.

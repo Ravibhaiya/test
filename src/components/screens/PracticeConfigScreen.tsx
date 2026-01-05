@@ -127,10 +127,11 @@ export default function PracticeConfigScreen({
                      <span className="material-symbols-outlined">timer</span>
                 </div>
                 <div className="flex-1">
-                    <p className="font-bold text-slate-700 text-sm">Timer (seconds)</p>
+                    <p id="timer-label-practice" className="font-bold text-slate-700 text-sm">Timer (seconds)</p>
                     <p className="text-xs text-slate-400">0 for no timer</p>
                 </div>
                 <input
+                    aria-labelledby="timer-label-practice"
                     type="number"
                     value={timer === undefined ? '' : timer}
                     onChange={(e) => handleTimerChange(e.target.value)}
