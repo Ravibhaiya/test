@@ -155,10 +155,11 @@ export default function PowersConfigScreen({ onStart }: PowersConfigScreenProps)
                      <span className="material-symbols-outlined">timer</span>
                 </div>
                 <div className="flex-1">
-                    <p className="font-bold text-slate-700 text-sm">Timer (seconds)</p>
+                    <p id="timer-label-powers" className="font-bold text-slate-700 text-sm">Timer (seconds)</p>
                     <p className="text-xs text-slate-400">0 for no timer</p>
                 </div>
                 <input
+                    aria-labelledby="timer-label-powers"
                     type="number"
                     value={timer === undefined ? '' : timer}
                     onChange={(e) => handleTimerChange(e.target.value)}
