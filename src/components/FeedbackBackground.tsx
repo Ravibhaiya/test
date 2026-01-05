@@ -3,6 +3,7 @@ import {
   Star, Circle, Triangle, Cloud, Sparkles, Heart,
   X, AlertTriangle, CloudRain, Clock, Hourglass, Zap, CheckCircle2
 } from 'lucide-react';
+import { secureMathRandom } from '@/lib/security';
 
 interface FeedbackBackgroundProps {
   status: 'idle' | 'correct' | 'wrong' | 'timeup';
@@ -123,11 +124,11 @@ const FeedbackBackground: React.FC<FeedbackBackgroundProps> = ({ status }) => {
     const waveCols = 5;
     const waveRows = 1;
     for (let i = 0; i < waveCols * waveRows; i++) {
-        const Icon = IconSet[Math.floor(Math.random() * IconSet.length)];
-        const size = Math.floor(Math.random() * 12) + 10;
+        const Icon = IconSet[Math.floor(secureMathRandom() * IconSet.length)];
+        const size = Math.floor(secureMathRandom() * 12) + 10;
 
-        const left = (i % waveCols) * (100 / waveCols) + Math.random() * 10;
-        const top = 65 + Math.random() * 20; // 65% to 85%
+        const left = (i % waveCols) * (100 / waveCols) + secureMathRandom() * 10;
+        const top = 65 + secureMathRandom() * 20; // 65% to 85%
 
         elements.push(
             <div
@@ -136,7 +137,7 @@ const FeedbackBackground: React.FC<FeedbackBackgroundProps> = ({ status }) => {
                 style={{
                     left: `${left}%`,
                     top: `${top}%`,
-                    transform: `rotate(${Math.random() * 360}deg)`,
+                    transform: `rotate(${secureMathRandom() * 360}deg)`,
                 }}
             >
                 <Icon size={size} fill="currentColor" className="currentColor" />
@@ -148,11 +149,11 @@ const FeedbackBackground: React.FC<FeedbackBackgroundProps> = ({ status }) => {
     const footerCols = 6;
     const footerRows = 2;
     for (let i = 0; i < footerCols * footerRows; i++) {
-        const Icon = IconSet[Math.floor(Math.random() * IconSet.length)];
-        const size = Math.floor(Math.random() * 16) + 12;
+        const Icon = IconSet[Math.floor(secureMathRandom() * IconSet.length)];
+        const size = Math.floor(secureMathRandom() * 16) + 12;
 
-        const left = (i % footerCols) * (100 / footerCols) + Math.random() * 10;
-        const top = Math.floor(i / footerCols) * (100 / footerRows) + Math.random() * 30;
+        const left = (i % footerCols) * (100 / footerCols) + secureMathRandom() * 10;
+        const top = Math.floor(i / footerCols) * (100 / footerRows) + secureMathRandom() * 30;
 
         elements.push(
             <div
@@ -161,7 +162,7 @@ const FeedbackBackground: React.FC<FeedbackBackgroundProps> = ({ status }) => {
                 style={{
                     left: `${left}%`,
                     top: `${top}%`,
-                    transform: `rotate(${Math.random() * 360}deg)`,
+                    transform: `rotate(${secureMathRandom() * 360}deg)`,
                 }}
             >
                 <Icon size={size} fill="currentColor" className="currentColor" />
