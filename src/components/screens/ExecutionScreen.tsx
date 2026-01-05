@@ -10,6 +10,7 @@ import {
   generatePowersQuestion,
   generateFractionsQuestion,
 } from '@/lib/question-helpers';
+import { secureMathRandom } from '@/lib/security';
 import VirtualKeyboard from '@/components/VirtualKeyboard';
 import TimerBar from '@/components/TimerBar';
 import FeedbackBackground from '@/components/FeedbackBackground';
@@ -90,8 +91,8 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
     let questionData: Question | null;
 
     // Weighted question selection logic
-    if (wrongAnswerPool.length > 0 && Math.random() < 0.4) {
-        questionData = wrongAnswerPool[Math.floor(Math.random() * wrongAnswerPool.length)];
+    if (wrongAnswerPool.length > 0 && secureMathRandom() < 0.4) {
+        questionData = wrongAnswerPool[Math.floor(secureMathRandom() * wrongAnswerPool.length)];
     } else {
         if (mode === 'tables') {
           questionData = generateTablesQuestion(
