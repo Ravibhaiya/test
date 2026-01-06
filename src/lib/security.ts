@@ -2,6 +2,10 @@
  * Security utility functions for input validation and sanitization.
  */
 
+// Bolt Optimization: Reuse buffer to avoid allocation on every call (Hot Path)
+// Safe because JS is single-threaded in this context and the operation is synchronous.
+const RANDOM_BUFFER = new Uint32Array(1);
+
 /**
  * Validates and sanitizes timer input to prevent negative or excessive values.
  * Returns undefined for 0 or empty input (meaning no timer).
@@ -30,8 +34,7 @@ export function validateTimerInput(value: string): number | undefined {
  * a defense-in-depth measure for this specific application.
  */
 export function secureMathRandom(): number {
-  const array = new Uint32Array(1);
-  crypto.getRandomValues(array);
+  crypto.getRandomValues(RANDOM_BUFFER);
   // Divide by 2^32 to get a value between 0 and 1
-  return array[0] / (0xffffffff + 1);
+  return RANDOM_BUFFER[0] / (0xffffffff + 1);
 }
