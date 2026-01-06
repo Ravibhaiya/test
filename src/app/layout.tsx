@@ -50,6 +50,7 @@ export default function RootLayout({
     worker-src 'self';
     manifest-src 'self';
     frame-src 'none';
+    frame-ancestors 'none';
     object-src 'none';
     base-uri 'self';
     form-action 'self';
