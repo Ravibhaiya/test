@@ -24,3 +24,8 @@
 **Vulnerability:** Configuration screens allowed users to input negative numbers or excessively large values for the practice timer. This led to potential Denial of Service (DoS) in the `TimerBar` component (immediate loop) or UI overflow/performance issues.
 **Learning:** Input fields with `type="number"` do not automatically prevent negative values from being processed by JavaScript `parseInt`. Explicit validation and clamping are necessary to protect internal logic and UI state from invalid user inputs.
 **Prevention:** Implemented a `validateTimerInput` utility in `src/lib/security.ts` that enforces a positive integer range (0-3600 seconds). Applied this validator across all configuration screens to sanitize inputs before updating state or local storage.
+
+## 2025-02-28 - Clickjacking Protection
+**Vulnerability:** The application was missing the `frame-ancestors` CSP directive, potentially allowing it to be embedded in an iframe on a malicious site (Clickjacking), where attackers could trick users into clicking invisible buttons overlaying the app.
+**Learning:** Even if an app is primarily designed for mobile (Capacitor), the web build (SPA) is accessible in browsers. Standard `X-Frame-Options` headers are often missing in static exports, so CSP is the reliable mechanism for this protection in client-side apps.
+**Prevention:** Added `frame-ancestors 'none'` to the Content Security Policy in `src/app/layout.tsx`. This instructs the browser to refuse rendering the page if it is loaded within a frame, protecting the UI integrity.
