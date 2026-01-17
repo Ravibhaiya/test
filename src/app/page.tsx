@@ -7,6 +7,7 @@ import type {
   ExecutionConfig,
 } from '@/lib/types';
 
+import { useSound } from '@/contexts/SoundContext';
 import HomeScreen from '@/components/screens/HomeScreen';
 import TableSelectionScreen from '@/components/screens/TableSelectionScreen';
 import PracticeConfigScreen from '@/components/screens/PracticeConfigScreen';
@@ -15,6 +16,7 @@ import FractionsConfigScreen from '@/components/screens/FractionsConfigScreen';
 import ExecutionScreen from '@/components/screens/ExecutionScreen';
 
 export default function Home() {
+  const { play } = useSound();
   const [page, setPage] = useState<Page>('home');
   const [mode, setMode] = useState<Mode>('');
   const [activeConfig, setActiveConfig] = useState<ExecutionConfig | null>(
@@ -74,7 +76,7 @@ export default function Home() {
           id="back-btn"
           aria-label="Go back"
           className="rounded-full bg-slate-200 hover:bg-slate-300 active:bg-slate-400 transition-colors flex items-center justify-center w-11 h-11 text-slate-600 relative z-10 focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:outline-none focus:outline-none"
-          onClick={handleBack}
+          onClick={() => { play('click'); handleBack(); }}
           style={{ display: page === 'home' ? 'none' : 'inline-flex' }}
         >
           <span className="material-symbols-outlined" aria-hidden="true">

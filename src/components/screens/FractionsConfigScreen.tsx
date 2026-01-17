@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import type { Mode, FractionAnswerType } from '@/lib/types';
 import { validateTimerInput } from '@/lib/security';
+import { useSound } from '@/contexts/SoundContext';
 
 interface FractionsConfig {
   selected: FractionAnswerType[];
@@ -18,6 +19,7 @@ const TIMER_STORAGE_KEY = 'math-tools-timer-fractions';
 export default function FractionsConfigScreen({
   onStart,
 }: FractionsConfigScreenProps) {
+  const { play } = useSound();
   const [selected, setSelected] = useState<FractionAnswerType[]>([]);
   const [timer, setTimer] = useState<number | undefined>(10);
   const [configError, setConfigError] = useState('');
@@ -84,7 +86,7 @@ export default function FractionsConfigScreen({
                         <button
                             key={type}
                             aria-pressed={selected.includes(type)}
-                            onClick={() => handleTypeSelection(type)}
+                            onClick={() => { play('click'); handleTypeSelection(type); }}
                             className={`choice-chip btn-push ${selected.includes(type) ? 'selected' : ''}`}
                         >
                             {selected.includes(type) && <span className="material-symbols-outlined text-lg">check</span>}
@@ -123,7 +125,7 @@ export default function FractionsConfigScreen({
              )}
 
              <button
-                onClick={handleStartClick}
+                onClick={() => { play('click'); handleStartClick(); }}
                 className="w-full filled-button"
              >
                 START PRACTICE

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import type { Mode, PowerType } from '@/lib/types';
 import { validateTimerInput } from '@/lib/security';
+import { useSound } from '@/contexts/SoundContext';
 
 interface PowersConfig {
   selected: PowerType[];
@@ -17,6 +18,7 @@ interface PowersConfigScreenProps {
 const TIMER_STORAGE_KEY = 'math-tools-timer-powers';
 
 export default function PowersConfigScreen({ onStart }: PowersConfigScreenProps) {
+  const { play } = useSound();
   const [selected, setSelected] = useState<PowerType[]>([]);
   const [rangeMax, setRangeMax] = useState(30);
   const [timer, setTimer] = useState<number | undefined>(10);
@@ -95,7 +97,7 @@ export default function PowersConfigScreen({ onStart }: PowersConfigScreenProps)
                         <button
                             key={type}
                             aria-pressed={selected.includes(type)}
-                            onClick={() => handlePowerSelection(type)}
+                            onClick={() => { play('click'); handlePowerSelection(type); }}
                             className={`choice-chip btn-push ${selected.includes(type) ? 'selected' : ''}`}
                         >
                             {selected.includes(type) && <span className="material-symbols-outlined text-lg">check</span>}
@@ -175,7 +177,7 @@ export default function PowersConfigScreen({ onStart }: PowersConfigScreenProps)
              )}
 
              <button
-                onClick={handleStartClick}
+                onClick={() => { play('click'); handleStartClick(); }}
                 className="w-full filled-button"
              >
                 START PRACTICE

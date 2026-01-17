@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import type { Mode } from '@/lib/types';
 import { validateTimerInput } from '@/lib/security';
+import { useSound } from '@/contexts/SoundContext';
 
 interface PracticeConfig {
   digits1: number[];
@@ -19,6 +20,7 @@ const TIMER_STORAGE_KEY = 'math-tools-timer-practice';
 export default function PracticeConfigScreen({
   onStart,
 }: PracticeConfigScreenProps) {
+  const { play } = useSound();
   const [digits1, setDigits1] = useState<number[]>([]);
   const [digits2, setDigits2] = useState<number[]>([]);
   const [timer, setTimer] = useState<number | undefined>(10);
@@ -90,7 +92,7 @@ export default function PracticeConfigScreen({
                         <button
                             key={`d1-${digit}`}
                             aria-pressed={digits1.includes(digit)}
-                            onClick={() => handleDigitSelection('digits1', digit)}
+                            onClick={() => { play('click'); handleDigitSelection('digits1', digit); }}
                             className={`choice-chip btn-push ${digits1.includes(digit) ? 'selected' : ''}`}
                         >
                             {digits1.includes(digit) && <span className="material-symbols-outlined text-lg">check</span>}
@@ -108,7 +110,7 @@ export default function PracticeConfigScreen({
                         <button
                             key={`d2-${digit}`}
                             aria-pressed={digits2.includes(digit)}
-                            onClick={() => handleDigitSelection('digits2', digit)}
+                            onClick={() => { play('click'); handleDigitSelection('digits2', digit); }}
                             className={`choice-chip btn-push ${digits2.includes(digit) ? 'selected' : ''}`}
                         >
                             {digits2.includes(digit) && <span className="material-symbols-outlined text-lg">check</span>}
@@ -147,7 +149,7 @@ export default function PracticeConfigScreen({
              )}
 
              <button
-                onClick={handleStartClick}
+                onClick={() => { play('click'); handleStartClick(); }}
                 className="w-full filled-button"
              >
                 START
