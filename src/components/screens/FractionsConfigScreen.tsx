@@ -119,7 +119,11 @@ export default function FractionsConfigScreen({
              </div>
 
              {configError && (
-                 <div className="text-center text-red-500 font-bold text-sm bg-red-50 py-2 rounded-xl border border-red-100">
+                 <div
+                   role="alert"
+                   aria-live="polite"
+                   className="text-center text-red-500 font-bold text-sm bg-red-50 py-2 rounded-xl border border-red-100"
+                 >
                      {configError}
                  </div>
              )}

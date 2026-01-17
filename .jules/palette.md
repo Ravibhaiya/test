@@ -13,3 +13,7 @@
 ## 2025-05-18 - Input Label Association
 **Learning:** Inputs (like timers) often rely on proximity to text ("Timer (seconds)") without programmatic association, confusing screen readers.
 **Action:** Use `id` on the descriptive text and `aria-labelledby` on the input to explicitly link them without changing the visual layout.
+
+## 2025-05-18 - Config Error Accessibility
+**Learning:** Inconsistent error handling across configuration screens (some missing `role="alert"`) creates a fragmented experience for screen reader users, where some errors are announced and others are silent.
+**Action:** Audit all similar screens when fixing one instance to ensure the pattern is applied consistently across the entire feature set.
