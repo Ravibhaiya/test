@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Nunito, Fredoka, Source_Code_Pro } from 'next/font/google';
+import { SoundProvider } from '@/contexts/SoundContext';
 import './globals.css';
 
 const fredoka = Fredoka({
@@ -46,6 +47,7 @@ export default function RootLayout({
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
     font-src 'self' https://fonts.gstatic.com;
     img-src 'self' data: https://placehold.co https://images.unsplash.com https://picsum.photos;
+    media-src 'self' data: blob:;
     connect-src 'self';
     worker-src 'self';
     manifest-src 'self';
@@ -71,9 +73,11 @@ export default function RootLayout({
       <body
         className={`${fredoka.variable} ${nunito.variable} ${sourceCodePro.variable} antialiased selection:bg-primary/20`}
       >
-        <div id="app-root" className="h-full w-full overflow-hidden bg-background text-foreground">
-            {children}
-        </div>
+        <SoundProvider>
+          <div id="app-root" className="h-full w-full overflow-hidden bg-background text-foreground">
+              {children}
+          </div>
+        </SoundProvider>
       </body>
     </html>
   );

@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import { useSound } from '@/contexts/SoundContext';
 
 interface VirtualKeyboardProps {
   onChar: (char: string) => void;
@@ -58,6 +59,7 @@ const KeyButton = memo(function KeyButton({
     className?: string
 }) {
     const isBackspace = value === 'backspace';
+    const { play } = useSound();
 
     return (
         <button
@@ -73,6 +75,7 @@ const KeyButton = memo(function KeyButton({
             `}
             onClick={(e) => {
               e.preventDefault();
+              play('type');
               if (isBackspace && onDelete) {
                 onDelete();
               } else if (onChar) {

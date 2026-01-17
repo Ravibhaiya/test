@@ -14,6 +14,7 @@ import { secureMathRandom } from '@/lib/security';
 import VirtualKeyboard from '@/components/VirtualKeyboard';
 import TimerBar from '@/components/TimerBar';
 import FeedbackBackground from '@/components/FeedbackBackground';
+import { useSound } from '@/contexts/SoundContext';
 
 interface Question {
   question: string;
@@ -28,6 +29,7 @@ interface ExecutionScreenProps {
 }
 
 export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) {
+  const { play } = useSound();
   const [question, setQuestion] = useState('');
   const [currentQuestionObject, setCurrentQuestionObject] = useState<Question | null>(null);
   const [wrongAnswerPool, setWrongAnswerPool] = useState<Question[]>([]);
@@ -61,13 +63,14 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
   const timeUp = useCallback(
     (answer: number | string) => {
       setFeedbackStatus('timeup');
+      play('timeup');
       setFeedbackMessage(`Correct answer: ${answer}`);
       const qObj = currentQuestionRef.current;
       if (qObj) {
          setWrongAnswerPool((prev) => [...prev, qObj]);
       }
     },
-    []
+    [play]
   );
 
   const handleTimerFinish = useCallback(() => {
@@ -158,11 +161,14 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
   const handleCheck = () => {
     if (feedbackStatus !== 'idle') {
         // If checking while showing result, go to next
+        play('click');
         displayQuestion();
         return;
     }
 
     if (!inputValue) return;
+
+    play('click');
 
     let isCorrect = false;
     const isFractionPractice =
@@ -195,12 +201,14 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
 
     if (isCorrect) {
       setFeedbackStatus('correct');
+      play('correct');
       setFeedbackMessage('Correct!');
       if (currentQuestionObject) {
          setWrongAnswerPool(prev => prev.filter(q => q.question !== currentQuestionObject.question));
       }
     } else {
       setFeedbackStatus('wrong');
+      play('wrong');
       setFeedbackMessage(`Correct answer: ${currentAnswer}`);
        if (currentQuestionObject) {
          setWrongAnswerPool(prev => [...prev, currentQuestionObject]);
@@ -348,7 +356,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
                 </button>
             ) : (
                 <button
-                    onClick={displayQuestion}
+                    onClick={() => { play('click'); displayQuestion(); }}
                     className={`
                         w-full h-14 btn-juicy
                         ${feedbackStatus === 'correct' ? 'btn-juicy-success' : ''}

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import type { Mode } from '@/lib/types';
 import { validateTimerInput } from '@/lib/security';
+import { useSound } from '@/contexts/SoundContext';
 
 interface TableConfig {
   selected: number[];
@@ -17,6 +18,7 @@ const TIMER_STORAGE_KEY = 'math-tools-timer-tables';
 export default function TableSelectionScreen({
   onStart,
 }: TableSelectionScreenProps) {
+  const { play } = useSound();
   const [selected, setSelected] = useState<number[]>([]);
   const [timer, setTimer] = useState<number | undefined>(10);
   const [configError, setConfigError] = useState('');
@@ -78,6 +80,7 @@ export default function TableSelectionScreen({
              <div className="flex justify-end mb-4">
                  <button
                     onClick={() => {
+                        play('click');
                         if (selected.length === 29) {
                             setSelected([]);
                         } else {
@@ -106,7 +109,7 @@ export default function TableSelectionScreen({
                     <button
                         key={num}
                         aria-pressed={selected.includes(num)}
-                        onClick={() => handleTableSelection(num)}
+                        onClick={() => { play('click'); handleTableSelection(num); }}
                         className={`number-chip btn-push ${selected.includes(num) ? 'selected' : ''}`}
                     >
                         {num}
@@ -147,7 +150,7 @@ export default function TableSelectionScreen({
              )}
 
              <button
-                onClick={handleStartClick}
+                onClick={() => { play('click'); handleStartClick(); }}
                 className={`w-full filled-button ${selected.length === 0 ? 'opacity-50 grayscale' : ''}`}
              >
                 START PRACTICE

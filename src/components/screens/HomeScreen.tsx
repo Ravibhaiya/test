@@ -1,6 +1,8 @@
 // src/components/screens/HomeScreen.tsx
 'use client';
 import type { Page } from '@/lib/types';
+import SoundToggle from '@/components/SoundToggle';
+import { useSound } from '@/contexts/SoundContext';
 // Ripple is less used in "Duolingo" style (prefer push animation), but we can keep or remove.
 // I'll rely on the css active states for the "push" effect.
 
@@ -9,12 +11,16 @@ interface HomeScreenProps {
 }
 
 export default function HomeScreen({ navigateTo }: HomeScreenProps) {
+  const { play } = useSound();
   return (
     <div id="home-screen" className="screen-container">
         {/* Header */}
-        <div className="flex-shrink-0 px-6 py-6 pb-2">
-            <h1 className="display-medium text-slate-700">Practice</h1>
-            <p className="body-medium mt-1">Choose a skill to improve</p>
+        <div className="flex-shrink-0 px-6 py-6 pb-2 flex flex-row justify-between items-start">
+            <div>
+                <h1 className="display-medium text-slate-700">Practice</h1>
+                <p className="body-medium mt-1">Choose a skill to improve</p>
+            </div>
+            <SoundToggle />
         </div>
 
         {/* Content */}
@@ -22,7 +28,7 @@ export default function HomeScreen({ navigateTo }: HomeScreenProps) {
             <div className="flex flex-col gap-4">
                 {/* Card 1: Tables (Purple) */}
                 <button
-                    onClick={() => navigateTo('table-selection')}
+                    onClick={() => { play('click'); navigateTo('table-selection'); }}
                     className="w-full relative group transition-all active:scale-[0.98] rounded-3xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-purple-200"
                 >
                      {/* Card Body */}
@@ -45,7 +51,7 @@ export default function HomeScreen({ navigateTo }: HomeScreenProps) {
 
                 {/* Card 2: Practice (Cyan) */}
                 <button
-                    onClick={() => navigateTo('practice-config')}
+                    onClick={() => { play('click'); navigateTo('practice-config'); }}
                     className="w-full relative group transition-all active:scale-[0.98] rounded-3xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-200"
                 >
                     <div className="w-full bg-white border-2 border-slate-100 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
@@ -62,7 +68,7 @@ export default function HomeScreen({ navigateTo }: HomeScreenProps) {
 
                 {/* Card 3: Powers (Green) */}
                 <button
-                    onClick={() => navigateTo('powers-config')}
+                    onClick={() => { play('click'); navigateTo('powers-config'); }}
                     className="w-full relative group transition-all active:scale-[0.98] rounded-3xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-200"
                 >
                     <div className="w-full bg-white border-2 border-slate-100 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
@@ -79,7 +85,7 @@ export default function HomeScreen({ navigateTo }: HomeScreenProps) {
 
                  {/* Card 4: Fractions (Red) */}
                  <button
-                    onClick={() => navigateTo('fractions-config')}
+                    onClick={() => { play('click'); navigateTo('fractions-config'); }}
                     className="w-full relative group transition-all active:scale-[0.98] rounded-3xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-rose-200"
                 >
                     <div className="w-full bg-white border-2 border-slate-100 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
