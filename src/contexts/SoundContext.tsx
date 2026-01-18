@@ -18,8 +18,9 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
   const [loaded, setLoaded] = useState(false);
 
   // Refs for Howl instances to persist across renders without re-initializing
-  const clickSoundRef = useRef<Howl | null>(null);
-  const typeSoundRef = useRef<Howl | null>(null);
+  const buttonSoundRef = useRef<Howl | null>(null);
+  const correctSoundRef = useRef<Howl | null>(null);
+  const wrongSoundRef = useRef<Howl | null>(null);
 
   useEffect(() => {
     // Initialize mute state from local storage
@@ -29,23 +30,30 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     }
 
     // Initialize sounds
-    clickSoundRef.current = new Howl({
-      src: ['/sounds/click.wav'],
+    buttonSoundRef.current = new Howl({
+      src: ['/sounds/button.wav'],
       volume: 0.5,
       preload: true,
     });
 
-    typeSoundRef.current = new Howl({
-      src: ['/sounds/type.wav'],
-      volume: 0.4,
+    correctSoundRef.current = new Howl({
+      src: ['/sounds/correct.wav'],
+      volume: 0.5,
+      preload: true,
+    });
+
+    wrongSoundRef.current = new Howl({
+      src: ['/sounds/wrong.wav'],
+      volume: 0.5,
       preload: true,
     });
 
     setLoaded(true);
 
     return () => {
-        clickSoundRef.current?.unload();
-        typeSoundRef.current?.unload();
+        buttonSoundRef.current?.unload();
+        correctSoundRef.current?.unload();
+        wrongSoundRef.current?.unload();
     };
   }, []);
 
@@ -66,53 +74,35 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     // However, for sequences, we might want to skip logic if muted.
     if (muted) return;
 
-    const click = clickSoundRef.current;
-    const typeSnd = typeSoundRef.current;
+    const button = buttonSoundRef.current;
+    const correct = correctSoundRef.current;
+    const wrong = wrongSoundRef.current;
 
     switch (type) {
       case 'click':
-        click?.rate(1.0);
-        click?.play();
+        button?.rate(1.0);
+        button?.play();
         break;
       case 'type':
-        typeSnd?.rate(1.0 + Math.random() * 0.2 - 0.1); // Slight variation
-        typeSnd?.play();
+        // Use button sound with variation
+        button?.rate(1.0 + Math.random() * 0.2 - 0.1);
+        button?.play();
         break;
       case 'correct':
-        // Ascending triad sequence
-        if (click) {
-            click.rate(1.0);
-            const id1 = click.play();
-
-            setTimeout(() => {
-                click.rate(1.25); // Major third
-                click.play();
-            }, 100);
-
-            setTimeout(() => {
-                click.rate(1.5); // Fifth
-                click.play();
-            }, 200);
-        }
+        correct?.rate(1.0);
+        correct?.play();
         break;
       case 'wrong':
-        // Low pitched thud sequence
-        if (typeSnd) {
-             typeSnd.rate(0.5);
-             typeSnd.play();
-             setTimeout(() => {
-                 typeSnd.rate(0.4);
-                 typeSnd.play();
-             }, 150);
-        }
+        wrong?.rate(1.0);
+        wrong?.play();
         break;
       case 'timeup':
-        // Fast ticking alarm
-        if (click) {
+        // Fast ticking using button sound
+        if (button) {
             for(let i=0; i<3; i++) {
                 setTimeout(() => {
-                    click.rate(2.0);
-                    click.play();
+                    button.rate(2.0);
+                    button.play();
                 }, i * 150);
             }
         }
