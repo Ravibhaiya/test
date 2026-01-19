@@ -30,6 +30,7 @@ export default function HomeScreen({ navigateTo }: HomeScreenProps) {
                 <button
                     onClick={() => { play('click'); navigateTo('table-selection'); }}
                     className="w-full relative group transition-all active:scale-[0.98] rounded-3xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-purple-200"
+                    aria-label="Practice Multiplication Tables"
                 >
                      {/* Card Body */}
                     <div className="w-full bg-white border-2 border-slate-100 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
@@ -53,6 +54,7 @@ export default function HomeScreen({ navigateTo }: HomeScreenProps) {
                 <button
                     onClick={() => { play('click'); navigateTo('practice-config'); }}
                     className="w-full relative group transition-all active:scale-[0.98] rounded-3xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-200"
+                    aria-label="Practice Multi-digit Multiplication"
                 >
                     <div className="w-full bg-white border-2 border-slate-100 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
                         <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center">
@@ -70,6 +72,7 @@ export default function HomeScreen({ navigateTo }: HomeScreenProps) {
                 <button
                     onClick={() => { play('click'); navigateTo('powers-config'); }}
                     className="w-full relative group transition-all active:scale-[0.98] rounded-3xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-200"
+                    aria-label="Practice Powers and Roots"
                 >
                     <div className="w-full bg-white border-2 border-slate-100 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
                          <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
@@ -87,6 +90,7 @@ export default function HomeScreen({ navigateTo }: HomeScreenProps) {
                  <button
                     onClick={() => { play('click'); navigateTo('fractions-config'); }}
                     className="w-full relative group transition-all active:scale-[0.98] rounded-3xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-rose-200"
+                    aria-label="Practice Fractions and Decimals"
                 >
                     <div className="w-full bg-white border-2 border-slate-100 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
                          <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center">
