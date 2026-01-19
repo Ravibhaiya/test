@@ -20,75 +20,68 @@ const TimerBar = memo(function TimerBar({ duration, isRunning, onTimeUp, resetKe
     onTimeUpRef.current = onTimeUp;
   }, [onTimeUp]);
 
-  const updateColor = (progress: number) => {
-    if (!barRef.current) return;
+  useEffect(() => {
+    const updateColor = (progress: number) => {
+      if (!barRef.current) return;
 
-    let newColor = 'bg-green-500';
-    if (progress < 33.33) {
-      newColor = 'bg-red-500';
-    } else if (progress <= 66.66) {
-      newColor = 'bg-orange-500';
-    }
+      let newColor = 'bg-green-500';
+      if (progress < 33.33) {
+        newColor = 'bg-red-500';
+      } else if (progress <= 66.66) {
+        newColor = 'bg-orange-500';
+      }
 
-    if (newColor !== activeColorClassRef.current) {
+      if (newColor !== activeColorClassRef.current) {
         barRef.current.classList.remove(activeColorClassRef.current);
         barRef.current.classList.add(newColor);
         activeColorClassRef.current = newColor;
-    }
-  };
+      }
+    };
 
-  const animate = (time: number) => {
-    const elapsed = time - startTimeRef.current;
-    const durationMs = totalDurationRef.current;
+    const animate = (time: number) => {
+      const elapsed = time - startTimeRef.current;
+      const durationMs = totalDurationRef.current;
 
-    if (durationMs > 0) {
-      const remaining = Math.max(0, durationMs - elapsed);
-      const newProgress = (remaining / durationMs) * 100;
+      if (durationMs > 0) {
+        const remaining = Math.max(0, durationMs - elapsed);
+        const newProgress = (remaining / durationMs) * 100;
 
-      if (barRef.current) {
-        barRef.current.style.width = `${newProgress}%`;
-        updateColor(newProgress);
+        if (barRef.current) {
+          barRef.current.style.width = `${newProgress}%`;
+          updateColor(newProgress);
+        }
+
+        if (remaining <= 0) {
+          if (requestRef.current) cancelAnimationFrame(requestRef.current);
+          if (onTimeUpRef.current) onTimeUpRef.current();
+          return;
+        }
       }
 
-      if (remaining <= 0) {
-        if (requestRef.current) cancelAnimationFrame(requestRef.current);
-        if (onTimeUpRef.current) onTimeUpRef.current();
-        return;
-      }
-    }
+      requestRef.current = requestAnimationFrame(animate);
+    };
 
-    requestRef.current = requestAnimationFrame(animate);
-  };
-
-  useEffect(() => {
     if (requestRef.current) cancelAnimationFrame(requestRef.current);
 
     // Reset visual state
     totalDurationRef.current = duration * 1000;
     if (barRef.current) {
-        barRef.current.style.width = '100%';
-        // Reset color to green
-        barRef.current.classList.remove(activeColorClassRef.current);
-        barRef.current.classList.add('bg-green-500');
-        activeColorClassRef.current = 'bg-green-500';
+      barRef.current.style.width = '100%';
+      // Reset color to green
+      barRef.current.classList.remove(activeColorClassRef.current);
+      barRef.current.classList.add('bg-green-500');
+      activeColorClassRef.current = 'bg-green-500';
     }
 
     if (isRunning) {
-        startTimeRef.current = performance.now();
-        requestRef.current = requestAnimationFrame(animate);
+      startTimeRef.current = performance.now();
+      requestRef.current = requestAnimationFrame(animate);
     }
 
     return () => {
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
     };
-  }, [resetKey, duration, isRunning]); // Bolt: Added missing dependencies to satisfy React rules
-
-  useEffect(() => {
-    if (!isRunning && requestRef.current) {
-        cancelAnimationFrame(requestRef.current);
-        requestRef.current = 0;
-    }
-  }, [isRunning]);
+  }, [resetKey, duration, isRunning]);
 
   return (
     <div className="w-full h-5 bg-slate-200 rounded-full overflow-hidden border-2 border-slate-100 shadow-inner">
