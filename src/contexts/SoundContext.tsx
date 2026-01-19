@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { Howl, Howler } from 'howler';
+import { secureMathRandom } from '@/lib/security';
 
 type SoundType = 'click' | 'type' | 'correct' | 'wrong' | 'timeup';
 
@@ -21,6 +22,10 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
   const buttonSoundRef = useRef<Howl | null>(null);
   const correctSoundRef = useRef<Howl | null>(null);
   const wrongSoundRef = useRef<Howl | null>(null);
+  const typingSoundRef = useRef<Howl | null>(null);
+
+  // Ref to track active timeouts for cancellation
+  const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   useEffect(() => {
     // Initialize mute state from local storage
@@ -48,12 +53,22 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
       preload: true,
     });
 
+    typingSoundRef.current = new Howl({
+      src: ['/sounds/typing.wav'],
+      volume: 0.5,
+      preload: true,
+    });
+
     setLoaded(true);
 
     return () => {
         buttonSoundRef.current?.unload();
         correctSoundRef.current?.unload();
         wrongSoundRef.current?.unload();
+        typingSoundRef.current?.unload();
+
+        // Clear timeouts on unmount
+        timeoutsRef.current.forEach(clearTimeout);
     };
   }, []);
 
@@ -67,16 +82,26 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     setMuted((prev) => !prev);
   }, []);
 
+  const stopAll = useCallback(() => {
+    // Stop all playing sounds globally
+    Howler.stop();
+
+    // Clear any pending timeouts (e.g. for timeup sequence)
+    timeoutsRef.current.forEach(clearTimeout);
+    timeoutsRef.current = [];
+  }, []);
+
   const play = useCallback((type: SoundType) => {
     if (!loaded) return;
-
-    // We check muted here just in case, though Howler.mute handles it globally.
-    // However, for sequences, we might want to skip logic if muted.
     if (muted) return;
+
+    // Ensure strict mutual exclusion: stop any current sound before playing new one
+    stopAll();
 
     const button = buttonSoundRef.current;
     const correct = correctSoundRef.current;
     const wrong = wrongSoundRef.current;
+    const typing = typingSoundRef.current;
 
     switch (type) {
       case 'click':
@@ -84,9 +109,10 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
         button?.play();
         break;
       case 'type':
-        // Use button sound with variation
-        button?.rate(1.0 + Math.random() * 0.2 - 0.1);
-        button?.play();
+        // Use typing sound with pitch variation for organic feel
+        // Using secureMathRandom as per project requirements
+        typing?.rate(1.0 + secureMathRandom() * 0.2 - 0.1);
+        typing?.play();
         break;
       case 'correct':
         correct?.rate(1.0);
@@ -100,15 +126,16 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
         // Fast ticking using button sound
         if (button) {
             for(let i=0; i<3; i++) {
-                setTimeout(() => {
+                const id = setTimeout(() => {
                     button.rate(2.0);
                     button.play();
                 }, i * 150);
+                timeoutsRef.current.push(id);
             }
         }
         break;
     }
-  }, [loaded, muted]);
+  }, [loaded, muted, stopAll]);
 
   return (
     <SoundContext.Provider value={{ play, muted, toggleMute }}>
