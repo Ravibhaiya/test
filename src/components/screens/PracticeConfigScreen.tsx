@@ -95,7 +95,7 @@ export default function PracticeConfigScreen({
                             onClick={() => { play('click'); handleDigitSelection('digits1', digit); }}
                             className={`choice-chip btn-push ${digits1.includes(digit) ? 'selected' : ''}`}
                         >
-                            {digits1.includes(digit) && <span className="material-symbols-outlined text-lg">check</span>}
+                            {digits1.includes(digit) && <span className="material-symbols-outlined text-lg" aria-hidden="true">check</span>}
                             <span>{digit} Digits</span>
                         </button>
                     ))}
@@ -113,7 +113,7 @@ export default function PracticeConfigScreen({
                             onClick={() => { play('click'); handleDigitSelection('digits2', digit); }}
                             className={`choice-chip btn-push ${digits2.includes(digit) ? 'selected' : ''}`}
                         >
-                            {digits2.includes(digit) && <span className="material-symbols-outlined text-lg">check</span>}
+                            {digits2.includes(digit) && <span className="material-symbols-outlined text-lg" aria-hidden="true">check</span>}
                             <span>{digit} Digits</span>
                         </button>
                     ))}
@@ -134,6 +134,7 @@ export default function PracticeConfigScreen({
                 </div>
                 <input
                     aria-labelledby="timer-label-practice"
+                    title="Timer duration in seconds"
                     type="number"
                     value={timer === undefined ? '' : timer}
                     onChange={(e) => handleTimerChange(e.target.value)}
@@ -154,7 +155,7 @@ export default function PracticeConfigScreen({
 
              <button
                 onClick={() => { play('click'); handleStartClick(); }}
-                className="w-full filled-button"
+                className={`w-full filled-button ${digits1.length > 0 && digits2.length > 0 ? '' : 'opacity-50 grayscale'}`}
              >
                 START
              </button>

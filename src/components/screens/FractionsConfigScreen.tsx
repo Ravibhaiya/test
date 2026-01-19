@@ -89,7 +89,7 @@ export default function FractionsConfigScreen({
                             onClick={() => { play('click'); handleTypeSelection(type); }}
                             className={`choice-chip btn-push ${selected.includes(type) ? 'selected' : ''}`}
                         >
-                            {selected.includes(type) && <span className="material-symbols-outlined text-lg">check</span>}
+                            {selected.includes(type) && <span className="material-symbols-outlined text-lg" aria-hidden="true">check</span>}
                             <span>{type === 'fraction' ? 'Fraction' : 'Decimal'}</span>
                         </button>
                     ))}
@@ -110,6 +110,7 @@ export default function FractionsConfigScreen({
                 </div>
                 <input
                     aria-labelledby="timer-label-fractions"
+                    title="Timer duration in seconds"
                     type="number"
                     value={timer === undefined ? '' : timer}
                     onChange={(e) => handleTimerChange(e.target.value)}
@@ -130,7 +131,7 @@ export default function FractionsConfigScreen({
 
              <button
                 onClick={() => { play('click'); handleStartClick(); }}
-                className="w-full filled-button"
+                className={`w-full filled-button ${selected.length > 0 ? '' : 'opacity-50 grayscale'}`}
              >
                 START PRACTICE
              </button>

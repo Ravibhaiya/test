@@ -100,7 +100,7 @@ export default function PowersConfigScreen({ onStart }: PowersConfigScreenProps)
                             onClick={() => { play('click'); handlePowerSelection(type); }}
                             className={`choice-chip btn-push ${selected.includes(type) ? 'selected' : ''}`}
                         >
-                            {selected.includes(type) && <span className="material-symbols-outlined text-lg">check</span>}
+                            {selected.includes(type) && <span className="material-symbols-outlined text-lg" aria-hidden="true">check</span>}
                             <span>
                               {
                                 {
@@ -127,6 +127,7 @@ export default function PowersConfigScreen({ onStart }: PowersConfigScreenProps)
 
                  <input
                     type="range"
+                    aria-label="Maximum number"
                     min="2"
                     max="30"
                     value={rangeMax}
@@ -162,6 +163,7 @@ export default function PowersConfigScreen({ onStart }: PowersConfigScreenProps)
                 </div>
                 <input
                     aria-labelledby="timer-label-powers"
+                    title="Timer duration in seconds"
                     type="number"
                     value={timer === undefined ? '' : timer}
                     onChange={(e) => handleTimerChange(e.target.value)}
@@ -182,7 +184,7 @@ export default function PowersConfigScreen({ onStart }: PowersConfigScreenProps)
 
              <button
                 onClick={() => { play('click'); handleStartClick(); }}
-                className="w-full filled-button"
+                className={`w-full filled-button ${selected.length > 0 ? '' : 'opacity-50 grayscale'}`}
              >
                 START PRACTICE
              </button>

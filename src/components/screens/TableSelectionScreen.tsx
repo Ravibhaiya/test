@@ -131,6 +131,7 @@ export default function TableSelectionScreen({
                 </div>
                 <input
                     aria-labelledby="timer-label-tables"
+                    title="Timer duration in seconds"
                     type="number"
                     value={timer === undefined ? '' : timer}
                     onChange={(e) => handleTimerChange(e.target.value)}
