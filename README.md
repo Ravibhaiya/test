@@ -31,7 +31,7 @@ A modern, high-performance web application designed to help users practice vario
 ### Prerequisites
 
 - Node.js 20+
-- npm
+- pnpm
 
 ### Installation
 
@@ -43,12 +43,12 @@ A modern, high-performance web application designed to help users practice vario
 
 2. **Install dependencies:**
    ```bash
-   npm install
+   pnpm install
    ```
 
 3. **Run the development server:**
    ```bash
-   npm run dev
+   pnpm run dev
    ```
    Open [http://localhost:9002](http://localhost:9002) in your browser.
 
@@ -57,7 +57,7 @@ A modern, high-performance web application designed to help users practice vario
 To create a static build suitable for Capacitor export:
 
 ```bash
-npm run static
+pnpm run static
 ```
 
 This runs `next build` followed by `cap sync`.
@@ -79,7 +79,7 @@ The project is configured to use Capacitor for Android deployment.
 1. Ensure Android Studio is installed.
 2. Build the web assets:
    ```bash
-   npm run static
+   pnpm run static
    ```
 3. Open the Android project:
    ```bash
