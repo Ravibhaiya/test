@@ -1,7 +1,6 @@
 // src/components/screens/HomeScreen.tsx
 'use client';
 import type { Page } from '@/lib/types';
-import SoundToggle from '@/components/SoundToggle';
 import { useSound } from '@/contexts/SoundContext';
 // Ripple is less used in "Duolingo" style (prefer push animation), but we can keep or remove.
 // I'll rely on the css active states for the "push" effect.
@@ -20,7 +19,6 @@ export default function HomeScreen({ navigateTo }: HomeScreenProps) {
                 <h1 className="display-medium text-slate-700">Practice</h1>
                 <p className="body-medium mt-1">Choose a skill to improve</p>
             </div>
-            <SoundToggle />
         </div>
 
         {/* Content */}

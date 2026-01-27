@@ -8,6 +8,7 @@ import type {
 } from '@/lib/types';
 
 import { useSound } from '@/contexts/SoundContext';
+import SoundToggle from '@/components/SoundToggle';
 import HomeScreen from '@/components/screens/HomeScreen';
 import TableSelectionScreen from '@/components/screens/TableSelectionScreen';
 import PracticeConfigScreen from '@/components/screens/PracticeConfigScreen';
@@ -98,6 +99,10 @@ export default function Home() {
         >
           {pageTitles[page]}
         </h1>
+
+        <div className="relative z-10 flex items-center justify-center w-11 h-11">
+             <SoundToggle />
+        </div>
       </header>
 
       {page === 'home' && <HomeScreen navigateTo={navigateTo} />}
