@@ -95,7 +95,7 @@ export default function AlphabetConfigScreen({
                                 type="text"
                                 value={startLetter}
                                 onChange={(e) => handleLetterChange(e.target.value, setStartLetter)}
-                                className="w-full h-14 bg-slate-50 border-2 border-slate-200 rounded-2xl text-center text-2xl font-bold text-slate-700 focus:border-amber-400 focus:outline-none transition-colors"
+                                className="w-full h-14 bg-slate-50 border-2 border-slate-200 rounded-2xl text-center text-2xl font-bold text-slate-700 focus:border-black focus:outline-none transition-colors"
                                 maxLength={2} // Allow 2 to capture the second keystroke for replacement logic
                             />
                         </div>
@@ -107,7 +107,7 @@ export default function AlphabetConfigScreen({
                                 type="text"
                                 value={endLetter}
                                 onChange={(e) => handleLetterChange(e.target.value, setEndLetter)}
-                                className="w-full h-14 bg-slate-50 border-2 border-slate-200 rounded-2xl text-center text-2xl font-bold text-slate-700 focus:border-amber-400 focus:outline-none transition-colors"
+                                className="w-full h-14 bg-slate-50 border-2 border-slate-200 rounded-2xl text-center text-2xl font-bold text-slate-700 focus:border-black focus:outline-none transition-colors"
                                 maxLength={2}
                             />
                         </div>
@@ -138,7 +138,7 @@ export default function AlphabetConfigScreen({
                     type="number"
                     value={timer === undefined ? '' : timer}
                     onChange={(e) => handleTimerChange(e.target.value)}
-                    className="w-16 h-10 bg-white border-2 border-slate-200 rounded-xl text-center font-bold text-slate-700 outline-none focus:border-amber-500"
+                    className="w-16 h-10 bg-white border-2 border-slate-200 rounded-xl text-center font-bold text-slate-700 outline-none focus:border-black"
                     placeholder="∞"
                 />
              </div>
