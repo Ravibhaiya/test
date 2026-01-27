@@ -101,7 +101,7 @@ export default function Home() {
         </h1>
 
         <div className="relative z-10 flex items-center justify-center w-11 h-11">
-             <SoundToggle />
+             {page === 'home' && <SoundToggle />}
         </div>
       </header>
 
