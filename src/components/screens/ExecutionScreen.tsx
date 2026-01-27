@@ -9,6 +9,7 @@ import {
   generatePracticeQuestion,
   generatePowersQuestion,
   generateFractionsQuestion,
+  generateAlphabetQuestion,
 } from '@/lib/question-helpers';
 import { secureMathRandom } from '@/lib/security';
 import VirtualKeyboard from '@/components/VirtualKeyboard';
@@ -112,6 +113,10 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
         } else if (mode === 'fractions') {
           questionData = generateFractionsQuestion(
             config as { selected: FractionAnswerType[] }
+          );
+        } else if (mode === 'alphabet') {
+          questionData = generateAlphabetQuestion(
+            config as { start: string; end: string }
           );
         } else {
           questionData = null;

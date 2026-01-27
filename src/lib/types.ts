@@ -6,11 +6,12 @@ export type Page =
   | 'practice-config'
   | 'powers-config'
   | 'fractions-config'
+  | 'alphabet-config'
   | 'execution';
 
-export type Mode = '' | 'tables' | 'practice' | 'powers' | 'fractions';
+export type Mode = '' | 'tables' | 'practice' | 'powers' | 'fractions' | 'alphabet';
 
-export type NonNullableMode = 'tables' | 'practice' | 'powers' | 'fractions';
+export type NonNullableMode = 'tables' | 'practice' | 'powers' | 'fractions' | 'alphabet';
 
 export type PowerType = 'squares' | 'cubes' | 'square_roots' | 'cube_roots';
 
@@ -35,10 +36,16 @@ export interface PracticeConfig {
     selected: FractionAnswerType[];
     timer?: number;
   };
+  alphabet: {
+    start: string;
+    end: string;
+    timer?: number;
+  };
 }
 
 export type ExecutionConfig =
   | PracticeConfig['tables']
   | PracticeConfig['practice']
   | PracticeConfig['powers']
-  | PracticeConfig['fractions'];
+  | PracticeConfig['fractions']
+  | PracticeConfig['alphabet'];

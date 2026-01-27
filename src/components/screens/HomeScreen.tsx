@@ -103,6 +103,24 @@ export default function HomeScreen({ navigateTo }: HomeScreenProps) {
                         <span className="material-symbols-outlined text-slate-300" aria-hidden="true">chevron_right</span>
                     </div>
                 </button>
+
+                 {/* Card 5: Alphabet (Amber) */}
+                 <button
+                    onClick={() => { play('click'); navigateTo('alphabet-config'); }}
+                    className="w-full relative group transition-all active:scale-[0.98] rounded-3xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-amber-200"
+                    aria-label="Practice Alphabet Positions"
+                >
+                    <div className="w-full bg-white border-2 border-slate-100 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
+                         <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center">
+                             <span className="material-symbols-outlined text-3xl" aria-hidden="true">sort_by_alpha</span>
+                        </div>
+                        <div className="text-left flex-1">
+                            <h3 className="title-medium text-slate-700">Alphabet</h3>
+                            <p className="text-sm font-semibold text-slate-400">Position of letters</p>
+                        </div>
+                        <span className="material-symbols-outlined text-slate-300" aria-hidden="true">chevron_right</span>
+                    </div>
+                </button>
             </div>
         </div>
     </div>

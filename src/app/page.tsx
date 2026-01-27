@@ -13,6 +13,7 @@ import TableSelectionScreen from '@/components/screens/TableSelectionScreen';
 import PracticeConfigScreen from '@/components/screens/PracticeConfigScreen';
 import PowersConfigScreen from '@/components/screens/PowersConfigScreen';
 import FractionsConfigScreen from '@/components/screens/FractionsConfigScreen';
+import AlphabetConfigScreen from '@/components/screens/AlphabetConfigScreen';
 import ExecutionScreen from '@/components/screens/ExecutionScreen';
 
 export default function Home() {
@@ -29,6 +30,7 @@ export default function Home() {
     'practice-config': 'Multiplication Practice',
     'powers-config': 'Powers & Roots',
     'fractions-config': 'Fractions & Decimals',
+    'alphabet-config': 'Alphabet Position',
     execution: 'Practice',
   };
 
@@ -41,7 +43,9 @@ export default function Home() {
             ? 'practice-config'
             : mode === 'powers'
               ? 'powers-config'
-              : 'fractions-config';
+              : mode === 'fractions'
+                ? 'fractions-config'
+                : 'alphabet-config';
       setPage(prevPage);
     } else if (
       [
@@ -49,6 +53,7 @@ export default function Home() {
         'practice-config',
         'powers-config',
         'fractions-config',
+        'alphabet-config',
       ].includes(page)
     ) {
       setPage('home');
@@ -107,6 +112,9 @@ export default function Home() {
       )}
       {page === 'fractions-config' && (
         <FractionsConfigScreen onStart={startPractice} />
+      )}
+      {page === 'alphabet-config' && (
+        <AlphabetConfigScreen onStart={startPractice} />
       )}
       {page === 'execution' && mode && activeConfig && (
         <ExecutionScreen mode={mode} config={activeConfig} />
