@@ -9,7 +9,7 @@ export default function SoundToggle() {
   return (
     <button
       onClick={toggleMute}
-      className="w-11 h-11 flex items-center justify-center rounded-2xl transition-transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-purple-300 hover:bg-slate-50"
+      className="w-11 h-11 flex items-center justify-center rounded-2xl transition-transform active:scale-95 focus:outline-none hover:bg-slate-50"
       aria-label={muted ? "Unmute sounds" : "Mute sounds"}
       title={muted ? "Unmute sounds" : "Mute sounds"}
     >
@@ -19,7 +19,7 @@ export default function SoundToggle() {
         viewBox="0 0 36 36"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className={muted ? "grayscale opacity-60 transition-all duration-300" : "transition-all duration-300"}
+        className="transition-all duration-300"
       >
         {/* Speaker Body - Juicy Orange/Yellow Gradient */}
         <defs>
@@ -54,7 +54,6 @@ export default function SoundToggle() {
                     stroke="#4ADE80"
                     strokeWidth="3"
                     strokeLinecap="round"
-                    className="animate-pulse"
                 />
 
                 {/* Medium Wave */}
@@ -63,8 +62,6 @@ export default function SoundToggle() {
                     stroke="#22C55E"
                     strokeWidth="3"
                     strokeLinecap="round"
-                    style={{ animationDelay: '0.1s' }}
-                    className="animate-pulse"
                 />
             </>
         )}
