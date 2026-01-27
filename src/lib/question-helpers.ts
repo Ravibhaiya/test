@@ -164,3 +164,24 @@ export const generateFractionsQuestion = (config: {
     };
   }
 };
+
+export const generateAlphabetQuestion = (config: {
+  start: string;
+  end: string;
+}): Question => {
+  const { start, end } = config;
+  const startCode = start.toUpperCase().charCodeAt(0);
+  const endCode = end.toUpperCase().charCodeAt(0);
+
+  const min = Math.min(startCode, endCode);
+  const max = Math.max(startCode, endCode);
+
+  const charCode = Math.floor(secureMathRandom() * (max - min + 1)) + min;
+  const char = String.fromCharCode(charCode);
+  const position = charCode - 64; // 'A' (65) -> 1
+
+  return {
+    question: char,
+    answer: position,
+  };
+};
