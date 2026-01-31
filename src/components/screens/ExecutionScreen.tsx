@@ -261,7 +261,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
 
             <div className="flex-1 flex flex-col justify-center w-full relative z-10">
                 {/* Question Bubble */}
-                <div className="mb-4 animate-bounce-soft">
+                <div key={question} className="mb-4 animate-pop-in">
                      {/*
                        Security Note: dangerouslySetInnerHTML is used here to render MathML/HTML questions.
                        Input is sanitized via DOMPurify to prevent XSS.
@@ -288,7 +288,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
                         flex items-center justify-center
                         min-h-[80px] w-full px-6 rounded-3xl
                         border-2 text-3xl font-bold transition-all
-                        focus:outline-none focus:ring-4 focus:ring-purple-200 focus:border-purple-400
+                        focus:outline-none focus:ring-4 focus:ring-purple-200 focus:border-purple-400 focus:scale-[1.02]
                         ${feedbackStatus === 'idle' ? 'bg-white border-slate-200 text-slate-700' : ''}
                         ${feedbackStatus === 'correct' ? 'bg-green-100 border-green-500 text-green-700' : ''}
                         ${feedbackStatus === 'wrong' ? 'bg-red-100 border-red-500 text-red-700' : ''}
