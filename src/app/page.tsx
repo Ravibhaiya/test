@@ -17,6 +17,24 @@ import FractionsConfigScreen from '@/components/screens/FractionsConfigScreen';
 import AlphabetConfigScreen from '@/components/screens/AlphabetConfigScreen';
 import ExecutionScreen from '@/components/screens/ExecutionScreen';
 
+const PAGE_TITLES: Record<Page, string> = {
+  home: 'Math Tools',
+  'table-selection': 'Multiplication Tables',
+  'practice-config': 'Multiplication Practice',
+  'powers-config': 'Powers & Roots',
+  'fractions-config': 'Fractions & Decimals',
+  'alphabet-config': 'Alphabet Position',
+  execution: 'Practice',
+};
+
+const PREVIOUS_PAGES: Partial<Record<Mode, Page>> = {
+  tables: 'table-selection',
+  practice: 'practice-config',
+  powers: 'powers-config',
+  fractions: 'fractions-config',
+  alphabet: 'alphabet-config',
+};
+
 export default function Home() {
   const { play } = useSound();
   const [page, setPage] = useState<Page>('home');
@@ -25,38 +43,11 @@ export default function Home() {
     null
   );
 
-  const pageTitles: Record<Page, string> = {
-    home: 'Math Tools',
-    'table-selection': 'Multiplication Tables',
-    'practice-config': 'Multiplication Practice',
-    'powers-config': 'Powers & Roots',
-    'fractions-config': 'Fractions & Decimals',
-    'alphabet-config': 'Alphabet Position',
-    execution: 'Practice',
-  };
-
   const handleBack = () => {
     if (page === 'execution') {
-      const prevPage =
-        mode === 'tables'
-          ? 'table-selection'
-          : mode === 'practice'
-            ? 'practice-config'
-            : mode === 'powers'
-              ? 'powers-config'
-              : mode === 'fractions'
-                ? 'fractions-config'
-                : 'alphabet-config';
-      setPage(prevPage);
-    } else if (
-      [
-        'table-selection',
-        'practice-config',
-        'powers-config',
-        'fractions-config',
-        'alphabet-config',
-      ].includes(page)
-    ) {
+      const prevPage = PREVIOUS_PAGES[mode];
+      setPage(prevPage || 'home');
+    } else if (page !== 'home') {
       setPage('home');
     }
   };
@@ -97,7 +88,7 @@ export default function Home() {
               : 'mx-12 relative flex-auto text-left pointer-events-auto'
           }`}
         >
-          {pageTitles[page]}
+          {PAGE_TITLES[page]}
         </h1>
 
         <div className="relative z-10 flex items-center justify-center w-11 h-11">
