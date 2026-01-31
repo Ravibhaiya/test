@@ -163,9 +163,31 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
     setInputValue(prev => prev.slice(0, -1));
   }, []); // Stable callback
 
+  const validateAnswer = () => {
+    if (mode === 'fractions' && activeAnswerType === 'fraction') {
+      return inputValue.toLowerCase() === currentAnswer.toString().toLowerCase();
+    }
+
+    const sanitizedUserAnswer = inputValue.replace(/,/g, '');
+    const isValidNumber = /^-?\d*\.?\d+$/.test(sanitizedUserAnswer);
+
+    if (!isValidNumber) return false;
+
+    const userAnswerNum = parseFloat(sanitizedUserAnswer);
+    if (unroundedAnswer !== null) {
+      const tolerance = 0.01;
+      return Math.abs(userAnswerNum - unroundedAnswer) < tolerance;
+    } else {
+      const correctAnswerNum =
+        typeof currentAnswer === 'string'
+          ? parseFloat(currentAnswer.replace(/,/g, ''))
+          : currentAnswer;
+      return userAnswerNum === correctAnswerNum;
+    }
+  };
+
   const handleCheck = () => {
     if (feedbackStatus !== 'idle') {
-        // If checking while showing result, go to next
         play('click');
         displayQuestion();
         return;
@@ -175,34 +197,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
 
     play('click');
 
-    let isCorrect = false;
-    const isFractionPractice =
-      mode === 'fractions' && activeAnswerType === 'fraction';
-
-    if (isFractionPractice) {
-      isCorrect =
-        inputValue.toLowerCase() ===
-        currentAnswer.toString().toLowerCase();
-    } else {
-      const sanitizedUserAnswer = inputValue.replace(/,/g, '');
-      const isValidNumber = /^-?\d*\.?\d+$/.test(sanitizedUserAnswer);
-
-      if (isValidNumber) {
-        const userAnswerNum = parseFloat(sanitizedUserAnswer);
-        if (unroundedAnswer !== null) {
-          const tolerance = 0.01;
-          isCorrect = Math.abs(userAnswerNum - unroundedAnswer) < tolerance;
-        } else {
-          const correctAnswerNum =
-            typeof currentAnswer === 'string'
-              ? parseFloat(currentAnswer.replace(/,/g, ''))
-              : currentAnswer;
-          isCorrect = userAnswerNum === correctAnswerNum;
-        }
-      } else {
-        isCorrect = false;
-      }
-    }
+    const isCorrect = validateAnswer();
 
     if (isCorrect) {
       setFeedbackStatus('correct');
