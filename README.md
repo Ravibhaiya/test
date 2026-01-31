@@ -1,6 +1,6 @@
 # Arithmetic Practice App
 
-A modern, high-performance web application designed to help users practice various arithmetic operations, including multiplication tables, powers, fractions, and general practice. Built with a focus on speed, responsiveness, and a "juicy", gamified user interface.
+A modern, high-performance web application designed to help users practice various arithmetic operations, including multiplication tables, powers, fractions, alphabet position, and general practice. Built with a focus on speed, responsiveness, and a "juicy", gamified user interface.
 
 ## Features
 
@@ -8,6 +8,7 @@ A modern, high-performance web application designed to help users practice vario
   - **Tables**: Practice multiplication tables with customizable number selection.
   - **Powers**: Squares and cubes practice.
   - **Fractions**: Convert fractions to decimals or decimals to percentages.
+  - **Alphabet Position**: Practice converting letters to their numerical position (A=1, B=2, etc).
   - **Practice**: General arithmetic with configurable digit ranges.
 - **Gamified Experience**:
   - "Juicy" UI design with 3D button effects and vibrant colors.
