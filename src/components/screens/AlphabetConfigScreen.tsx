@@ -1,13 +1,14 @@
 // src/components/screens/AlphabetConfigScreen.tsx
 'use client';
 import { useState, useEffect } from 'react';
-import type { Mode } from '@/lib/types';
+import type { Mode, AlphabetMode } from '@/lib/types';
 import { validateTimerInput } from '@/lib/security';
 import { useSound } from '@/contexts/SoundContext';
 
 interface AlphabetConfig {
   start: string;
   end: string;
+  mode?: AlphabetMode;
   timer?: number;
 }
 
@@ -23,6 +24,7 @@ export default function AlphabetConfigScreen({
   const { play } = useSound();
   const [startLetter, setStartLetter] = useState('A');
   const [endLetter, setEndLetter] = useState('Z');
+  const [mode, setMode] = useState<AlphabetMode>('letter_to_position');
   const [timer, setTimer] = useState<number | undefined>(undefined);
   const [configError, setConfigError] = useState('');
 
@@ -70,7 +72,7 @@ export default function AlphabetConfigScreen({
         return;
     }
 
-    onStart('alphabet', { start: startLetter, end: endLetter, timer });
+    onStart('alphabet', { start: startLetter, end: endLetter, mode, timer });
   };
 
   return (
@@ -114,9 +116,55 @@ export default function AlphabetConfigScreen({
                     </div>
                  </div>
 
+                 {/* Mode Selection */}
+                 <div>
+                    <h3 className="text-slate-700 font-bold mb-3">Game Mode</h3>
+                    <div className="flex flex-col gap-3">
+                         {/* Option 1: Find Position */}
+                         <button
+                            onClick={() => { play('click'); setMode('letter_to_position'); }}
+                            className={`w-full p-4 rounded-xl border-2 flex items-center gap-4 transition-all text-left ${
+                                mode === 'letter_to_position'
+                                ? 'bg-amber-50 border-amber-500 ring-2 ring-amber-200'
+                                : 'bg-slate-50 border-slate-200 hover:bg-slate-100'
+                            }`}
+                         >
+                            <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
+                                mode === 'letter_to_position' ? 'border-amber-500' : 'border-slate-300'
+                            }`}>
+                                {mode === 'letter_to_position' && <div className="w-3 h-3 rounded-full bg-amber-500" />}
+                            </div>
+                            <div>
+                                <p className="font-bold text-slate-700">Find Position</p>
+                                <p className="text-sm text-slate-500">Show A → Type 1</p>
+                            </div>
+                         </button>
+
+                         {/* Option 2: Find Letter */}
+                         <button
+                            onClick={() => { play('click'); setMode('position_to_letter'); }}
+                            className={`w-full p-4 rounded-xl border-2 flex items-center gap-4 transition-all text-left ${
+                                mode === 'position_to_letter'
+                                ? 'bg-amber-50 border-amber-500 ring-2 ring-amber-200'
+                                : 'bg-slate-50 border-slate-200 hover:bg-slate-100'
+                            }`}
+                         >
+                            <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
+                                mode === 'position_to_letter' ? 'border-amber-500' : 'border-slate-300'
+                            }`}>
+                                {mode === 'position_to_letter' && <div className="w-3 h-3 rounded-full bg-amber-500" />}
+                            </div>
+                            <div>
+                                <p className="font-bold text-slate-700">Find Letter</p>
+                                <p className="text-sm text-slate-500">Show 1 → Type A</p>
+                            </div>
+                         </button>
+                    </div>
+                 </div>
+
                  <div className="bg-amber-50 p-4 rounded-xl text-amber-800 text-sm font-medium flex gap-3">
                     <span className="material-symbols-outlined icon-filled text-amber-600">info</span>
-                    <p>Identify the position of letters (e.g. A=1, Z=26).</p>
+                    <p>{mode === 'letter_to_position' ? 'Identify the position of letters (e.g. A=1, Z=26).' : 'Identify the letter for the given position (e.g. 1=A, 26=Z).'}</p>
                  </div>
              </div>
         </div>

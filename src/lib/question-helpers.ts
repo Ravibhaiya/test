@@ -1,6 +1,6 @@
 // src/lib/question-helpers.ts
 
-import type { PowerType, FractionAnswerType } from '@/lib/types';
+import type { PowerType, FractionAnswerType, AlphabetMode } from '@/lib/types';
 import FRACTION_DATA from '@/lib/fractions.json';
 import { secureMathRandom } from '@/lib/security';
 
@@ -168,8 +168,9 @@ export const generateFractionsQuestion = (config: {
 export const generateAlphabetQuestion = (config: {
   start: string;
   end: string;
+  mode?: AlphabetMode;
 }): Question => {
-  const { start, end } = config;
+  const { start, end, mode } = config;
   const startCode = start.toUpperCase().charCodeAt(0);
   const endCode = end.toUpperCase().charCodeAt(0);
 
@@ -179,6 +180,13 @@ export const generateAlphabetQuestion = (config: {
   const charCode = Math.floor(secureMathRandom() * (max - min + 1)) + min;
   const char = String.fromCharCode(charCode);
   const position = charCode - 64; // 'A' (65) -> 1
+
+  if (mode === 'position_to_letter') {
+    return {
+      question: position.toString(),
+      answer: char,
+    };
+  }
 
   return {
     question: char,
