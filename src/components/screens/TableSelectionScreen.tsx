@@ -88,7 +88,7 @@ export default function TableSelectionScreen({
                         }
                         handleSelectionChange();
                     }}
-                    className="choice-chip btn-push selected"
+                    className={`choice-chip btn-push ${selected.length === 29 ? 'selected' : ''}`}
                  >
                     {selected.length === 29 ? (
                         <>
