@@ -125,14 +125,14 @@ export default function AlphabetConfigScreen({
                             onClick={() => { play('click'); setMode('letter_to_position'); }}
                             className={`w-full p-4 rounded-xl border-2 flex items-center gap-4 transition-all text-left ${
                                 mode === 'letter_to_position'
-                                ? 'bg-amber-50 border-amber-500 ring-2 ring-amber-200'
+                                ? 'bg-sky-50 border-sky-500 ring-2 ring-sky-200'
                                 : 'bg-slate-50 border-slate-200 hover:bg-slate-100'
                             }`}
                          >
                             <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-                                mode === 'letter_to_position' ? 'border-amber-500' : 'border-slate-300'
+                                mode === 'letter_to_position' ? 'border-sky-500' : 'border-slate-300'
                             }`}>
-                                {mode === 'letter_to_position' && <div className="w-3 h-3 rounded-full bg-amber-500" />}
+                                {mode === 'letter_to_position' && <div className="w-3 h-3 rounded-full bg-sky-500" />}
                             </div>
                             <div>
                                 <p className="font-bold text-slate-700">Find Position</p>
@@ -145,14 +145,14 @@ export default function AlphabetConfigScreen({
                             onClick={() => { play('click'); setMode('position_to_letter'); }}
                             className={`w-full p-4 rounded-xl border-2 flex items-center gap-4 transition-all text-left ${
                                 mode === 'position_to_letter'
-                                ? 'bg-amber-50 border-amber-500 ring-2 ring-amber-200'
+                                ? 'bg-sky-50 border-sky-500 ring-2 ring-sky-200'
                                 : 'bg-slate-50 border-slate-200 hover:bg-slate-100'
                             }`}
                          >
                             <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-                                mode === 'position_to_letter' ? 'border-amber-500' : 'border-slate-300'
+                                mode === 'position_to_letter' ? 'border-sky-500' : 'border-slate-300'
                             }`}>
-                                {mode === 'position_to_letter' && <div className="w-3 h-3 rounded-full bg-amber-500" />}
+                                {mode === 'position_to_letter' && <div className="w-3 h-3 rounded-full bg-sky-500" />}
                             </div>
                             <div>
                                 <p className="font-bold text-slate-700">Find Letter</p>

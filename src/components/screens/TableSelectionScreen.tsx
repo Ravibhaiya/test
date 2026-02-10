@@ -88,7 +88,7 @@ export default function TableSelectionScreen({
                         }
                         handleSelectionChange();
                     }}
-                    className="choice-chip text-sm font-bold"
+                    className="h-10 px-4 rounded-xl flex items-center justify-center gap-2 transition-all font-bold bg-sky-50 text-sky-700 hover:bg-sky-100 active:scale-95"
                  >
                     {selected.length === 29 ? (
                         <>
@@ -152,7 +152,7 @@ export default function TableSelectionScreen({
 
              <button
                 onClick={() => { play('click'); handleStartClick(); }}
-                className={`w-full filled-button ${selected.length === 0 ? 'opacity-50 grayscale' : ''}`}
+                className={`w-full filled-button ${selected.length > 0 ? '' : 'opacity-50 grayscale'}`}
              >
                 START PRACTICE
              </button>
