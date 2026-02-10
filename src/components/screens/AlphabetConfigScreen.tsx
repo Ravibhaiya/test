@@ -118,7 +118,7 @@ export default function AlphabetConfigScreen({
 
                  {/* Mode Selection */}
                  <div>
-                    <h3 className="text-slate-700 font-bold mb-3">Game Mode</h3>
+                    <h3 className="text-slate-700 font-bold mb-3">Challenge Type</h3>
                     <div className="flex flex-col gap-3">
                          {/* Option 1: Find Position */}
                          <button

@@ -88,7 +88,7 @@ export default function TableSelectionScreen({
                         }
                         handleSelectionChange();
                     }}
-                    className="h-10 px-4 rounded-xl flex items-center justify-center gap-2 transition-all font-bold bg-sky-50 text-sky-700 hover:bg-sky-100 active:scale-95"
+                    className="choice-chip btn-push selected"
                  >
                     {selected.length === 29 ? (
                         <>
