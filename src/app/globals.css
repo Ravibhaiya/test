@@ -207,6 +207,7 @@
   @apply h-10 px-4 inline-flex items-center gap-2 rounded-xl;
   @apply border-2 border-slate-200 bg-white text-slate-600;
   @apply font-bold text-sm cursor-pointer transition-all;
+  @apply active:scale-95;
 }
 .choice-chip:hover { @apply bg-slate-50; }
 .choice-chip.selected {

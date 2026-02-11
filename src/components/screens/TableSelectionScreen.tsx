@@ -88,7 +88,7 @@ export default function TableSelectionScreen({
                         }
                         handleSelectionChange();
                     }}
-                    className={`choice-chip btn-push ${selected.length === 29 ? 'selected' : ''}`}
+                    className={`choice-chip ${selected.length === 29 ? 'selected' : ''}`}
                  >
                     {selected.length === 29 ? (
                         <>
@@ -110,7 +110,7 @@ export default function TableSelectionScreen({
                         key={num}
                         aria-pressed={selected.includes(num)}
                         onClick={() => { play('click'); handleTableSelection(num); }}
-                        className={`number-chip btn-push ${selected.includes(num) ? 'selected' : ''}`}
+                        className={`number-chip ${selected.includes(num) ? 'selected' : ''}`}
                     >
                         {num}
                     </button>

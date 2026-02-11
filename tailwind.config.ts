@@ -97,13 +97,19 @@ export default {
           '0%': { transform: 'scale(0.9)', opacity: '0' },
           '70%': { transform: 'scale(1.02)' },
           '100%': { transform: 'scale(1)', opacity: '1' },
-        }
+        },
+        shake: {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '20%, 60%': { transform: 'translateX(-4px)' },
+          '40%, 80%': { transform: 'translateX(4px)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'bounce-soft': 'bounce-soft 0.2s ease-in-out',
         'pop-in': 'pop-in 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+        shake: 'shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both',
       },
     },
   },

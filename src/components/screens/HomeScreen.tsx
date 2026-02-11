@@ -16,8 +16,7 @@ export default function HomeScreen({ navigateTo }: HomeScreenProps) {
         {/* Header */}
         <div className="flex-shrink-0 px-6 py-6 pb-2 flex flex-row justify-between items-start">
             <div>
-                <h1 className="display-medium text-slate-700">Practice</h1>
-                <p className="body-medium mt-1">Choose a skill to improve</p>
+                <p className="text-lg text-slate-600 font-bold mt-1">Choose a skill to improve</p>
             </div>
         </div>
 
@@ -31,7 +30,7 @@ export default function HomeScreen({ navigateTo }: HomeScreenProps) {
                     aria-label="Practice Multiplication Tables"
                 >
                      {/* Card Body */}
-                    <div className="w-full bg-white border-2 border-slate-100 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
+                    <div className="w-full bg-white border-2 border-slate-100 group-hover:border-purple-200 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
                         {/* Icon Box */}
                         <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center">
                             <span className="material-symbols-outlined text-3xl" aria-hidden="true">close</span>
@@ -54,7 +53,7 @@ export default function HomeScreen({ navigateTo }: HomeScreenProps) {
                     className="w-full relative group transition-all active:scale-[0.98] rounded-3xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sky-200"
                     aria-label="Practice Multi-digit Multiplication"
                 >
-                    <div className="w-full bg-white border-2 border-slate-100 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
+                    <div className="w-full bg-white border-2 border-slate-100 group-hover:border-sky-200 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
                         <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center">
                              <span className="material-symbols-outlined text-3xl" aria-hidden="true">calculate</span>
                         </div>
@@ -72,7 +71,7 @@ export default function HomeScreen({ navigateTo }: HomeScreenProps) {
                     className="w-full relative group transition-all active:scale-[0.98] rounded-3xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-200"
                     aria-label="Practice Powers and Roots"
                 >
-                    <div className="w-full bg-white border-2 border-slate-100 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
+                    <div className="w-full bg-white border-2 border-slate-100 group-hover:border-emerald-200 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
                          <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
                              <span className="material-symbols-outlined text-3xl" aria-hidden="true">superscript</span>
                         </div>
@@ -90,7 +89,7 @@ export default function HomeScreen({ navigateTo }: HomeScreenProps) {
                     className="w-full relative group transition-all active:scale-[0.98] rounded-3xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-rose-200"
                     aria-label="Practice Fractions and Decimals"
                 >
-                    <div className="w-full bg-white border-2 border-slate-100 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
+                    <div className="w-full bg-white border-2 border-slate-100 group-hover:border-rose-200 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
                          <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center">
                              <span className="material-symbols-outlined text-3xl" aria-hidden="true">percent</span>
                         </div>
@@ -108,7 +107,7 @@ export default function HomeScreen({ navigateTo }: HomeScreenProps) {
                     className="w-full relative group transition-all active:scale-[0.98] rounded-3xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-amber-200"
                     aria-label="Practice Alphabet Positions"
                 >
-                    <div className="w-full bg-white border-2 border-slate-100 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
+                    <div className="w-full bg-white border-2 border-slate-100 group-hover:border-amber-200 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
                          <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center">
                              <span className="material-symbols-outlined text-3xl" aria-hidden="true">sort_by_alpha</span>
                         </div>
