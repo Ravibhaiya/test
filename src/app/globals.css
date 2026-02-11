@@ -82,6 +82,22 @@
     @apply font-semibold;
   }
 
+  /* Sub/Superscript fixes */
+  sub, sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+
+  sup {
+    top: -0.5em;
+  }
+
+  sub {
+    bottom: -0.25em;
+  }
+
   /* Typography utilities */
   .display-large { @apply text-4xl font-bold tracking-tight; font-family: var(--font-fredoka); }
   .display-medium { @apply text-3xl font-bold; font-family: var(--font-fredoka); }
