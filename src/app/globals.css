@@ -84,14 +84,14 @@
 
   /* Sub/Superscript fixes */
   sub, sup {
-    font-size: 75%;
+    font-size: 60%; /* Smaller to be distinct */
     line-height: 0;
     position: relative;
     vertical-align: baseline;
   }
 
   sup {
-    top: -0.5em;
+    top: -0.6em; /* Move it higher */
   }
 
   sub {

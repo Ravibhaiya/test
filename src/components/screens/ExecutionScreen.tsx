@@ -246,7 +246,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
         'ul', 'ol', 'li', 'table', 'thead', 'tbody', 'tr', 'th', 'td', // Tables and Lists
         'math', 'mrow', 'mfrac', 'mn', 'mo', 'sup', 'sub'       // MathML & Powers
       ],
-      USE_PROFILES: { mathMl: true }, // Keep mathMl profile for standard MathML attributes
+      USE_PROFILES: { html: true, mathMl: true }, // Explicitly enable HTML profile to prevent stripping
     });
   }, [question]);
 
