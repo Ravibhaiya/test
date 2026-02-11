@@ -77,6 +77,12 @@ export const generateTablesQuestion = (config: {
   };
 };
 
+const generateRandomNumber = (digits: number) => {
+  const min = Math.pow(10, digits - 1);
+  const max = Math.pow(10, digits) - 1;
+  return Math.floor(secureMathRandom() * (max - min + 1)) + min;
+};
+
 export const generatePracticeQuestion = (config: {
   digits1: number[];
   digits2: number[];
@@ -84,11 +90,7 @@ export const generatePracticeQuestion = (config: {
   const { digits1, digits2 } = config;
   const d1 = digits1[Math.floor(secureMathRandom() * digits1.length)];
   const d2 = digits2[Math.floor(secureMathRandom() * digits2.length)];
-  const generateRandomNumber = (digits: number) => {
-    const min = Math.pow(10, digits - 1);
-    const max = Math.pow(10, digits) - 1;
-    return Math.floor(secureMathRandom() * (max - min + 1)) + min;
-  };
+
   const num1 = generateRandomNumber(d1);
   const num2 = generateRandomNumber(d2);
   return {
