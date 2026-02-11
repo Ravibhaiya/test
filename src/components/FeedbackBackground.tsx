@@ -5,6 +5,43 @@ import {
 } from 'lucide-react';
 import { secureMathRandom } from '@/lib/security';
 
+const WAVE_WIDTH = 1440;
+const WAVE_HEIGHT = 320;
+const WAVE_AMPLITUDE = 30;
+const WAVE_FREQUENCY = 8;
+const WAVE_MID_Y = 160;
+
+// Standard smooth Quadratic Bezier Wave
+const generateQuadPath = (invert: boolean) => {
+  let path = `M 0 ${WAVE_MID_Y} `;
+  const segmentWidth = WAVE_WIDTH / WAVE_FREQUENCY;
+
+  for (let i = 0; i < WAVE_FREQUENCY; i++) {
+      const startX = i * segmentWidth;
+      const dir = invert ? -1 : 1;
+
+      const q1x = startX + segmentWidth / 4;
+      const q1y = WAVE_MID_Y - WAVE_AMPLITUDE * dir;
+      const end1x = startX + segmentWidth / 2;
+      const end1y = WAVE_MID_Y;
+
+      const q2x = startX + (segmentWidth * 3) / 4;
+      const q2y = WAVE_MID_Y + WAVE_AMPLITUDE * dir;
+      const end2x = startX + segmentWidth;
+      const end2y = WAVE_MID_Y;
+
+      path += `Q ${q1x} ${q1y}, ${end1x} ${end1y} `;
+      path += `Q ${q2x} ${q2y}, ${end2x} ${end2y} `;
+  }
+  path += `L ${WAVE_WIDTH} ${WAVE_HEIGHT} L 0 ${WAVE_HEIGHT} Z`;
+  return path;
+}
+
+const WAVES = {
+  front: generateQuadPath(false),
+  back: generateQuadPath(true) // Inverted phase for depth
+};
+
 interface FeedbackBackgroundProps {
   status: 'idle' | 'correct' | 'wrong' | 'timeup';
 }
@@ -72,45 +109,8 @@ const FeedbackBackground: React.FC<FeedbackBackgroundProps> = ({ status }) => {
     }
   }, [status]);
 
-  // Generate sine wave paths (Front and Back)
-  const waves = useMemo(() => {
-    const width = 1440;
-    const height = 320;
-    const amplitude = 30;
-    const frequency = 8;
-    const midY = 160;
-
-    // Standard smooth Quadratic Bezier Wave
-    const generateQuadPath = (invert: boolean) => {
-        let path = `M 0 ${midY} `;
-        const segmentWidth = width / frequency;
-
-        for (let i = 0; i < frequency; i++) {
-            const startX = i * segmentWidth;
-            const dir = invert ? -1 : 1;
-
-            const q1x = startX + segmentWidth / 4;
-            const q1y = midY - amplitude * dir;
-            const end1x = startX + segmentWidth / 2;
-            const end1y = midY;
-
-            const q2x = startX + (segmentWidth * 3) / 4;
-            const q2y = midY + amplitude * dir;
-            const end2x = startX + segmentWidth;
-            const end2y = midY;
-
-            path += `Q ${q1x} ${q1y}, ${end1x} ${end1y} `;
-            path += `Q ${q2x} ${q2y}, ${end2x} ${end2y} `;
-        }
-        path += `L ${width} ${height} L 0 ${height} Z`;
-        return path;
-    }
-
-    return {
-        front: generateQuadPath(false),
-        back: generateQuadPath(true) // Inverted phase for depth
-    };
-  }, []);
+  // Use static wave paths
+  const waves = WAVES;
 
   // Generate STATIC elements
   const staticElements = useMemo(() => {
