@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import React from 'react';
 import DOMPurify from 'dompurify';
-import type { Mode, FractionAnswerType, ExecutionConfig, PowerType } from '@/lib/types';
+import type { Mode, FractionAnswerType, ExecutionConfig, PowerType, AlphabetMode } from '@/lib/types';
 import {
   generateTablesQuestion,
   generatePracticeQuestion,
@@ -61,6 +61,14 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
     currentQuestionRef.current = currentQuestionObject;
   }, [currentQuestionObject]);
 
+  // Determine alphabet mode
+  const alphabetMode: AlphabetMode = (mode === 'alphabet' && 'mode' in config)
+    ? (config as any).mode || 'letter_to_position'
+    : 'letter_to_position';
+
+  // Determine layout
+  const keyboardLayout = (mode === 'alphabet' && alphabetMode === 'position_to_letter') ? 'qwerty' : 'numeric';
+
   const timeUp = useCallback(
     (answer: number | string) => {
       setFeedbackStatus('timeup');
@@ -116,7 +124,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
           );
         } else if (mode === 'alphabet') {
           questionData = generateAlphabetQuestion(
-            config as { start: string; end: string }
+            config as { start: string; end: string; mode?: AlphabetMode }
           );
         } else {
           questionData = null;
@@ -166,6 +174,11 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
   const validateAnswer = () => {
     if (mode === 'fractions' && activeAnswerType === 'fraction') {
       return inputValue.toLowerCase() === currentAnswer.toString().toLowerCase();
+    }
+
+    // Validate Alphabet (Position -> Letter)
+    if (mode === 'alphabet' && typeof currentAnswer === 'string') {
+        return inputValue.trim().toUpperCase() === currentAnswer.toUpperCase();
     }
 
     const sanitizedUserAnswer = inputValue.replace(/,/g, '');
@@ -375,6 +388,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
                 onChar={handleVirtualChar}
                 onDelete={handleVirtualDelete}
                 visible={true}
+                layout={keyboardLayout}
             />
         </div>
     </div>

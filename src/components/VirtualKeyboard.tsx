@@ -5,11 +5,39 @@ interface VirtualKeyboardProps {
   onChar: (char: string) => void;
   onDelete: () => void;
   visible: boolean;
+  layout?: 'numeric' | 'qwerty';
 }
 
+const QWERTY_ROW_1 = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'];
+const QWERTY_ROW_2 = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
+const QWERTY_ROW_3 = ['Z', 'X', 'C', 'V', 'B', 'N', 'M'];
+
 // Memoized to prevent re-renders when parent timer updates or other unrelated state changes
-const VirtualKeyboard = memo(function VirtualKeyboard({ onChar, onDelete, visible }: VirtualKeyboardProps) {
+const VirtualKeyboard = memo(function VirtualKeyboard({ onChar, onDelete, visible, layout = 'numeric' }: VirtualKeyboardProps) {
   if (!visible) return null;
+
+  if (layout === 'qwerty') {
+      return (
+        <div className="w-full max-w-2xl mx-auto select-none">
+             <div className="flex gap-1 mb-2">
+                {QWERTY_ROW_1.map(char => (
+                    <KeyButton key={char} label={char} value={char} onChar={onChar} className="flex-1 min-w-0 px-0 text-lg sm:text-xl" />
+                ))}
+             </div>
+             <div className="flex gap-1 mb-2 px-2 sm:px-6">
+                {QWERTY_ROW_2.map(char => (
+                    <KeyButton key={char} label={char} value={char} onChar={onChar} className="flex-1 min-w-0 px-0 text-lg sm:text-xl" />
+                ))}
+             </div>
+             <div className="flex gap-1 px-2 sm:px-12">
+                 {QWERTY_ROW_3.map(char => (
+                    <KeyButton key={char} label={char} value={char} onChar={onChar} className="flex-1 min-w-0 px-0 text-lg sm:text-xl" />
+                 ))}
+                 <KeyButton label="⌫" value="backspace" onDelete={onDelete} isAction className="flex-[1.5] min-w-0 px-0 text-lg sm:text-xl" />
+             </div>
+        </div>
+      );
+  }
 
   return (
     <div className="w-full max-w-md mx-auto">

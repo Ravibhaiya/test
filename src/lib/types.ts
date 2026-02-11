@@ -17,6 +17,8 @@ export type PowerType = 'squares' | 'cubes' | 'square_roots' | 'cube_roots';
 
 export type FractionAnswerType = 'fraction' | 'decimal';
 
+export type AlphabetMode = 'letter_to_position' | 'position_to_letter';
+
 export interface PracticeConfig {
   tables: {
     selected: number[];
@@ -39,6 +41,7 @@ export interface PracticeConfig {
   alphabet: {
     start: string;
     end: string;
+    mode?: AlphabetMode;
     timer?: number;
   };
 }

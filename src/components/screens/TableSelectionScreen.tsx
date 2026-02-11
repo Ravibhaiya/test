@@ -88,7 +88,7 @@ export default function TableSelectionScreen({
                         }
                         handleSelectionChange();
                     }}
-                    className="choice-chip text-sm font-bold"
+                    className={`choice-chip btn-push ${selected.length === 29 ? 'selected' : ''}`}
                  >
                     {selected.length === 29 ? (
                         <>
@@ -152,7 +152,7 @@ export default function TableSelectionScreen({
 
              <button
                 onClick={() => { play('click'); handleStartClick(); }}
-                className={`w-full filled-button ${selected.length === 0 ? 'opacity-50 grayscale' : ''}`}
+                className={`w-full filled-button ${selected.length > 0 ? '' : 'opacity-50 grayscale'}`}
              >
                 START PRACTICE
              </button>
