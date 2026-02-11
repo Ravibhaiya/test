@@ -26,11 +26,13 @@ const PERCENTAGE_MAPPINGS = [
   { val: 0.166, n: 1, d: 6 },
   { val: 0.833, n: 5, d: 6 },
   { val: 0.142, n: 1, d: 7 },
+  { val: 0.285, n: 2, d: 7 },
   { val: 0.125, n: 1, d: 8 },
   { val: 0.375, n: 3, d: 8 },
   { val: 0.625, n: 5, d: 8 },
   { val: 0.875, n: 7, d: 8 },
   { val: 0.111, n: 1, d: 9 },
+  { val: 0.090, n: 1, d: 11 },
 ];
 
 const buildPercentageString = (numerator: number, denominator: number): string => {
