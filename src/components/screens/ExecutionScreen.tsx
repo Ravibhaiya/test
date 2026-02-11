@@ -299,10 +299,10 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
                         focus:outline-none focus:ring-4 focus:ring-purple-200 focus:border-purple-400 focus:scale-[1.02]
                         ${feedbackStatus === 'idle' ? 'bg-white border-slate-200 text-slate-700' : ''}
                         ${feedbackStatus === 'correct' ? 'bg-green-100 border-green-500 text-green-700' : ''}
-                        ${feedbackStatus === 'wrong' ? 'bg-red-100 border-red-500 text-red-700' : ''}
+                        ${feedbackStatus === 'wrong' ? 'bg-red-100 border-red-500 text-red-700 animate-shake' : ''}
                         ${feedbackStatus === 'timeup' ? 'bg-sky-100 border-sky-500 text-sky-700' : ''}
                     `}>
-                        {inputValue}
+                        <span className={feedbackStatus === 'timeup' ? 'animate-pulse' : ''}>{inputValue}</span>
                         {inputValue.length === 0 && <span className="text-slate-300 animate-pulse">_</span>}
                         {showPercentAdornment && <span className="ml-1 text-slate-400">%</span>}
                     </div>

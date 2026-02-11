@@ -71,6 +71,7 @@ This runs `next build` followed by `cap sync`.
   - **`VirtualKeyboard.tsx`**: Custom numeric keypad.
 - **`src/lib`**: Helper functions and type definitions.
   - **`question-helpers.ts`**: Logic for generating arithmetic questions.
+  - **`security.ts`**: Security utilities (secure RNG, input validation).
 - **`android`**: Capacitor Android project files.
 
 ## Mobile Deployment (Android)
