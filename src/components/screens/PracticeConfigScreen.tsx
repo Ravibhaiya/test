@@ -93,7 +93,7 @@ export default function PracticeConfigScreen({
                             key={`d1-${digit}`}
                             aria-pressed={digits1.includes(digit)}
                             onClick={() => { play('click'); handleDigitSelection('digits1', digit); }}
-                            className={`choice-chip btn-push ${digits1.includes(digit) ? 'selected' : ''}`}
+                            className={`choice-chip ${digits1.includes(digit) ? 'selected' : ''}`}
                         >
                             {digits1.includes(digit) && <span className="material-symbols-outlined text-lg" aria-hidden="true">check</span>}
                             <span>{digit} Digits</span>
@@ -111,7 +111,7 @@ export default function PracticeConfigScreen({
                             key={`d2-${digit}`}
                             aria-pressed={digits2.includes(digit)}
                             onClick={() => { play('click'); handleDigitSelection('digits2', digit); }}
-                            className={`choice-chip btn-push ${digits2.includes(digit) ? 'selected' : ''}`}
+                            className={`choice-chip ${digits2.includes(digit) ? 'selected' : ''}`}
                         >
                             {digits2.includes(digit) && <span className="material-symbols-outlined text-lg" aria-hidden="true">check</span>}
                             <span>{digit} Digits</span>

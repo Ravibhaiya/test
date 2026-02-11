@@ -98,7 +98,7 @@ export default function PowersConfigScreen({ onStart }: PowersConfigScreenProps)
                             key={type}
                             aria-pressed={selected.includes(type)}
                             onClick={() => { play('click'); handlePowerSelection(type); }}
-                            className={`choice-chip btn-push ${selected.includes(type) ? 'selected' : ''}`}
+                            className={`choice-chip ${selected.includes(type) ? 'selected' : ''}`}
                         >
                             {selected.includes(type) && <span className="material-symbols-outlined text-lg" aria-hidden="true">check</span>}
                             <span>
