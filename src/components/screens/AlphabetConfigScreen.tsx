@@ -159,12 +159,36 @@ export default function AlphabetConfigScreen({
                                 <p className="text-sm text-slate-500">Show 1 → Type A</p>
                             </div>
                          </button>
+
+                         {/* Option 3: Reverse Letter */}
+                         <button
+                            onClick={() => { play('click'); setMode('reverse_letter'); }}
+                            className={`w-full p-4 rounded-xl border-2 flex items-center gap-4 transition-all text-left ${
+                                mode === 'reverse_letter'
+                                ? 'bg-sky-50 border-sky-500 ring-2 ring-sky-200'
+                                : 'bg-slate-50 border-slate-200 hover:bg-slate-100'
+                            }`}
+                         >
+                            <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
+                                mode === 'reverse_letter' ? 'border-sky-500' : 'border-slate-300'
+                            }`}>
+                                {mode === 'reverse_letter' && <div className="w-3 h-3 rounded-full bg-sky-500" />}
+                            </div>
+                            <div>
+                                <p className="font-bold text-slate-700">Reverse Letter</p>
+                                <p className="text-sm text-slate-500">Show A → Type Z</p>
+                            </div>
+                         </button>
                     </div>
                  </div>
 
                  <div className="bg-amber-50 p-4 rounded-xl text-amber-800 text-sm font-medium flex gap-3">
                     <span className="material-symbols-outlined icon-filled text-amber-600">info</span>
-                    <p>{mode === 'letter_to_position' ? 'Identify the position of letters (e.g. A=1, Z=26).' : 'Identify the letter for the given position (e.g. 1=A, 26=Z).'}</p>
+                    <p>
+                        {mode === 'letter_to_position' && 'Identify the position of letters (e.g. A=1, Z=26).'}
+                        {mode === 'position_to_letter' && 'Identify the letter for the given position (e.g. 1=A, 26=Z).'}
+                        {mode === 'reverse_letter' && 'Identify the reverse alphabet letter (e.g. A=Z, B=Y).'}
+                    </p>
                  </div>
              </div>
         </div>

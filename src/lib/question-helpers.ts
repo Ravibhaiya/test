@@ -192,6 +192,15 @@ export const generateAlphabetQuestion = (config: {
     };
   }
 
+  if (mode === 'reverse_letter') {
+    const reversePosition = 27 - position;
+    const reverseChar = String.fromCharCode(reversePosition + 64);
+    return {
+      question: char,
+      answer: reverseChar,
+    };
+  }
+
   return {
     question: char,
     answer: position,
