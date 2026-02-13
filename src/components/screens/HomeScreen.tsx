@@ -109,7 +109,7 @@ export default function HomeScreen({ navigateTo }: HomeScreenProps) {
                 >
                     <div className="w-full bg-white border-2 border-slate-100 group-hover:border-amber-200 rounded-3xl p-4 flex items-center gap-5 shadow-soft hover:shadow-soft-md transition-all">
                          <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center">
-                             <span className="material-symbols-outlined text-3xl" aria-hidden="true">sort_by_alpha</span>
+                             <span className="text-2xl font-bold" aria-hidden="true">AZ</span>
                         </div>
                         <div className="text-left flex-1">
                             <h3 className="title-medium text-slate-700">Alphabet</h3>

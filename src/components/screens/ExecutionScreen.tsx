@@ -67,7 +67,7 @@ export default function ExecutionScreen({ mode, config }: ExecutionScreenProps) 
     : 'letter_to_position';
 
   // Determine layout
-  const keyboardLayout = (mode === 'alphabet' && alphabetMode === 'position_to_letter') ? 'qwerty' : 'numeric';
+  const keyboardLayout = (mode === 'alphabet' && (alphabetMode === 'position_to_letter' || alphabetMode === 'reverse_letter')) ? 'qwerty' : 'numeric';
 
   const timeUp = useCallback(
     (answer: number | string) => {
