@@ -13,6 +13,12 @@ export interface Question {
 }
 
 // Bolt Optimization: Extract static constant to avoid recreation and string parsing in loop
+/**
+ * Lookup table for common fractional remainders of percentages.
+ * Used to format results like "16.666%" as "16 2/3%".
+ * The 'val' property corresponds to the decimal part of the percentage value (e.g., 2/3 ≈ 0.666).
+ * 'n' and 'd' are the numerator and denominator of the fraction to display.
+ */
 const PERCENTAGE_MAPPINGS = [
   { val: 0.5, n: 1, d: 2 },
   { val: 0.333, n: 1, d: 3 },

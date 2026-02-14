@@ -8,8 +8,14 @@ interface TimerBarProps {
   resetKey: any;
 }
 
+/**
+ * TimerBar component that visualizes a countdown.
+ * Note: This timer resets completely whenever `resetKey` changes.
+ * It is designed for "per-question" timing, not continuous timing across pauses.
+ */
 const TimerBar = memo(function TimerBar({ duration, isRunning, onTimeUp, resetKey }: TimerBarProps) {
   const barRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const requestRef = useRef<number>(0);
   const startTimeRef = useRef<number>(0);
   const totalDurationRef = useRef<number>(duration * 1000);
@@ -51,6 +57,11 @@ const TimerBar = memo(function TimerBar({ duration, isRunning, onTimeUp, resetKe
           updateColor(newProgress);
         }
 
+        // Accessibility Update: Update aria-valuenow directly on DOM to avoid re-renders
+        if (containerRef.current) {
+            containerRef.current.setAttribute('aria-valuenow', Math.round(newProgress).toString());
+        }
+
         if (remaining <= 0) {
           if (requestRef.current) cancelAnimationFrame(requestRef.current);
           if (onTimeUpRef.current) onTimeUpRef.current();
@@ -72,6 +83,9 @@ const TimerBar = memo(function TimerBar({ duration, isRunning, onTimeUp, resetKe
       barRef.current.classList.add('bg-green-500');
       activeColorClassRef.current = 'bg-green-500';
     }
+    if (containerRef.current) {
+        containerRef.current.setAttribute('aria-valuenow', '100');
+    }
 
     if (isRunning) {
       startTimeRef.current = performance.now();
@@ -84,7 +98,16 @@ const TimerBar = memo(function TimerBar({ duration, isRunning, onTimeUp, resetKe
   }, [resetKey, duration, isRunning]);
 
   return (
-    <div className="w-full h-5 bg-slate-200 rounded-full overflow-hidden border-2 border-slate-100 shadow-inner">
+    <div
+        ref={containerRef}
+        className="w-full h-5 bg-slate-200 rounded-full overflow-hidden border-2 border-slate-100 shadow-inner"
+        role="progressbar"
+        aria-label="Time remaining"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={100}
+        title="Time remaining"
+    >
         <div
             ref={barRef}
             className="h-full bg-green-500 rounded-full relative"

@@ -63,10 +63,11 @@ export default function Home() {
   };
 
   return (
-    <main id="app-container" className="h-full flex flex-col overflow-hidden bg-background">
+    <div id="app-container" className="h-full flex flex-col overflow-hidden bg-background">
       <header
         id="top-app-bar"
-        className="flex flex-row items-center px-4 bg-white sticky top-0 z-50 h-14 flex-shrink-0"
+        className="flex flex-row items-center px-4 bg-white sticky top-0 z-50 h-14 flex-shrink-0 shadow-sm"
+        role="banner"
       >
          <button
           type="button"
@@ -96,25 +97,27 @@ export default function Home() {
         </div>
       </header>
 
-      {page === 'home' && <HomeScreen navigateTo={navigateTo} />}
-      {page === 'table-selection' && (
-        <TableSelectionScreen onStart={startPractice} />
-      )}
-      {page === 'practice-config' && (
-        <PracticeConfigScreen onStart={startPractice} />
-      )}
-      {page === 'powers-config' && (
-        <PowersConfigScreen onStart={startPractice} />
-      )}
-      {page === 'fractions-config' && (
-        <FractionsConfigScreen onStart={startPractice} />
-      )}
-      {page === 'alphabet-config' && (
-        <AlphabetConfigScreen onStart={startPractice} />
-      )}
-      {page === 'execution' && mode && activeConfig && (
-        <ExecutionScreen mode={mode} config={activeConfig} />
-      )}
-    </main>
+      <main className="flex-1 w-full overflow-hidden relative flex flex-col" role="main">
+        {page === 'home' && <HomeScreen navigateTo={navigateTo} />}
+        {page === 'table-selection' && (
+          <TableSelectionScreen onStart={startPractice} />
+        )}
+        {page === 'practice-config' && (
+          <PracticeConfigScreen onStart={startPractice} />
+        )}
+        {page === 'powers-config' && (
+          <PowersConfigScreen onStart={startPractice} />
+        )}
+        {page === 'fractions-config' && (
+          <FractionsConfigScreen onStart={startPractice} />
+        )}
+        {page === 'alphabet-config' && (
+          <AlphabetConfigScreen onStart={startPractice} />
+        )}
+        {page === 'execution' && mode && activeConfig && (
+          <ExecutionScreen mode={mode} config={activeConfig} />
+        )}
+      </main>
+    </div>
   );
 }
