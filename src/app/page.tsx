@@ -66,7 +66,7 @@ export default function Home() {
     <div id="app-container" className="h-full flex flex-col overflow-hidden bg-background">
       <header
         id="top-app-bar"
-        className="flex flex-row items-center px-4 bg-background/95 backdrop-blur-sm sticky top-0 z-50 h-14 flex-shrink-0 border-b border-slate-200/50"
+        className="flex flex-row items-center px-4 bg-background/95 backdrop-blur-sm sticky top-0 z-50 h-14 flex-shrink-0"
         role="banner"
       >
          <button
