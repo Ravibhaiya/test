@@ -18,7 +18,7 @@ const VirtualKeyboard = memo(function VirtualKeyboard({ onChar, onDelete, visibl
 
   if (layout === 'qwerty') {
       return (
-        <div className="w-full max-w-2xl mx-auto select-none">
+        <div className="w-full max-w-2xl mx-auto select-none" role="region" aria-label="Virtual Keyboard">
              <div className="flex gap-1 mb-2">
                 {QWERTY_ROW_1.map(char => (
                     <KeyButton key={char} label={char} value={char} onChar={onChar} className="flex-1 min-w-0 px-0 text-lg sm:text-xl" />
@@ -40,7 +40,7 @@ const VirtualKeyboard = memo(function VirtualKeyboard({ onChar, onDelete, visibl
   }
 
   return (
-    <div className="w-full max-w-md mx-auto">
+    <div className="w-full max-w-md mx-auto" role="region" aria-label="Virtual Keyboard">
       <div className="grid grid-cols-4 gap-2">
         {/* Row 1 */}
         <KeyButton label="1" value="1" onChar={onChar} />
